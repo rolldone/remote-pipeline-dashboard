@@ -1,0 +1,50 @@
+reset_cache: true
+project_name: remote_pipeline_dashboard
+username: root
+privateKey: C:/Users/test/.ssh/id_rsa_no_password
+host: 192.168.50.4
+port: 2200
+localPath: .
+remotePath: /root/workspaces/remote_pipeline_dashboard
+devsync:
+  os_target: linux
+  ignores: []
+  downloads: []
+  single_sync:
+    - dist
+    - node_modules
+  script:
+    local:
+      on_ready: null
+      on_stop: null
+      commands:
+        - npm run watch
+    remote:
+      on_ready: null
+      on_stop: null
+      commands:
+        - docker-compose up --build
+        - docker-compose exec app bash -l
+        - docker-compose exec app bash -c "npm install && npm run watch"
+  trigger_permission:
+    unlink_folder: true
+    unlink: true
+    change: true
+    add: true
+direct_access:
+  config_file: ""
+  ssh_configs:
+    - Host: workspaces
+      HostName: =host
+      User: =username
+      Port: =port
+      RequestTty: force
+      IdentityFile: =privateKey
+      StrictHostKeyChecking: no
+      RemoteCommand: cd =remotePath && bash -l
+      ServerAliveInterval: 300
+      ServerAliveCountMax: 2
+  ssh_commands:
+    - access_name: Enter Server
+      command: ssh -v workspaces
+saved_file_name: donny_desktop.yaml
