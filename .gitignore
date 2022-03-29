@@ -1,0 +1,11 @@
+node_modules/
+.sync_temp/src/index.ts
+.sync_temp/src/indexView.html
+.sync_temp/src/auth/ForgotPassword.ts
+.sync_temp/src/auth/ForgotPasswordView.html
+.sync_temp/src/auth/Login.ts
+.sync_temp/src/auth/LoginView.html
+.sync_temp/src/auth/RegisterView.html
+.sync_ignore
+docker-compose.yaml
+sync-config.yaml
