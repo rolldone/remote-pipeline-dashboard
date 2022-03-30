@@ -1,0 +1,96 @@
+<div class="container-xl">
+  <!-- Page title -->
+  <div class="page-header d-print-none">
+    <div class="row g-2 align-items-center">
+      <div class="col">
+        <!-- Page pre-title -->
+        <div class="page-pretitle">
+          user
+        </div>
+        <h2 class="page-title">
+          Add New User
+        </h2>
+      </div>
+      <!-- Page title actions -->
+      <div class="col-12 col-md-auto ms-auto d-print-none">
+        <div class="btn-list">
+          <span class="d-none d-sm-inline">
+            <a href="#" class="btn btn-white">
+              Manage Group
+            </a>
+          </span>
+          <a href="/dashboard/user" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+            data-bs-target="#modal-report">
+            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-corner-up-left" width="24"
+              height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M18 18v-6a3 3 0 0 0 -3 -3h-10l4 -4m0 8l-4 -4"></path>
+            </svg>
+            Back to users
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container-xl">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Basic form</h3>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="form-group mb-3 ">
+            <label class="form-label">Email address</label>
+            <div>
+              <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+              <small class="form-hint">We'll never share your email with anyone else.</small>
+            </div>
+          </div>
+          <div class="form-group mb-3 ">
+            <label class="form-label">Password</label>
+            <div>
+              <input type="password" class="form-control" placeholder="Password">
+              <small class="form-hint">
+                Your password must be 8-20 characters long, contain letters and numbers, and must not contain
+                spaces, special characters, or emoji.
+              </small>
+            </div>
+          </div>
+          <div class="form-group mb-3 ">
+            <label class="form-label">Select</label>
+            <div>
+              <select class="form-select">
+                <option>Option 1</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label">Checkboxes</label>
+            <div>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" checked="">
+                <span class="form-check-label">Option 1</span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <span class="form-check-label">Option 2</span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" disabled="">
+                <span class="form-check-label">Option 3</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

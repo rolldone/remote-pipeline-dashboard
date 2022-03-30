@@ -9,3 +9,4 @@ node_modules/
 .sync_ignore
 docker-compose.yaml
 sync-config.yaml
+.sync_temp/
