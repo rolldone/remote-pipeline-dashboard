@@ -18,13 +18,13 @@ export default BaseRactive.extend({
         // Handle the route here...
         let ProjectNew = (await import("./ProjectNew")).default;
         new ProjectNew({
-          target: "#content2",
+          target: "#index-body",
         })
       })
       .get('/update', async (req, context) => {
         let ProjectNew = (await import("./ProjectUpdate")).default;
         new ProjectNew({
-          target: "#content2",
+          target: "#index-body",
         })
       })
       .run();
