@@ -1,9 +1,13 @@
 import BaseRactive from "base/BaseRactive";
+import PipelineItems from "pipelineitem/PipelineItems";
 import template from './PipelineNewView.html';
 
 export default BaseRactive.extend({
   template,
-  onconfig(){
-    
+  components: {
+    "pipeline-items": PipelineItems
+  },
+  onconfig() {
+
   }
 });

@@ -1,5 +1,6 @@
 import BaseRactive from "./base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from 'routerjs';
+import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
 import template from './indexView.html';
 

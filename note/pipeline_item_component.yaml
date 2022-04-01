@@ -1,0 +1,24 @@
+# Basic command
+basic_command:
+  parent: dropdown [nullable]
+  command: text 
+
+# Condition command
+conditional_command: 
+  parent: dropdown 
+  condition_type: dropdown [include|equals|next turn]
+  action_type: 
+    type: select menu [command|rsync|sftp]
+    child:
+      command: text
+      rsync: 
+        type: dropdown search [file|script]
+        action: dropdown [upload|download]
+        path_target: text 
+      sftp: 
+        type: dropdown search [file|script]
+        action: dropdown [upload|download]
+        path_traget: text
+
+# 
+ 

@@ -15,3 +15,4 @@ ngi-sync-*
 !/tsconfig.json
 !/package*
 !/docker-compose*
+!/note
