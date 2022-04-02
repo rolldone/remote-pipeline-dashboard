@@ -6,8 +6,8 @@ basic_command:
 # Condition command
 conditional_command: 
   parent: dropdown 
-  condition_type: dropdown [include|equals|next turn]
-  action_type: 
+  condition_type: select menu [include|equals|next turn]
+  method_type: 
     type: select menu [command|rsync|sftp]
     child:
       command: text

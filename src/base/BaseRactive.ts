@@ -4,6 +4,7 @@ export default Ractive.extend({
   onconstruct: function () {
     this.reInitializeObserve();
   },
+  components: {},
   router: null,
   getLang: null,
   reInitializeObserve: function () {

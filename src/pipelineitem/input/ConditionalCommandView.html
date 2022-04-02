@@ -21,25 +21,22 @@
     <div class="mb-3">
       <label class="form-label">Parent Condition Type</label>
       <div class="btn-group w-100">
-        <button type="button" class="btn">Equals</button>
-        <button type="button" class="btn">Includes</button>
-        <button type="button" class="btn btn-primary">Next Turn</button>
-        <button type="button" class="btn">Failed</button>
-        <button type="button" class="btn">Success</button>
+        <button type="button" class="btn {{parent_condition_type=='equals'?'btn-primary':''}}" on-click="@this.handleClick('PARENT_CONDITION',{ value : 'equals' },@event)">Equals</button>
+        <button type="button" class="btn {{parent_condition_type=='includes'?'btn-primary':''}}" on-click="@this.handleClick('PARENT_CONDITION',{ value : 'includes' },@event)">Includes</button>
+        <button type="button" class="btn {{parent_condition_type=='next'?'btn-primary':''}}" on-click="@this.handleClick('PARENT_CONDITION',{ value : 'next' },@event)">Next Turn</button>
+        <button type="button" class="btn {{parent_condition_type=='failed'?'btn-primary':''}}" on-click="@this.handleClick('PARENT_CONDITION',{ value : 'failed' },@event)">Failed</button>
+        <button type="button" class="btn {{parent_condition_type=='success'?'btn-primary':''}}" on-click="@this.handleClick('PARENT_CONDITION',{ value : 'success' },@event)">Success</button>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label">Method Type</label>
       <div class="btn-group w-100">
-        <button type="button" class="btn">Command</button>
-        <button type="button" class="btn btn-primary">Rsync</button>
-        <button type="button" class="btn">Sftp</button>
+        <button type="button" class="btn {{method_type=='command'?'btn-primary':''}}" on-click="@this.handleClick('METHOD_TYPE',{ value : 'command'},@event)">Command</button>
+        <button type="button" class="btn {{method_type=='rsync'?'btn-primary':''}}" on-click="@this.handleClick('METHOD_TYPE',{ value : 'rsync'},@event)">Rsync</button>
+        <button type="button" class="btn {{method_type=='sftp'?'btn-primary':''}}" on-click="@this.handleClick('METHOD_TYPE',{ value : 'sftp'},@event)">Sftp</button>
       </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Command</label>
-      <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
-    </div>
+    {{> method_type_partial}}
     <div class="mb-3">
       <label class="form-label">Textarea <span class="form-label-description">56/100</span></label>
       <textarea class="form-control" name="example-textarea-input" rows="6"
