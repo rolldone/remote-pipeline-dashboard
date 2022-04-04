@@ -18,22 +18,17 @@
       </datalist>
     </div>
     <div class="mb-3">
-      <label class="form-label">Parent Condition Type</label>
+      <label class="form-label">Method Type</label>
       <div class="btn-group w-100">
-        <button type="button" class="btn {{parent_condition_type=='equals'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'equals' },@event)">Equals</button>
-        <button type="button" class="btn {{parent_condition_type=='includes'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'includes' },@event)">Includes</button>
-        <button type="button" class="btn {{parent_condition_type=='next'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'next' },@event)">Next Turn</button>
-        <button type="button" class="btn {{parent_condition_type=='failed'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'failed' },@event)">Failed</button>
-        <button type="button" class="btn {{parent_condition_type=='success'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'success' },@event)">Success</button>
+        <button type="button" class="btn {{method_type=='rsync'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'rsync'},@event)">Rsync</button>
+        <button type="button" class="btn {{method_type=='sftp'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'sftp'},@event)">Sftp</button>
       </div>
     </div>
     <div class="mb-3">
-      {{> parent_conditon_partial}}
+      {{> sync_action_partial}}
+      {{> method_type_partial}}
     </div>
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>

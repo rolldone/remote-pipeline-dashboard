@@ -6,67 +6,78 @@ export default BaseRactive.extend({
   template,
   data() {
     return {
-      method_type: null
+      condition_values: [],
+      method_type: null,
+      sync_action: null,
     }
   },
   partials: {
-    method_type_partial: [],
+    parent_conditon_partial: [],
     parent_condition_type: null,
     method_type: null
   },
   oncomplete() {
     console.log(this.get("config"))
   },
-  handleClick(action, props, e) {
+  observe: {
+    parent_condition_type(val) {
+      switch (val) {
+        case 'includes':
+        case 'equals':
+          let _condition_values = this.get("condition_values");
+          this.displayPartial('parent_conditon_partial', _condition_values);
+          return;
+        default:
+          this.resetPartial('parent_conditon_partial', []);
+          return;
+      }
+    },
+    condition_values: {
+      handler: function (val: Array<any>, old: Array<any>) { }
+    }
+  },
+  displayPartial(action, val) {
+    let parent_conditon_partial = [];
     switch (action) {
-      case 'PARENT_CONDITION':
-        this.set("parent_condition_type", props.value)
-        break;
-      case 'METHOD_TYPE':
-        this.set("method_type", props.value);
-        let method_type_partial = [];
-        let _template = null;
-        switch (props.value) {
-          case 'sftp':
-          case 'rsync':
-            _template = Ractive.parse(/* html */`
+      case 'parent_conditon_partial':
+        for (var a = 0; a < val.length; a++) {
+          let _template = Ractive.parse(/* html */`
             <div class="row">
-              <div class="col">
-                <div class="form-label">Select your attachment file</div>
-                <select class="form-select">
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div class="col">
-                <label class="form-label">Put the target path</label>
-                <div class="input-group mb-2">
-                  <div class="col">
-                    <input type="text" class="form-control" placeholder="Target Path" style="width:98%;">
-                  </div>
-                  <div class="col-auto align-self-center">
-                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="<p>ZIP Code must be US or CDN format. You can use an extended ZIP+4 code to determine address more accurately.</p>
-                    <p class='mb-0'><a href='#'>USP ZIP codes lookup tools</a></p>
-                    " data-bs-html="true" data-bs-original-title="" title="">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </span>
-                  </div>
+              <div class="col col-lg-1">
+                <div class="mb-3">
+                  <div class="form-label">Condition</div>
+                  <select class="form-select" name="condition_logic" on-change="@this.handleChange('CONDITION_LOGIC',{ index : ${a} },@event)" value="{{condition_values[${a}].condition_logic}}">
+                    <option value="1">--</option>
+                    <option value="2">AND</option>
+                    <option value="3">OR</option>
+                  </select>
                 </div>
               </div>
-            </div>
-          `)
-            method_type_partial.push({
-              ..._template.t[0]
-            });
-            _template = Ractive.parse(/* html */`
-              <div class="row">
-                <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-                  <a href="#" class="btn btn-twitter w-100 btn-icon" aria-label="Twitter">
+              <div class="col">
+                <div class="mb-3">
+                  <label class="form-label">Value</label> 
+                  <input class="form-control" type="text" placeholder="Condition value" name="condition_input_value" value="{{condition_values[${a}].condition_input_value}}">
+                </div>
+              </div>
+              {{#if ${a} < condition_values.length - 1}}
+              <div class="col col-lg-1">
+                <div class="mb-3">
+                  <label class="form-label" style="visibility:hidden">T</label>
+                  <a href="#" class="btn btn-twitter w-100 btn-icon" aria-label="Twitter" on-click="@this.handleClick('ADD_MORE_CONDITIONAL_VALUE',{ action : 'delete', index : ${a} },@event)">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              {{else}}
+              <div class="col col-lg-1">
+                <div class="mb-3">
+                  <label class="form-label" style="visibility:hidden">T</label>
+                  <a href="#" class="btn btn-twitter w-100 btn-icon" aria-label="Twitter" on-click="@this.handleClick('ADD_MORE_CONDITIONAL_VALUE',{action : 'new' },@event)">
                     <!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -76,28 +87,59 @@ export default BaseRactive.extend({
                   </a>
                 </div>
               </div>
-            `);
-            method_type_partial.push({
-              ..._template.t[0]
-            });
-            break;
-          case 'command':
-            _template = Ractive.parse(/* html */`
-              <div class="mb-3">
-                <label class="form-label">Command</label>
-                <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
-              </div>
-            `) as any;
-            method_type_partial.push({
-              ..._template.t[0]
-            });
-            break;
-          case 'sftp':
-
-            break;
+              {{/if}}
+            </div>
+          `);
+          parent_conditon_partial.push({
+            ..._template.t[0]
+          });
         }
-        this.resetPartial('method_type_partial', method_type_partial);
+        this.resetPartial('parent_conditon_partial', parent_conditon_partial);
         break;
     }
-  }
+  },
+  handleChange(action, props, e) {
+    switch (action) {
+      case 'CONDITION_LOGIC':
+        break;
+    }
+  },
+  handleClick(action, props, e) {
+    let _template = null;
+    let _condition_values = this.get("condition_values") as Array<any>;
+    switch (action) {
+      case 'ADD_MORE_CONDITIONAL_VALUE':
+        e.preventDefault();
+        switch (props.action) {
+          case 'new':
+            _condition_values.push({})
+            this.set("condition_values", _condition_values);
+            break;
+          case 'delete':
+            _condition_values.splice(props.index, 1);
+            this.set("condition_values", _condition_values);
+            break;
+        }
+        this.displayPartial('parent_conditon_partial', _condition_values);
+        break;
+      case 'PARENT_CONDITION':
+        this.set("parent_condition_type", props.value);
+        switch (props.value) {
+          case 'includes':
+          case 'equals':
+            if (_condition_values.length > 0) {
+              return;
+            }
+            _condition_values.push({})
+            this.set("condition_values", _condition_values);
+            this.displayPartial('parent_conditon_partial', _condition_values);
+            break;
+          case 'success':
+          case 'failed':
+          case 'next_turn':
+            break;
+        }
+        break;
+    }
+  },
 });

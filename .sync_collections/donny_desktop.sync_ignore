@@ -16,3 +16,5 @@ ngi-sync-*
 !/package*
 !/docker-compose*
 !/note
+!/node_modules/ractive
+!/rollup*

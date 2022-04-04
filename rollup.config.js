@@ -27,8 +27,8 @@ export default {
     // prefix: `@import "src/base/flexbox.scss";`
   }), notify(),
   inject({
-    '$': 'jQuery',
-    exclude: '**/*.html',
+    // '$': 'jQuery',
+    exclude: ['**/*.html',"**/*.ts"],
   }),
   html(),
   multiInput(), json(),

@@ -9,7 +9,11 @@ remotePath: /root/workspaces/remote_pipeline_dashboard
 devsync:
   os_target: linux
   ignores: []
-  downloads: []
+  downloads:
+    - package.json
+    - package-lock.json
+    - docker-compose.yaml
+    - tsconfig.json
   single_sync:
     - dist
     - node_modules
@@ -24,6 +28,7 @@ devsync:
       on_stop: null
       commands:
         - docker-compose up --build
+        - docker-compose up
         - docker-compose exec app bash -l
         - docker-compose exec app bash -c "npm install && npm run watch"
   trigger_permission:
@@ -47,4 +52,4 @@ direct_access:
   ssh_commands:
     - access_name: Enter Server
       command: ssh -v workspaces
-saved_file_name: donny_desktop.yaml
+saved_file_name: donny_desktop.yaml.yaml

@@ -18,5 +18,10 @@ export default Ractive.extend({
   observeData: function (opts, callback) {
     return this.observe(opts, callback);
   },
+  ractiveParse(template?: string) {
+    return Ractive.parse(template);
+  },
+  displayPartial(action: string, val: any) {
 
+  }
 });
