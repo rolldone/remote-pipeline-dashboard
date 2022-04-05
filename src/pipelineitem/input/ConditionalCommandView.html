@@ -6,16 +6,14 @@
       <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
     </div>
     <div class="mb-3">
-      <label class="form-label">Parent</label>
-      <input class="form-control" list="datalistOptions" placeholder="Type to search...">
-      <datalist id="datalistOptions">
-        <option value="Command 1">
-        </option>
-        <option value="Command 2">
-        </option>
-        <option value="Command xxx">
-        </option>
-      </datalist>
+      <label for="tags-input" class="form-label">Select Parent</label>
+      <select class="form-select" id="tags-input" name="tags[]" multiple>
+        <option disabled hidden value="">Choose a parent...</option>
+        <option value="1" selected="selected">Apple</option>
+        <option value="2">Banana</option>
+        <option value="3">Orange</option>
+      </select>
+      <div class="invalid-feedback">Please select a valid tag.</div>
     </div>
     <div class="mb-3">
       <label class="form-label">Parent Condition Type</label>
@@ -34,6 +32,10 @@
     </div>
     <div class="mb-3">
       {{> parent_conditon_partial}}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Command Value</label>
+      <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
     </div>
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>

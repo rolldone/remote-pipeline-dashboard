@@ -1,8 +1,15 @@
 import BaseRactive from "./base/BaseRactive";
-import { BrowserHistoryEngine, createRouter } from 'routerjs';
+import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
 import template from './indexView.html';
+
+declare global {
+  interface Window {
+    router: Router;
+    pipelineRouter: Router
+  }  
+}
 
 export default function () {
   const App = BaseRactive.extend({

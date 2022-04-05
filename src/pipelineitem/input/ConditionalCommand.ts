@@ -1,6 +1,7 @@
 import BaseRactive from "base/BaseRactive";
 import Ractive from "ractive";
 import template from './ConditionalCommandView.html';
+import Tags from "bootstrap5-tags"
 
 export default BaseRactive.extend({
   template,
@@ -18,6 +19,7 @@ export default BaseRactive.extend({
   },
   oncomplete() {
     console.log(this.get("config"))
+    Tags.init();
   },
   observe: {
     parent_condition_type(val) {

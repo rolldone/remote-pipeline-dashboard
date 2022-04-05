@@ -11,7 +11,7 @@ export default BaseRactive.extend({
   },
   async getParents() {
     try {
-      let resData = await PipelineItemService.getParents();
+      let resData = await PipelineItemService.getParents(0);
     } catch (ex) {
       console.error("getParents :: ex ", ex);
     }

@@ -39,60 +39,33 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Basic form</h3>
+        <h3 class="card-title">New Pipeline form</h3>
       </div>
       <div class="card-body">
         <form>
           <div class="form-group mb-3 ">
-            <label class="form-label">Commands</label>
+            <label class="form-label">Project Name</label>
             <div>
-              <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Command">
-              <small class="form-hint">We'll never share your email with anyone else.</small>
+              <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Project Name"
+                name="project_name" value="{{form_data.project_name}}">
+              <small class="form-hint">This is project name.</small>
             </div>
           </div>
-          <div class="form-group mb-3 ">
-            <label class="form-label">Password</label>
-            <div>
-              <input type="password" class="form-control" placeholder="Password">
-              <small class="form-hint">
-                Your password must be 8-20 characters long, contain letters and numbers, and must not contain
-                spaces, special characters, or emoji.
-              </small>
-            </div>
-          </div>
-          <div class="form-group mb-3 ">
-            <label class="form-label">Select</label>
-            <div>
-              <select class="form-select">
-                <option>Option 1</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group mb-3">
-            <label class="form-label">Checkboxes</label>
-            <div>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" checked="">
-                <span class="form-check-label">Option 1</span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox">
-                <span class="form-check-label">Option 2</span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" disabled="">
-                <span class="form-check-label">Option 3</span>
-              </label>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+            <textarea class="form-control" name="description" rows="6"
+              placeholder="Content..">{{form_data.description}}</textarea>
           </div>
           <div class="form-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>
           </div>
         </form>
       </div>
     </div>
   </div>
   <br>
+  {{#if Object.keys(form_data).length > 0}}
   <pipeline-items></pipeline-items>
+  {{/if}}
   <br>
 </div>
