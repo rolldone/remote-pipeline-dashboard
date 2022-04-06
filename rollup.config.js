@@ -76,10 +76,11 @@ export default {
   //   flatten: false,
   //   copyOnce: true
   // }),
-  baseUrl({
-    url: '/public/dashboard', // the base URL prefix; optional, defaults to /
-    staticImports: true, // also rebases static `import _ from "…"`; optional, defaults to false
-  }),],
+  // baseUrl({
+  //   url: '/public/dashboard', // the base URL prefix; optional, defaults to /
+  //   staticImports: true, // also rebases static `import _ from "…"`; optional, defaults to false
+  // }),
+  ],
   output: {
     dir: path.join(baseOut),
     format: 'esm',

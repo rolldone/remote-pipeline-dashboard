@@ -19,14 +19,14 @@ export default PipelineUpdate.extend({
       resolve();
     });
   },
-  handleClick(action, props, e) {
+  async handleClick(action, props, e) {
     switch (action) {
       case 'SUBMIT':
         e.preventDefault();
         let form_data = this.get("form_data");
-        let resData = PipelineService.updatePipeline(form_data);
+        let resData = await PipelineService.updatePipeline(form_data);
         resData = resData.return;
-        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.ID}/view`));
+        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
         return;
     }
     this._super(action, props, e);
@@ -34,7 +34,7 @@ export default PipelineUpdate.extend({
   async getPipeline() {
     try {
       let resData = await PipelineService.getPipeline({
-        ID: this.req.params.id
+        id: this.req.params.id
       });
       return resData;
     } catch (ex) {

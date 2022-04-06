@@ -1,5 +1,7 @@
 import localStorageDB from "localstoragedb"
+import SqlBricks from "sql-bricks";
 import { DATABASE_NAME } from "./PipelineItemService";
+import SqlService from "./SqlService";
 
 export default {
   async resetPipeline() {
@@ -9,52 +11,62 @@ export default {
     }
     lib.truncate("pipelines");
   },
-  addPipeline(props: { project_name: string, description?: string }) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    if (lib.tableExists("pipelines") == false) {
-      lib.createTable("pipelines", ["project_name", "description"]);
-    }
-    let id = lib.insert("pipelines", { project_name: props.project_name, description: props.description });
-    lib.commit();
-    return this.getPipeline({ ID: id });
-  },
-  updatePipeline(props) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    if (lib.tableExists("pipelines") == false) {
-      lib.createTable("pipelines", ["project_name", "description"]);
-    }
-    lib.update("pipelines", {
-      ID: props.ID
-    }, (row) => {
-      row = {
-        ...props
+  async addPipeline(props): Promise<any> {
+    try {
+      let id = await SqlService.insert(SqlBricks.insert('pipelines', {
+        name: props.name,
+        description: props.description,
+        project_id: props.project_id
+      }).toString());
+      let resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", id).toString());
+      return {
+        status: 'success',
+        status_code: 200,
+        return: resData
       }
-      return row;
-    });
-    lib.commit();
-    return this.getPipeline({ ID: props.ID });
+    } catch (ex) {
+      throw ex;
+    }
   },
-  getPipeline(props) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    let gg = lib.queryAll("pipelines", {
-      query: props
-    });
-    return {
-      status: 'success',
-      status_code: 200,
-      return: gg[0] || null
-    };
+  async updatePipeline(props): Promise<any> {
+    try {
+      let resData = await SqlService.update(SqlBricks.update('pipelines', {
+        name: props.name,
+        description: props.description,
+        project_id: props.project_id
+      }).where("id", props.id).toString());
+      resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", props.id).toString());
+      return {
+        status: 'success',
+        status_code: 200,
+        return: resData
+      }
+    } catch (ex) {
+      throw ex;
+    }
   },
-  getPipelines(props) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    let gg = lib.queryAll("pipelines", {
-      query: props,
-      sort: [["ID", "DESC"]]
-    });
-    return {
-      status: 'success',
-      status_code: 200,
-      return: gg
-    };
+  async getPipeline(props): Promise<any> {
+    try {
+      let resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", props.id).toString());
+      return {
+        status: 'success',
+        status_code: 200,
+        return: resData
+      }
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async getPipelines(props): Promise<any> {
+    try {
+      let resData = await SqlService.select(SqlBricks.select().from("pipelines").orderBy("id", "DESC").toString());
+      return {
+        status: 'success',
+        status_code: 200,
+        return: resData
+      }
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

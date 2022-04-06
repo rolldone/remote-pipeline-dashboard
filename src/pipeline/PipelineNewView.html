@@ -43,11 +43,13 @@
       </div>
       <div class="card-body">
         <form>
+          <input type="hidden" name="id" value="{{form_data.id}}">
+          <input type="hidden" name="project_id" value="{{form_data.project_id}}">
           <div class="form-group mb-3 ">
             <label class="form-label">Project Name</label>
             <div>
-              <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Project Name"
-                name="project_name" value="{{form_data.project_name}}">
+              <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Pipeline Name"
+                name="name" value="{{form_data.name}}">
               <small class="form-hint">This is project name.</small>
             </div>
           </div>
@@ -57,7 +59,8 @@
               placeholder="Content..">{{form_data.description}}</textarea>
           </div>
           <div class="form-footer">
-            <button type="submit" class="btn btn-primary" on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>
+            <button type="submit" class="btn btn-primary"
+              on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>
           </div>
         </form>
       </div>
@@ -65,7 +68,7 @@
   </div>
   <br>
   {{#if Object.keys(form_data).length > 0}}
-  <pipeline-items></pipeline-items>
+  <pipeline-items pipelines_items="{{pipelines_items}}"></pipeline-items>
   {{/if}}
   <br>
 </div>

@@ -1,11 +1,13 @@
 import BaseRactive from "base/BaseRactive";
 import Ractive from "ractive";
+import SqlService from "services/SqlService";
 import AddCommand from "./input/AddCommand";
 import BasicCommand from "./input/BasicCommand";
 import CommandGroup from "./input/CommandGroup";
 import ConditionalCommand from "./input/ConditionalCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
 import template from './PipelineItemsView.html';
+import SqlBricks from "sql-bricks";
 
 export const CommandItem = BaseRactive.extend({
   components: {
@@ -47,8 +49,8 @@ export const ListGroupItem = BaseRactive.extend({
           </a>
         </div>
         <div class="col text-truncate">
-          <a href="#" class="text-reset d-block">{{pipeline_item.pipeline_item_name}}</a>
-          <div class="d-block text-muted text-truncate mt-n1">{{pipeline_item.pipeline_item_description}}</div>
+          <span class="text-reset d-block" contenteditable="true" value='{{pipeline_item.pipeline_item_name}}'></span>
+          <div class="d-block text-muted text-truncate mt-n1" contenteditable="true" value="{{pipeline_item.pipeline_item_description}}"></div>
         </div>
         <div class="col-auto">
           <a href="#" class="list-group-item-actions" style="display: none;">
@@ -77,7 +79,7 @@ export const ListGroupItem = BaseRactive.extend({
               <!-- SVG icon code -->
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="#" on-click="@this.handleClick('SAVE_PIPELINE_ITEM',{},@event)">
                 Save
               </a>
               <a class="dropdown-item" href="#">
@@ -111,6 +113,15 @@ export const ListGroupItem = BaseRactive.extend({
         pipeline_item_name: "New Pipeline Item",
         pipeline_item_description: "Description for new pipeline item"
       },
+    }
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'SAVE_PIPELINE_ITEM':
+        e.preventDefault();
+        console.log(this.get("pipeline_item"));
+        this.fire("listener", action, props, e);
+        break;
     }
   },
   addNewCommandItem() {
@@ -152,7 +163,7 @@ export const ListGroupItem = BaseRactive.extend({
           let command_datas = this.get("command_datas") as Array<any>;
           if (text.value == "delete") {
             command_datas.splice(text.index, 1);
-            
+
             let partial_input = [];
             for (var a = 0; a < command_datas.length; a++) {
               let _ii = Ractive.parse(/* html */`
@@ -206,29 +217,34 @@ export default BaseRactive.extend({
     command_group_calc: [],
     pipeline_type: []
   },
+  observe: {},
   newOn: {
-    onAddPipelineItemListener(c, action, text, object) {
+    async onAddPipelineItemListener(c, action, text, object) {
       switch (action) {
         case 'ADD_MORE':
           let pipelines_items = this.get("pipelines_items");
+          pipelines_items.push({
+            pipeline_item_name: 'Task ' + (pipelines_items.length + 1),
+            pipeline_item_description: 'Description for Task ' + (pipelines_items.length + 1)
+          })
+          this.set("pipelines_items", pipelines_items);
           let command_group_calc = [];
-          if (pipelines_items.length > 0) {
+          for (var a = 0; a < pipelines_items.length; a++) {
             let _exist_pipeline_item = Ractive.parse(/* html */`
-                {{#each pipelines_items:i}}
-                  <list-group-item pipeline_item={{pipelines_items[i]}}></list-group-item>
-                {{/each}}
-            `);
+                    <list-group-item pipeline_item={{pipelines_items[${a}]}} on-listener="onListGroupItemListener"></list-group-item>
+              `);
             command_group_calc.push({
               ..._exist_pipeline_item.t[0]
             });
           }
-          let _new_pipeline_item = Ractive.parse(/* html */`
-            <list-group-item ></list-group-item>
-          `);
-          command_group_calc.push({
-            ..._new_pipeline_item.t[0]
-          });
           this.resetPartial('command_group_calc', command_group_calc);
+          break;
+      }
+    },
+    onListGroupItemListener(c, action, text, object) {
+      switch (action) {
+        case 'SAVE_PIPELINE_ITEM':
+          
           break;
       }
     }
