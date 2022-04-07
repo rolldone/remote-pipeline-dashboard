@@ -1,34 +1,25 @@
-import localStorageDB from "localstoragedb";
+import localStorageDB from "localstoragedb"
+import SqlBricks from "sql-bricks";
+import SqlService from "./SqlService";
 
-export const DATABASE_NAME = "remote_pipeline_local";
 export default {
-  async resetParents() {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    if (lib.isNew()) {
-      return;
+  async getPipelineItemParents(project_id: number, pipeline_id: number, order_number: number) {
+    try {
+      let resData = await SqlService.select(SqlBricks.select("*").from("pipeline_items")
+        .where({
+          "pipeline_id": pipeline_id,
+          "project_id": project_id
+        }).where(SqlBricks.gtSome("order_number", order_number)).toString());
+      return resData;
+    } catch (ex) {
+      throw ex;
     }
-    lib.truncate("parents");
-  },
-  async getParents(index) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    lib.queryAll("parents", [
-      {
-        query: (row) => {
-          if (row.id > index) {
-            return true;
-          }
-          return false;
-        }
-      }
-    ]);
   },
   async addPipelineItem(props) {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    if (lib.tableExists("pipeline_items") == false) {
-      lib.createTable("pipeline_items", ["pipeline_id", "value"]);
+    try {
+
+    } catch (ex) {
+      throw ex;
     }
-    let id = lib.insert("pipeline_items", { pipeline_id: props.pipeline_id, value: props.value });
-    lib.commit();
-    return this.getPipeline({ ID: id });
   }
 }

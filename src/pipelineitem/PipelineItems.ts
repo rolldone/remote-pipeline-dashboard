@@ -25,9 +25,14 @@ export const CommandItem = BaseRactive.extend({
     return {
       command_type: {
         type: "basic-command"
-      }
+      },
+      pipeline_item: {}
     }
   },
+  oncomplete(){
+    console.log("pipeline_item",this.get("pipeline_item"));
+    debugger;
+  }
 })
 
 export const ListGroupItem = BaseRactive.extend({
@@ -132,7 +137,7 @@ export const ListGroupItem = BaseRactive.extend({
             <div class='list-group-item'>
               <switch-command-type on-listener="onSwitchCommandTypeListener" index={{${a}}}></switch-command-type>
               <br>
-              <command-item command_type={{command_datas[${a}]}}></command-item>
+              <command-item command_type={{command_datas[${a}]}} pipeline_item={{pipeline_item}}></command-item>
             </div>
           `);
       partial_input.push({
@@ -218,6 +223,13 @@ export default BaseRactive.extend({
     pipeline_type: []
   },
   observe: {},
+  submitPipelineItem() {
+    try {
+
+    } catch (ex) {
+      console.error("submitPipelineItem - ex :: ", ex);
+    }
+  },
   newOn: {
     async onAddPipelineItemListener(c, action, text, object) {
       switch (action) {
@@ -244,7 +256,7 @@ export default BaseRactive.extend({
     onListGroupItemListener(c, action, text, object) {
       switch (action) {
         case 'SAVE_PIPELINE_ITEM':
-          
+          this.submitPipelineItem();
           break;
       }
     }

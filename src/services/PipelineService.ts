@@ -1,16 +1,8 @@
 import localStorageDB from "localstoragedb"
 import SqlBricks from "sql-bricks";
-import { DATABASE_NAME } from "./PipelineItemService";
 import SqlService from "./SqlService";
 
 export default {
-  async resetPipeline() {
-    var lib = new localStorageDB(DATABASE_NAME, window.localStorage);
-    if (lib.isNew()) {
-      return;
-    }
-    lib.truncate("pipelines");
-  },
   async addPipeline(props): Promise<any> {
     try {
       let id = await SqlService.insert(SqlBricks.insert('pipelines', {
@@ -59,7 +51,15 @@ export default {
   },
   async getPipelines(props): Promise<any> {
     try {
-      let resData = await SqlService.select(SqlBricks.select().from("pipelines").orderBy("id", "DESC").toString());
+      SqlBricks.aliasExpansions({ 'pro': "projects" });
+      let resData = await SqlService.select(SqlBricks.select(
+        "pipelines.name as pip_name",
+        "pipelines.id as pip_id",
+        "pipelines.description as pip_description",
+        "pro.name as pro_name"
+      ).from("pipelines").leftJoin("pro").on({
+        "pro.id": "pipelines.project_id"
+      }).orderBy("pipelines.id DESC").toString());
       return {
         status: 'success',
         status_code: 200,

@@ -17,36 +17,10 @@ export default Pipelines.extend({
       pipeline_datas: []
     }
   },
-  onconfig() {
-    this.router = createRouter({
-      engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/pipeline"
-    })
-      .get("/", async (req, context) => { })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let Pipeline = (await import("./PipelineNew")).default;
-        new Pipeline({
-          target: "#index-body",
-          req: req
-        })
-      })
-      .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let Pipeline = (await import("./PipelineUpdate")).default;
-        new Pipeline({
-          target: "#index-body",
-          req: req
-        })
-      })
-      .run();
-
-    window.pipelineRouter = this.router;
-  },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
+
       this.setPipelines(await this.getPipelines())
       resolve();
     });

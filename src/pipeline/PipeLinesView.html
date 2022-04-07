@@ -45,6 +45,7 @@
                 <tr>
                   <th>Pipeline Name</th>
                   <th>Pipeline Items</th>
+                  <th>Project group</th>
                   <th>Role</th>
                   <th class="w-1"></th>
                 </tr>
@@ -56,8 +57,8 @@
                     <div class="d-flex py-1 align-items-center">
                       <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)"></span>
                       <div class="flex-fill">
-                        <div class="font-weight-medium">{{name}}</div>
-                        <div class="text-muted"><a href="#" class="text-reset">{{description}}</a></div>
+                        <div class="font-weight-medium">{{pip_name}}</div>
+                        <div class="text-muted"><a href="#" class="text-reset">{{pip_description}}</a></div>
                       </div>
                     </div>
                   </td>
@@ -65,12 +66,15 @@
                     <div>5 Items</div>
                     <div class="text-muted">30 Tasks</div>
                   </td>
+                  <td>
+                    {{pro_name}}
+                  </td>
                   <td class="text-muted" data-label="Role">
                     User
                   </td>
                   <td>
                     <div class="btn-list flex-nowrap">
-                      <a href="/dashboard/pipeline/{{id||ID}}/view" class="btn">
+                      <a href="/dashboard/pipeline/{{pip_id}}/view" class="btn">
                         Edit
                       </a>
                       <div class="dropdown">

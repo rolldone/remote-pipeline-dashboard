@@ -5,13 +5,17 @@ import PipelineItemService from "services/PipelineItemService";
 
 export default BaseRactive.extend({
   template,
+  data(){
+    return {}
+  },
   oncomplete() {
     console.log(this.get("config"))
     Tags.init();
+    console.log("this.data",)
   },
   async getParents() {
     try {
-      let resData = await PipelineItemService.getParents(0);
+      let resData = await PipelineItemService.getPipelineItemParents(0, 0, 0);
     } catch (ex) {
       console.error("getParents :: ex ", ex);
     }

@@ -58,6 +58,15 @@
             <textarea class="form-control" name="description" rows="6"
               placeholder="Content..">{{form_data.description}}</textarea>
           </div>
+          <div class="mb-3">
+            <div class="form-label">Select Project Name</div>
+            <select class="form-select" name="project_id" value="{{form_data.project_id}}">
+              <option value="">--</option>
+              {{#project_datas:i}}
+              <option value="{{id}}">{{name}}</option>
+              {{/project_datas}}
+            </select>
+          </div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"
               on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>

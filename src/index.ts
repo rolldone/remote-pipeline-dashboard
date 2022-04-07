@@ -7,7 +7,8 @@ import template from './indexView.html';
 declare global {
   interface Window {
     router: Router;
-    pipelineRouter: Router
+    pipelineRouter: Router,
+    projectRouter: Router
   }  
 }
 
@@ -49,7 +50,7 @@ export default function () {
           })
         })
         .get("/pipeline/(.*)?", async (req, context) => {
-          let Pipelines = (await import("./pipeline/Pipelines")).default;
+          let Pipelines = (await import("./pipeline")).default;
           new Pipelines({
             target: "#index-body"
           })
