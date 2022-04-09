@@ -11,15 +11,22 @@ export default ProjectNew.extend({
       form_data: {}
     }
   },
-  async handleClick(action, props, e) {
+  handleClick(action, props, e) {
     switch (action) {
       case 'SUBMIT':
         e.preventDefault();
-        let form_data = this.get("form_data");
-        let resData = await ProjectService.addProject(form_data);
-        resData = resData.return as any;
-        window.projectRouter.navigate(window.projectRouter.buildUrl(`/${resData.id}/view`));
+        this.submit();
         break;
+    }
+  },
+  async submit() {
+    try {
+      let form_data = this.get("form_data");
+      let resData = await ProjectService.addProject(form_data);
+      resData = resData.return as any;
+      window.projectRouter.navigate(window.projectRouter.buildUrl(`/${resData.id}/view`));
+    } catch (ex) {
+      console.error('submit - ex :: ', ex);
     }
   }
 });

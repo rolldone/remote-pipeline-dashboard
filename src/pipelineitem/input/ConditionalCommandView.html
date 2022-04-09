@@ -3,44 +3,49 @@
   <fieldset class="form-fieldset">
     <div class="mb-3">
       <label class="form-label">Command Name</label>
-      <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
+      <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input command">
     </div>
     <div class="mb-3">
       <label for="tags-input" class="form-label">Select Parent</label>
-      <select class="form-select" id="tags-input" name="tags[]" multiple>
-        <option disabled hidden value="">Choose a parent...</option>
-        <option value="1" selected="selected">Apple</option>
-        <option value="2">Banana</option>
-        <option value="3">Orange</option>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
       </select>
       <div class="invalid-feedback">Please select a valid tag.</div>
     </div>
     <div class="mb-3">
       <label class="form-label">Parent Condition Type</label>
       <div class="btn-group w-100">
-        <button type="button" class="btn {{parent_condition_type=='equals'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'equals' },@event)">Equals</button>
-        <button type="button" class="btn {{parent_condition_type=='includes'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'includes' },@event)">Includes</button>
-        <button type="button" class="btn {{parent_condition_type=='next'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'next' },@event)">Next Turn</button>
-        <button type="button" class="btn {{parent_condition_type=='failed'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'failed' },@event)">Failed</button>
-        <button type="button" class="btn {{parent_condition_type=='success'?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : 'success' },@event)">Success</button>
+        <button type="button"
+          class="btn {{parent_condition_type==@this.getParentConditionType().EQUALS?'btn-primary':''}}"
+          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().EQUALS },@event)">Equals</button>
+        <button type="button"
+          class="btn {{parent_condition_type==@this.getParentConditionType().INCLUDES?'btn-primary':''}}"
+          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().INCLUDES },@event)">Includes</button>
+        <button type="button"
+          class="btn {{parent_condition_type==@this.getParentConditionType().NEXT?'btn-primary':''}}"
+          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().NEXT },@event)">Next
+          Turn</button>
+        <button type="button"
+          class="btn {{parent_condition_type==@this.getParentConditionType().FAILED?'btn-primary':''}}"
+          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().FAILED },@event)">Failed</button>
+        <button type="button"
+          class="btn {{parent_condition_type==@this.getParentConditionType().SUCCESS?'btn-primary':''}}"
+          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().SUCCESS },@event)">Success</button>
       </div>
     </div>
     <div class="mb-3">
       {{> parent_conditon_partial}}
     </div>
     <div class="mb-3">
-      <label class="form-label">Command Value</label>
-      <input type="text" class="form-control" name="example-text-input" placeholder="Input command">
+      <label class="form-label">Command</label>
+      <input type="text" class="form-control" name="command" value="{{form_data.command}}" placeholder="Input command">
     </div>
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>
-      <textarea class="form-control" name="example-textarea-input" rows="6"
-        placeholder="Content..">Oh! Come and see the violence inherent in the system! Help, help, I'm being repressed! We shall say 'Ni' again to you, if you do not appease us. I'm not a witch. I'm not a witch. Camelot!</textarea>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
     </div>
   </fieldset>
 </div>

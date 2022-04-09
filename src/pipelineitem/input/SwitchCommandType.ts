@@ -18,6 +18,10 @@ export default BaseRactive.extend({
       index: null,
       command_types: [
         {
+          label: "Calibrate the task",
+          value: "calibrate"
+        },
+        {
           label: "Basic Command",
           value: "basic-command"
         },
@@ -28,7 +32,7 @@ export default BaseRactive.extend({
         {
           label: "Delete",
           value: "delete"
-        }
+        },
       ]
     }
   },

@@ -3,16 +3,21 @@ import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
 import template from './indexView.html';
+import $ from 'jquery';
 
 declare global {
   interface Window {
     router: Router;
     pipelineRouter: Router,
-    projectRouter: Router
-  }  
+    projectRouter: Router,
+    $: JQueryStatic
+  }
 }
 
 export default function () {
+  
+  window.$ = $;
+
   const App = BaseRactive.extend({
     template,
     target: "#app",

@@ -2,8 +2,21 @@ import BaseRactive from "base/BaseRactive";
 import Ractive from "ractive";
 import template from './ConditionalCommandView.html';
 import Tags from "bootstrap5-tags"
+import BasicCommand from "./BasicCommand";
 
-export default BaseRactive.extend({
+const ConditonalCommand = BasicCommand.extend({
+  getParentConditionType() {
+    return {
+      EQUALS: 'equals',
+      INCLUDES: 'includes',
+      NEXT: 'next',
+      FAILED: 'failed',
+      SUCCESS: 'success',
+    }
+  }
+})
+
+export default ConditonalCommand.extend({
   template,
   data() {
     return {
@@ -15,11 +28,18 @@ export default BaseRactive.extend({
   partials: {
     parent_conditon_partial: [],
     parent_condition_type: null,
-    method_type: null
+    method_type: null,
+    parent_order_number_commands_partial: [],
   },
   oncomplete() {
-    console.log(this.get("config"))
-    Tags.init();
+    let _super = this._super.bind(this);
+    return new Promise((resolve: Function) => {
+      // Add condition values;
+      this.set("condition_values", this.get("form_data.condition_values") || []);
+      this.set("parent_condition_type", this.get("form_data.parent_condition_type") || this.getParentConditionType().NEXT);
+      _super();
+      resolve();
+    })
   },
   observe: {
     parent_condition_type(val) {
@@ -28,6 +48,8 @@ export default BaseRactive.extend({
         case 'equals':
           let _condition_values = this.get("condition_values");
           this.displayPartial('parent_conditon_partial', _condition_values);
+          this.set("form_data.condition_values", _condition_values);
+          this.set("form_data.parent_condition_type", val);
           return;
         default:
           this.resetPartial('parent_conditon_partial', []);
@@ -49,9 +71,9 @@ export default BaseRactive.extend({
                 <div class="mb-3">
                   <div class="form-label">Condition</div>
                   <select class="form-select" name="condition_logic" on-change="@this.handleChange('CONDITION_LOGIC',{ index : ${a} },@event)" value="{{condition_values[${a}].condition_logic}}">
-                    <option value="1">--</option>
-                    <option value="2">AND</option>
-                    <option value="3">OR</option>
+                    <option value="NONE">--</option>
+                    <option value="AND">AND</option>
+                    <option value="OR">OR</option>
                   </select>
                 </div>
               </div>
