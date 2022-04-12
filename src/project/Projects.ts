@@ -1,23 +1,24 @@
+import Ractive from "ractive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
 import ProjectService from "services/ProjectService";
-import BaseRactive from "../base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import template from './ProjectsView.html';
 
 declare let window: Window;
-const Projects = BaseRactive.extend({
-  getProjects() { },
-  setProjects(props){ },
-});
 
-export default Projects.extend({
-  template: template,
+interface ProjectInterface extends BaseRactiveInterface {
+  getProjects: { (): Promise<any> }
+  setProjects: { (props: any): void }
+}
+
+export default BaseRactive.extend({
+  template,
   data() {
     return {
       project_datas: []
     }
   },
   oncomplete() {
-    let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       this.router = createRouter({
         engine: BrowserHistoryEngine({ bindClick: false }),
@@ -51,6 +52,7 @@ export default Projects.extend({
       resolve();
     });
   },
+
   handleClick(action, props, e) {
     let url = null;
     switch (action) {
@@ -65,7 +67,6 @@ export default Projects.extend({
     }
   },
   async getProjects() {
-
     try {
       let resData = await ProjectService.getProjects({});
       return resData;

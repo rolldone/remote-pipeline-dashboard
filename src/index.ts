@@ -1,4 +1,4 @@
-import BaseRactive from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
 import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
@@ -18,7 +18,7 @@ export default function () {
   
   window.$ = $;
 
-  const App = BaseRactive.extend({
+  const App = BaseRactive.extend<BaseRactiveInterface>({
     template,
     target: "#app",
     data() {
@@ -107,6 +107,7 @@ export default function () {
         .run();
       setTimeout(() => {
         this.set("test", "aaaaaaaaaaaaaaaa");
+        
       }, 4000);
     },
     handleClick(action, props, e) {

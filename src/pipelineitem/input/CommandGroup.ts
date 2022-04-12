@@ -1,4 +1,4 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import AddCommand from "./AddCommand";
 import BasicCommand from "./BasicCommand";
@@ -6,7 +6,7 @@ import template from './CommandGroupView.html';
 import ConditionalCommand from "./ConditionalCommand";
 import SwitchCommandType from "./SwitchCommandType";
 
-export default BaseRactive.extend({
+export default BaseRactive.extend<BaseRactiveInterface>({
   template,
   isolated: false,
   components: {
@@ -23,7 +23,8 @@ export default BaseRactive.extend({
     }
   },
   partials: {
-    test: null
+    test: null,
+    content: null
   },
   oncomplete() {
     let newCOntents = [];
@@ -92,7 +93,6 @@ export default BaseRactive.extend({
     onSwitchCommandTypeListener(c, action, text, object) {
       switch (action) {
         case 'SWITCH_COMMAND':
-
           break;
       }
     }

@@ -1,22 +1,19 @@
+import Ractive from "ractive";
 import ProjectService from "services/ProjectService";
-import ProjectNew from "./ProjectNew";
-
+import ProjectNew, { ProjectNewInterface } from "./ProjectNew";
+import template from './ProjectNewView.html';
 declare var window: Window;
-const ProjectUpdate = ProjectNew.extend({
-  getProject() { },
-  setProject(props) { },
-})
-export default ProjectUpdate.extend({
+
+
+export default ProjectNew.extend<ProjectNewInterface>({
+  template,
   oncomplete() {
-    let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
-      _super();
       this.setProject(await this.getProject());
       resolve();
     })
   },
   handleClick(action, props, e) {
-    let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       switch (action) {
         case 'SUBMIT':
@@ -28,7 +25,7 @@ export default ProjectUpdate.extend({
           return;
       }
       resolve();
-      _super(action, props, e);
+      this._super(action, props, e);
     })
   },
   async getProject() {

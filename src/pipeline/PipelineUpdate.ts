@@ -1,35 +1,14 @@
 import PipelineService from "services/PipelineService";
-import PipelineNew from "./PipelineNew";
+import PipelineNew, { PipelineNewInterface } from "./PipelineNew";
 
-const PipelineUpdate = PipelineNew.extend({
-  getPipeline() { },
-  setPipeline(props) { }
-})
-
-export default PipelineUpdate.extend({
+export default PipelineNew.extend<PipelineNewInterface>({
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
-      _super();
+      await _super();
       this.setPipeline(await this.getPipeline());
-      let pipelineItems = (await import("../pipelineitem/PipelineItems")).default;
-      new pipelineItems({
-        target: "#pipelineitem"
-      });
       resolve();
     });
-  },
-  async handleClick(action, props, e) {
-    switch (action) {
-      case 'SUBMIT':
-        e.preventDefault();
-        let form_data = this.get("form_data");
-        let resData = await PipelineService.updatePipeline(form_data);
-        resData = resData.return;
-        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
-        return;
-    }
-    this._super(action, props, e);
   },
   async getPipeline() {
     try {
@@ -44,5 +23,17 @@ export default PipelineUpdate.extend({
   setPipeline(props) {
     if (props == null) return;
     this.set("form_data", props.return);
+  },
+  async handleClick(action, props, e) {
+    switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        let form_data = this.get("form_data");
+        let resData = await PipelineService.updatePipeline(form_data);
+        resData = resData.return;
+        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
+        return;
+    }
+    this._super(action, props, e);
   }
 });

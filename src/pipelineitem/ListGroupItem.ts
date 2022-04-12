@@ -1,55 +1,18 @@
-import BaseRactive from "base/BaseRactive";
-import Ractive from "ractive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import Ractive, { ParsedTemplate } from "ractive";
+import PipelineTaskService, { command_data } from "services/PipelineTaskService";
 import CommandItem from "./CommandItem";
 import AddCommand from "./input/AddCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
 
-const ListGroupItem = BaseRactive.extend({
-  async addNewCommandItem() {
-    let command_datas = this.get("command_datas");
-    let partial_input = [
-      ...this.partials.pipeline_type_partial
-    ];
-    command_datas.push({
-      type: "basic-command",
-      temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
-      /* ...other datas */
-    });
-    await this.set("command_datas", command_datas);
-    let _index = command_datas.length - 1;
-    let _ii = Ractive.parse(/* html */`
-          <div class='list-group-item' index='${_index}'>
-            <switch-command-type on-listener="onSwitchCommandTypeListener" index='${_index}'></switch-command-type>
-            <br>
-            <command-item on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${_index}]}}' index='${_index}'></command-item>
-          </div>
-        `);
-    partial_input.push({
-      ..._ii.t[0],
-    });
-    await this.resetPartial('pipeline_type_partial', partial_input);
-  },
-  calibrateCommandItem() {
-    let command_datas = this.get("command_datas");
-    let partial_input = [];
-    for (var a = 0; a < command_datas.length; a++) {
-      let _ii = Ractive.parse(/* html */`
-            <div class='list-group-item' index='${a}'>
-              <switch-command-type on-listener="onSwitchCommandTypeListener" index='{{${a}}}'></switch-command-type>
-              <br>
-              <command-item on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${a}]}}' index='${a}'></command-item>
-            </div>
-          `);
-      partial_input.push({
-        ..._ii.t[0],
-      });
-    }
-    this.set("command_datas", command_datas);
-    this.resetPartial('pipeline_type_partial', partial_input);
-  },
-})
-
-export default ListGroupItem.extend({
+export interface ListGroupItemInterface extends BaseRactiveInterface {
+  calibrateCommandItem: { (): void }
+  getPipelineTask: { (): Promise<any> }
+  setPipelineTask: { (props: any): void }
+  returnDisplayCommandRactive: { (index: number): ParsedTemplate }
+  addNewCommandItem: { (): void }
+}
+export default BaseRactive.extend<ListGroupItemInterface>({
   components: {
     "add-command": AddCommand,
     "switch-command-type": SwitchCommandType,
@@ -68,8 +31,8 @@ export default ListGroupItem.extend({
           </a>
         </div>
         <div class="col text-truncate">
-          <span class="text-reset d-block" contenteditable="true" value='{{pipeline_item.pipeline_item_name}}'></span>
-          <div class="d-block text-muted text-truncate mt-n1" contenteditable="true" value="{{pipeline_item.pipeline_item_description}}"></div>
+          <span class="text-reset d-block" contenteditable="true" value='{{pipeline_item.name}}'></span>
+          <div class="d-block text-muted text-truncate mt-n1" contenteditable="true" value="{{pipeline_item.description}}"></div>
         </div>
         <div class="col-auto">
           <a href="#" class="list-group-item-actions" style="display: none;">
@@ -104,91 +67,192 @@ export default ListGroupItem.extend({
               <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE_PIPELINE_ITEM',{},@event)">
                 Delete
               </a>
+              <a class="dropdown-item" href="#" on-click="@this.handleClick('EDIT_TASKS',{},@event)">
+                {{#if is_edit_task == true}}
+                Hide Tasks
+                {{else}}
+                Edit Tasks
+                {{/if}}
+              </a>
             </div>
           </div>
         </div>
       </div>
       <br>
+      {{#if is_edit_task == true}}
       <div class="row">
         <div class="col-md-6 col-xl-12">
           <div class="row row-cards">
             <div class="col-12">
-            <div class="list-group list-group-flush list-group-hoverable" style="border: 1px solid #e6e7e9;">
-                {{>pipeline_type_partial}}
-                <div class='list-group-item'>
-                  <add-command on-listener="onCommandGroupListener" button_text="Add Command"></add-command>
-                </div>
+              <div class="list-group list-group-flush list-group-hoverable" style="border: 1px solid #e6e7e9;">
+              {{>pipeline_type_partial}}
+              <div class='list-group-item'>
+                <add-command on-listener="onCommandGroupListener" button_text="Add Command"></add-command>
               </div>
+            </div>
             </div>
           </div>
         </div>
       </div>
+      {{/if}}
     </div>
   `,
-  data() {
-    return {
-      index: -1,
-      command_datas: [],
-      pipeline_item: {
-        pipeline_item_name: "New Pipeline Item",
-        pipeline_item_description: "Description for new pipeline item"
+  onconstruct() {
+    this.newOn = {
+      onSwitchCommandTypeListener: (c, action, text, object) => {
+        switch (action) {
+          case 'SWITCH_COMMAND':
+            if (text.value == "calibrate") {
+              this.calibrateCommandItem();
+              return;
+            }
+            let command_datas = this.get("command_datas") as Array<any>;
+            if (text.value == "delete") {
+              command_datas.splice(text.index, 1);
+              this.set("command_datas", command_datas);
+              this.calibrateCommandItem();
+              return;
+            }
+            command_datas[text.index] = {
+              ...command_datas[text.index],
+              type: text.value
+            }
+            this.set("command_datas", command_datas);
+            this.calibrateCommandItem();
+            break;
+        }
       },
+      onCommandGroupListener: (c, action, text, object) => {
+        switch (action) {
+          case 'ADD_MORE':
+            this.addNewCommandItem();
+            break;
+        }
+      },
+      onCommandItemListener: (c, action, text, object) => {
+        switch (action) {
+          case 'FORM_DATA.NAME.TRIGGER':
+            this.calibrateCommandItem();
+            break;
+        }
+      }
     }
+    this._super();
   },
   oncomplete() {
     this.set("command_datas", this.get("pipeline_item.command_datas") || []);
     this.calibrateCommandItem();
   },
-  handleClick(action, props, e) {
+  data() {
+    return {
+      index: -1,
+      is_edit_task: false,
+      command_datas: [],
+      pipeline_item: {
+        name: "New Pipeline Item",
+        description: "Description for new pipeline item"
+      },
+    }
+  },
+  returnDisplayCommandRactive(index: number) {
+    return Ractive.parse(/* html */`
+      <div class='list-group-item' index='${index}'>
+        <switch-command-type on-listener="onSwitchCommandTypeListener" index='{{${index}}}'></switch-command-type>
+        <br>
+        <command-item on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${index}]}}' index='${index}'></command-item>
+      </div>
+    `);
+  },
+  async addNewCommandItem() {
+    let command_datas = this.get("command_datas");
+    let partial_input: Array<any> = [
+      ...this.partials.pipeline_type_partial as Array<any>
+    ];
+    command_datas.push({
+      type: "basic-command",
+      temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+      is_active: true
+      /* ...other datas */
+    });
+    await this.set("command_datas", command_datas);
+    let _index = command_datas.length - 1;
+    let _ii = this.returnDisplayCommandRactive(_index);
+    partial_input.push({
+      ..._ii.t[0],
+    });
+    await this.resetPartial('pipeline_type_partial', partial_input);
+  },
+  calibrateCommandItem() {
+    let command_datas = this.get("command_datas");
+    let partial_input = [];
+    for (var a = 0; a < command_datas.length; a++) {
+      let _ii = this.returnDisplayCommandRactive(a);
+      partial_input.push({
+        ..._ii.t[0],
+      });
+    }
+    this.set("command_datas", command_datas);
+    this.resetPartial('pipeline_type_partial', partial_input);
+  },
+  async getPipelineTask() {
+    try {
+      let pipeline_item = this.get("pipeline_item");
+      let resData = await PipelineTaskService.getPipelineTasks({
+        pipeline_item_id: pipeline_item.id
+      });
+      return resData;
+    } catch (ex) {
+      console.error("getPipelineTask - ex :: ", ex);
+    }
+  },
+  setPipelineTask(props): void {
+    if (props == null) return;
+    /**
+     * If have edit before and hide and show again
+     * dont let insert from server if data from is empty 
+    */
+    if (props.return.length > 0) {
+      let _commands = [];
+      let _tasks: Array<any> = props.return as any;
+      for (var a = 0; a < _tasks.length; a++) {
+        _commands.push({
+          data: JSON.parse(_tasks[a].data),
+          parent_order_temp_ids: JSON.parse(_tasks[a].parent_order_temp_ids),
+          description: _tasks[a].description,
+          id: _tasks[a].id,
+          is_active: _tasks[a].is_active,
+          order_number: _tasks[a].order_number,
+          pipeline_id: _tasks[a].pipeline_id,
+          pipeline_item_id: _tasks[a].pipeline_item_id,
+          project_id: _tasks[a].project_id,
+          name: _tasks[a].name,
+          temp_id: _tasks[a].temp_id,
+          type: _tasks[a].type,
+        })
+      }
+      this.set("command_datas", _commands);
+    }
+    this.calibrateCommandItem();
+  },
+  async handleClick(action, props, e) {
     switch (action) {
       case 'SAVE_PIPELINE_ITEM':
         e.preventDefault();
         this.set("pipeline_item.command_datas", this.get("command_datas"));
-        this.fire("listener", action, props, e);
+        this.fire("listener", action, { index: this.get("index") }, e);
+        this.set("is_edit_task", false);
         break;
       case 'DELETE_PIPELINE_ITEM':
         e.preventDefault();
         this.fire("listener", action, { index: this.get("index") }, e);
         break;
-    }
-  },
-  newOn: {
-    onSwitchCommandTypeListener(c, action, text, object) {
-      switch (action) {
-        case 'SWITCH_COMMAND':
-          if (text.value == "calibrate") {
-            this.calibrateCommandItem();
-            return;
-          }
-          let command_datas = this.get("command_datas") as Array<any>;
-          if (text.value == "delete") {
-            command_datas.splice(text.index, 1);
-            this.set("command_datas", command_datas);
-            this.calibrateCommandItem();
-            return;
-          }
-          command_datas[text.index] = {
-            ...command_datas[text.index],
-            type: text.value
-          }
-          this.set("command_datas", command_datas);
-          this.calibrateCommandItem();
-          break;
-      }
-    },
-    onCommandGroupListener(c, action, text, object) {
-      switch (action) {
-        case 'ADD_MORE':
-          this.addNewCommandItem();
-          break;
-      }
-    },
-    onCommandItemListener(c, action, text, object) {
-      switch (action) {
-        case 'FORM_DATA.NAME.TRIGGER':
-          this.calibrateCommandItem();
-          break;
-      }
+      case 'EDIT_TASKS':
+        e.preventDefault();
+        this.set("is_edit_task", this.get("is_edit_task") == true ? false : true)
+        if (this.get("is_edit_task") == true) {
+          this.setPipelineTask(await this.getPipelineTask());
+        }
+        break;
     }
   }
-});
+})

@@ -1,6 +1,7 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import Ractive from "ractive";
 
-export default BaseRactive.extend({
+export default BaseRactive.extend<BaseRactiveInterface>({
   template: /* html */`
     <div class="dropdown">
       <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">

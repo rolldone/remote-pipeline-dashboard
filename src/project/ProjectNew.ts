@@ -1,10 +1,17 @@
+import Ractive from "ractive";
 import ProjectService from "services/ProjectService";
-import BaseRactive from "../base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import template from './ProjectNewView.html';
 
 declare var window: Window;
-const ProjectNew = BaseRactive.extend({});
-export default ProjectNew.extend({
+
+export interface ProjectNewInterface extends BaseRactiveInterface {
+  submit?: { (): Promise<any> }
+  getProject?: { (): Promise<any> }
+  setProject?: { (props?: any): void }
+}
+
+export default BaseRactive.extend<ProjectNewInterface>({
   template: template,
   data() {
     return {

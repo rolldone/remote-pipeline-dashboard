@@ -76,8 +76,8 @@
     </div>
   </div>
   <br>
-  {{#if Object.keys(form_data).length > 0}}
-  <pipeline-items pipelines_items="{{pipelines_items}}"></pipeline-items>
+  {{#if form_data.id != ""}}
+  <pipeline-items pipeline_items="{{pipeline_items}}" pipeline="{{form_data}}"></pipeline-items>
   {{/if}}
   <br>
 </div>

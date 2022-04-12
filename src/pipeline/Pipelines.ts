@@ -1,16 +1,17 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './PipeLinesView.html';
 import { BrowserHistoryEngine, createRouter, Router } from "routerjs";
 import PipelineService from "services/PipelineService";
+import Ractive from "ractive";
 
 declare let window: Window;
 
-const Pipelines = BaseRactive.extend({
-  getPipelines() { },
-  setPipelines(props) { }
-});
+export interface PipelinesInterface extends BaseRactiveInterface {
+  getPipelines: { (): Promise<any> }
+  setPipelines: { (props: any): void }
+}
 
-export default Pipelines.extend({
+export default BaseRactive.extend<PipelinesInterface>({
   template,
   data() {
     return {
@@ -20,7 +21,6 @@ export default Pipelines.extend({
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
-
       this.setPipelines(await this.getPipelines())
       resolve();
     });

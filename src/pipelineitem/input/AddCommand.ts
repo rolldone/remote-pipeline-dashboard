@@ -1,6 +1,8 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import Ractive from "ractive";
 
-export default BaseRactive.extend({
+
+export default BaseRactive.extend<BaseRactiveInterface>({
   template:  /*html*/`
     <a href="#" class="btn btn-flickr w-100" on-click="@this.handleClick('ADD_MORE',{},@event)">
       <!-- Download SVG icon from http://tabler-icons.io/i/brand-flickr -->

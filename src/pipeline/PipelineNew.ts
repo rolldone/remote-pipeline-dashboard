@@ -1,46 +1,37 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import PipelineItems from "pipelineitem/PipelineItems";
+import Ractive from "ractive";
 import { Router } from "routerjs";
 import PipelineService from "services/PipelineService";
 import ProjectService from "services/ProjectService";
 import template from './PipelineNewView.html';
 
 declare var window: Window;
-const PipelineNew = BaseRactive.extend({
-  getProjectDatas() { },
-  setProjectDatas(props) { }
-});
 
-export default PipelineNew.extend({
+export interface PipelineNewInterface extends BaseRactiveInterface {
+  getProjectDatas?: { (): Promise<any> }
+  setProjectDatas?: { (props: any): void }
+  getPipeline?: { (): Promise<any> }
+  setPipeline?: { (props: any): void }
+}
+
+export default BaseRactive.extend<PipelineNewInterface>({
   template,
   components: {
     "pipeline-items": PipelineItems
   },
-  data() {
-    return {
-      form_data: {},
-      pipelines_items: [],
-      project_datas: []
-    }
-  },
-  onconfig() {
-
-  },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
+      _super();
       this.setProjectDatas(await this.getProjectDatas());
+      resolve();
     })
   },
-  async handleClick(action, props, e) {
-    switch (action) {
-      case 'SUBMIT':
-        e.preventDefault();
-        let form_data = this.get("form_data");
-        let resData = await PipelineService.addPipeline(form_data);
-        resData = resData.return;
-        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
-        break;
+  data() {
+    return {
+      pipeline_items: [],
+      project_datas: []
     }
   },
   async getProjectDatas() {
@@ -54,5 +45,16 @@ export default PipelineNew.extend({
   setProjectDatas(props) {
     if (props == null) return;
     this.set("project_datas", props.return);
+  },
+  async handleClick(action, props, e) {
+    switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        let form_data = this.get("form_data");
+        let resData = await PipelineService.addPipeline(form_data);
+        resData = resData.return;
+        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
+        break;
+    }
   }
 });

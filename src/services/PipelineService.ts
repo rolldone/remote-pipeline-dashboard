@@ -1,5 +1,5 @@
 import localStorageDB from "localstoragedb"
-import SqlBricks from "sql-bricks";
+import SqlBricks from "./SqlBricks";
 import SqlService from "./SqlService";
 
 export default {
@@ -10,7 +10,7 @@ export default {
         description: props.description,
         project_id: props.project_id
       }).toString());
-      let resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", id).toString());
+      let resData = await SqlService.selectOne(SqlBricks.select("*").from("pipelines").where("id", id).toString());
       return {
         status: 'success',
         status_code: 200,
@@ -27,7 +27,7 @@ export default {
         description: props.description,
         project_id: props.project_id
       }).where("id", props.id).toString());
-      resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", props.id).toString());
+      resData = await SqlService.selectOne(SqlBricks.select("*").from("pipelines").where("id", props.id).toString());
       return {
         status: 'success',
         status_code: 200,
@@ -39,7 +39,7 @@ export default {
   },
   async getPipeline(props): Promise<any> {
     try {
-      let resData = await SqlService.selectOne(SqlBricks.select().from("pipelines").where("id", props.id).toString());
+      let resData = await SqlService.selectOne(SqlBricks.select("*").from("pipelines").where("id", props.id).toString());
       return {
         status: 'success',
         status_code: 200,
@@ -60,6 +60,7 @@ export default {
       ).from("pipelines").leftJoin("pro").on({
         "pro.id": "pipelines.project_id"
       }).orderBy("pipelines.id DESC").toString());
+      
       return {
         status: 'success',
         status_code: 200,

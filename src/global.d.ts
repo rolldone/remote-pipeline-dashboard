@@ -3,6 +3,12 @@ declare module '*.html' {
   export default value
 }
 
+// declare global {
+//   interface SelectStatement {
+//       readonly limit: number;
+//   }
+// }
+
 
 // declare interface Window {
 //   router: any;

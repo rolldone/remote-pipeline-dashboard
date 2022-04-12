@@ -1,55 +1,45 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import template from './ConditionalCommandView.html';
 import Tags from "bootstrap5-tags"
-import BasicCommand from "./BasicCommand";
+import BasicCommand, { BasicCommandInterface } from "./BasicCommand";
 
-const ConditonalCommand = BasicCommand.extend({
-  getParentConditionType() {
-    return {
-      EQUALS: 'equals',
-      INCLUDES: 'includes',
-      NEXT: 'next',
-      FAILED: 'failed',
-      SUCCESS: 'success',
-    }
-  }
-})
+export interface ConditionalCommandInterface extends BasicCommandInterface {
+  getParentConditionType: { (): any }
+  displayPartial: { (action: string, val: any): void }
+}
 
-export default ConditonalCommand.extend({
+export default BasicCommand.extend<ConditionalCommandInterface>({
   template,
-  data() {
-    return {
-      condition_values: [],
-      method_type: null,
-      sync_action: null,
-    }
-  },
   partials: {
     parent_conditon_partial: [],
     parent_condition_type: null,
     method_type: null,
     parent_order_number_commands_partial: [],
   },
-  oncomplete() {
-    let _super = this._super.bind(this);
-    return new Promise((resolve: Function) => {
-      // Add condition values;
-      this.set("condition_values", this.get("form_data.condition_values") || []);
-      this.set("parent_condition_type", this.get("form_data.parent_condition_type") || this.getParentConditionType().NEXT);
-      _super();
-      resolve();
-    })
+  data() {
+    return {
+      condition_values: [],
+      method_type: null,
+      sync_action: null,
+      form_data: {
+        parent_order_temp_ids: [],
+        data: {
+          command: '',
+          condition_values: []
+        }
+      },
+    }
   },
   observe: {
-    parent_condition_type(val) {
+    parent_condition_type(val): any {
       switch (val) {
         case 'includes':
         case 'equals':
           let _condition_values = this.get("condition_values");
           this.displayPartial('parent_conditon_partial', _condition_values);
-          this.set("form_data.condition_values", _condition_values);
-          this.set("form_data.parent_condition_type", val);
+          this.set("form_data.data.condition_values", _condition_values);
+          this.set("form_data.data.parent_condition_type", val);
           return;
         default:
           this.resetPartial('parent_conditon_partial', []);
@@ -59,6 +49,25 @@ export default ConditonalCommand.extend({
     condition_values: {
       handler: function (val: Array<any>, old: Array<any>) { }
     }
+  },
+  getParentConditionType() {
+    return {
+      EQUALS: 'equals',
+      INCLUDES: 'includes',
+      NEXT: 'next',
+      FAILED: 'failed',
+      SUCCESS: 'success',
+    }
+  },
+  oncomplete() {
+    let _super = this._super.bind(this);
+    return new Promise((resolve: Function) => {
+      // Add condition values;
+      this.set("condition_values", this.get("form_data.data.condition_values") || []);
+      this.set("parent_condition_type", this.get("form_data.data.parent_condition_type") || this.getParentConditionType().NEXT);
+      _super();
+      resolve();
+    })
   },
   displayPartial(action, val) {
     let parent_conditon_partial = [];
@@ -127,6 +136,11 @@ export default ConditonalCommand.extend({
       case 'CONDITION_LOGIC':
         break;
     }
+    /**
+     * Parent :
+     * SELECT_PARENT_ORDER_NUMBER
+     */
+    this._super(action, props, e);
   },
   handleClick(action, props, e) {
     let _template = null;
@@ -165,5 +179,5 @@ export default ConditonalCommand.extend({
         }
         break;
     }
-  },
+  }
 });

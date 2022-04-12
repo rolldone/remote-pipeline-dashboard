@@ -1,8 +1,8 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
 import template from './GroupsView.html';
 
-export default BaseRactive.extend({
+export default BaseRactive.extend<BaseRactiveInterface>({
   template,
   oncomplete() {
     this.router = createRouter({

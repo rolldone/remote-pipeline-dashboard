@@ -1,13 +1,31 @@
-import Ractive from "ractive";
+import Ractive, { BaseParseOpts, ComputationDescriptor, ExtendOpts, PropertyOpts, ValueMap, InitOpts, AdaptorHandle } from "ractive";
+import { Router } from "routerjs";
+import NewRactive, { RactiveExtendInterface, RactiveStaticInterface } from './NewRactive';
 
-export default Ractive.extend({
-  onconstruct: function () {
+export interface BaseRactiveInterface extends RactiveExtendInterface {
+  router?: Router
+  handleClick?: { (action: string, props: any, e: any): void }
+  handleChange?: { (action: string, props: any, e: any): void }
+  req?: any
+  reInitializeObserve?: { (): void }
+  getLang?: any
+}
+
+export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
+  extend?: { <I extends BaseRactiveInterface>(i?: I): BaseRactiveStaticInterface }
+  new(props?: BaseRactiveInterface): typeof NewRactive;
+}
+
+const BaseRactive: BaseRactiveStaticInterface = NewRactive as any;
+
+export default BaseRactive.extend<BaseRactiveInterface>({
+  req: null,
+  onconstruct() {
     this.reInitializeObserve();
   },
-  components: {},
   router: null,
   getLang: null,
-  reInitializeObserve: function () {
+  reInitializeObserve() {
     let self = this;
     for (var key in self.newOn) {
       self.off(key);
@@ -15,13 +33,4 @@ export default Ractive.extend({
     }
   },
   newOn: {},
-  observeData: function (opts, callback) {
-    return this.observe(opts, callback);
-  },
-  ractiveParse(template?: string) {
-    return Ractive.parse(template);
-  },
-  displayPartial(action: string, val: any) {
-
-  }
-});
+})

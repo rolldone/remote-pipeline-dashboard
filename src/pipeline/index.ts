@@ -1,9 +1,9 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter, Router } from "routerjs";
 
 declare let window: Window;
 
-export default BaseRactive.extend({
+export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig(){
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),

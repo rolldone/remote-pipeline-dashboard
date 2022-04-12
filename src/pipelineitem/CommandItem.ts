@@ -1,8 +1,19 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import Ractive from "ractive";
 import BasicCommand from "./input/BasicCommand";
 import ConditionalCommand from "./input/ConditionalCommand";
 
-const CommandItem = BaseRactive.extend({
+export default BaseRactive.extend<BaseRactiveInterface>({
+  data() {
+    return {
+      command_data: {
+        type: "basic-command",
+        temp_id: null
+      },
+      command_datas: [],
+      index: -1
+    }
+  },
   components: {
     "basic-command": BasicCommand,
     "conditional-command": ConditionalCommand
@@ -14,16 +25,6 @@ const CommandItem = BaseRactive.extend({
     <conditional-command index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></conditional-command>
     {{/if}}
   `,
-  data() {
-    return {
-      command_data: {
-        type: "basic-command",
-        temp_id: null
-      },
-      command_datas: [],
-      index: -1
-    }
-  },
   onconfig() {
     this.set("command_data", {
       ...this.get("command_data"),
@@ -34,7 +35,7 @@ const CommandItem = BaseRactive.extend({
   },
   newOn: {
     onCommandListener(c, action, text, object) {
-      switch(action){
+      switch (action) {
         case 'FORM_DATA.NAME.TRIGGER':
           this.fire("listener", c, action, text, object);
           break;
@@ -42,5 +43,3 @@ const CommandItem = BaseRactive.extend({
     }
   }
 })
-
-export default CommandItem;
