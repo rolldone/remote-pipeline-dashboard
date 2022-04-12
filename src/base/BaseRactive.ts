@@ -12,8 +12,8 @@ export interface BaseRactiveInterface extends RactiveExtendInterface {
 }
 
 export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
-  extend?: { <I extends BaseRactiveInterface>(i?: I): BaseRactiveStaticInterface }
-  new(props?: BaseRactiveInterface): typeof NewRactive;
+  extend?: { <I>(i?: I): BaseRactiveStaticInterface }
+  new(props?: BaseRactiveInterface): typeof NewRactive
 }
 
 const BaseRactive: BaseRactiveStaticInterface = NewRactive as any;

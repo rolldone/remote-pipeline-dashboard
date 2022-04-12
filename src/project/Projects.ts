@@ -11,7 +11,7 @@ interface ProjectInterface extends BaseRactiveInterface {
   setProjects: { (props: any): void }
 }
 
-export default BaseRactive.extend({
+export default BaseRactive.extend<ProjectInterface>({
   template,
   data() {
     return {

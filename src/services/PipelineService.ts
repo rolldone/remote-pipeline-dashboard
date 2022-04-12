@@ -51,16 +51,17 @@ export default {
   },
   async getPipelines(props): Promise<any> {
     try {
-      SqlBricks.aliasExpansions({ 'pro': "projects" });
-      let resData = await SqlService.select(SqlBricks.select(
-        "pipelines.name as pip_name",
-        "pipelines.id as pip_id",
-        "pipelines.description as pip_description",
-        "pro.name as pro_name"
-      ).from("pipelines").leftJoin("pro").on({
-        "pro.id": "pipelines.project_id"
-      }).orderBy("pipelines.id DESC").toString());
-      
+      SqlBricks.aliasExpansions({
+        'pro': "projects",
+        "pip": "pipelines"
+      });
+      let query = SqlBricks.select("*").from("pip");
+      query = query.leftJoin("pro").on("pro.id", "pip.project_id");
+      if (props.project_id != null) {
+        query = query.where("pro.id", props.project_id);
+      }
+      query = query.orderBy("pip.id DESC");
+      let resData = await SqlService.select(query.toString());
       return {
         status: 'success',
         status_code: 200,

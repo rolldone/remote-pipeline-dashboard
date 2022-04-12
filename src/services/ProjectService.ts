@@ -49,10 +49,18 @@ export default {
   },
   async getProjects(props): Promise<any> {
     try {
-      let resData = await SqlService.select(SqlBricks.select("*").from("projects").orderBy("id DESC").toString());
-      // console.log(gg.select("*").from("projects").orderBy("id","DESC").toSQL().toNative().sql);
-      // debugger;
-      // let resData = await SqlService.select(gg.select("*").from("projects").orderBy("id","DESC").toSQL().toNative().sql)
+      SqlBricks.aliasExpansions({
+        "pip_task": "pipeline_tasks",
+        "pip_item": "pipeline_items",
+        "pip": "pipelines",
+        "pro": "projects"
+      });
+      let query = SqlBricks.select("*").from("pro");
+      query = query.where({
+        user_id: props.user_id
+      })
+      query = query.orderBy("id DESC");
+      let resData = await SqlService.select(query.toString());
       return {
         status: 'success',
         status_code: 200,
@@ -61,6 +69,5 @@ export default {
     } catch (ex) {
       throw ex;
     }
-
   }
 }

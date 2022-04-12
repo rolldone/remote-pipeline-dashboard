@@ -10,6 +10,7 @@ declare global {
     router: Router;
     pipelineRouter: Router,
     projectRouter: Router,
+    variableRouter: Router
     $: JQueryStatic
   }
 }
@@ -57,6 +58,12 @@ export default function () {
         .get("/pipeline/(.*)?", async (req, context) => {
           let Pipelines = (await import("./pipeline")).default;
           new Pipelines({
+            target: "#index-body"
+          })
+        })
+        .get("/variable/(.*)?", async (req, context) => {
+          let Variables = (await import("./variable")).default;
+          new Variables({
             target: "#index-body"
           })
         })
