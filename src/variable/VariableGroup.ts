@@ -1,10 +1,18 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import InputAsset from "./input/InputAsset";
+import InputScript from "./input/InputScript";
+import InputText from "./input/InputText";
 
 export interface VariableGroupInterface extends BaseRactiveInterface {
 
 }
 
 export default BaseRactive.extend<VariableGroupInterface>({
+  components: {
+    "input-text": InputText,
+    "input-asset": InputAsset,
+    "input-script": InputScript
+  },
   template: /* html */ `
     <div class="row row-cards">
       <div class="col-md-12">
@@ -35,13 +43,22 @@ export default BaseRactive.extend<VariableGroupInterface>({
               </a>
             </li>
           </ul>
-          <div class="card-body">
+          <div class="card-body" style="padding:0;">
             <div class="tab-content">
               {{#each variable_groups:i}}
               <div class="tab-pane" id="tabs-home-{{i}}">
                 <div>
-                  Cursus turpis vestibulum, dui in pharetra vulputate id sed non turpis ultricies fringilla at sed
-                  facilisis lacus pellentesque purus nibh {{i}}
+                  <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                      <input-text></input-text>
+                    </div>
+                    <div class="list-group-item">
+                      <input-asset></input-asset>
+                    </div>
+                    <div class="list-group-item">
+                      <input-script></input-script>
+                    </div>
+                  </div>
                 </div>
               </div>
               {{/each}}

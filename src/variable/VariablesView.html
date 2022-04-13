@@ -40,7 +40,7 @@
       <div class="col-12">
         <div class="card">
           <div class="table-responsive">
-            <table class="table table-vcenter table-mobile-md card-table">
+            <table class="table table-vcenter table-mobile-md card-table" style="overflow: inherit;">
               <thead>
                 <tr>
                   <th>Variable Name</th>
@@ -78,7 +78,7 @@
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" href="#" on-click="@this.handleClick('TO_PIPELINE',{ url : '/'+id+'/view' },@event)">
+                          <a class="dropdown-item" href="/dashboard/variable/{{id}}/view">
                             Edit
                           </a>
                           <a class="dropdown-item" href="#">

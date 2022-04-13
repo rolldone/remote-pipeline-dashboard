@@ -18,7 +18,7 @@ export interface VariableNewInterface extends BaseRactiveInterface {
 export default BaseRactive.extend<VariableNewInterface>({
   template,
   components: {
-    "variable-group": VariableGroup
+    "variable-group": VariableGroup,
   },
   data() {
     return {

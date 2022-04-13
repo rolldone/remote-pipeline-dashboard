@@ -2,6 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
 import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
+import "./style.scss";
 import template from './indexView.html';
 import $ from 'jquery';
 

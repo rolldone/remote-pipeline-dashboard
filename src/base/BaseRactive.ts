@@ -12,13 +12,13 @@ export interface BaseRactiveInterface extends RactiveExtendInterface {
 }
 
 export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
-  extend?: { <I>(i?: I): BaseRactiveStaticInterface }
+  extend?: { <I extends BaseRactiveInterface>(i?: I): BaseRactiveStaticInterface }
   new(props?: BaseRactiveInterface): typeof NewRactive
 }
 
 const BaseRactive: BaseRactiveStaticInterface = NewRactive as any;
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+const GG = BaseRactive.extend<BaseRactiveInterface>({
   req: null,
   onconstruct() {
     this.reInitializeObserve();
@@ -34,3 +34,5 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   },
   newOn: {},
 })
+
+export default GG;
