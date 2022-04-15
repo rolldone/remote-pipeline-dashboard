@@ -18,7 +18,7 @@ export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface,
 
 const BaseRactive: BaseRactiveStaticInterface = NewRactive as any;
 
-const GG = BaseRactive.extend<BaseRactiveInterface>({
+export default BaseRactive.extend<BaseRactiveInterface>({
   req: null,
   onconstruct() {
     this.reInitializeObserve();
@@ -34,5 +34,3 @@ const GG = BaseRactive.extend<BaseRactiveInterface>({
   },
   newOn: {},
 })
-
-export default GG;

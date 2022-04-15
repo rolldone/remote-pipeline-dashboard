@@ -22,6 +22,12 @@ export default BaseRactive.extend<VariablesInterface>({
       resolve();
     });
   },
+  handleClick(action,props,e){
+    switch(action){
+      case 'TO_VARIABLE':
+        break;
+    }
+  },
   async getVariables() {
     try {
       let resData = await VariableService.getVariables({});

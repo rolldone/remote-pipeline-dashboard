@@ -1,4 +1,5 @@
 const ENDPOINT = '/xhr'
 export default {
-  SQL: ENDPOINT + '/sql'
+  SQL: ENDPOINT + '/sql',
+  FILE: ENDPOINT + '/file'
 }

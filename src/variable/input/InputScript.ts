@@ -8,13 +8,7 @@ export default InputText.extend({
       <input type="checkbox" class="form-check-input">
     </div>
     <div class="col-auto">
-      <select type="text" class="form-select tomselected ts-hidden-accessible" placeholder="Select a date" id="select-users" value="" tabindex="-1">
-        <option value="3">Paweł Kuna</option>
-        <option value="4">Nikola Tesla</option>
-        <option value="1">Chuck Tesla</option>
-        <option value=""></option>
-        <option value="2">Elon Musk</option>
-      </select>
+      <switch-type on-listener="setOnSwitchTypeListener" type="{{form_data.type}}" index="{{index}}"></switch-type>
     </div>
     <div class="col text-truncate">
       <input type="text" class="form-control" name="example-text-input" placeholder="Input var name">

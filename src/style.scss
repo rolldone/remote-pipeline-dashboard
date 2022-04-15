@@ -1,6 +1,7 @@
-.table-responsive{
-  overflow: inherit;
+.table-responsive {
+  overflow-x: inherit !important;
 }
+
 .dropdown-menu.dropdown-menu-end.show {
   z-index: 1000000000000000000000;
 }

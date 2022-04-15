@@ -1,3 +1,4 @@
+import FileService from "./FileService";
 import SqlBricks from "./SqlBricks";
 import SqlService from "./SqlService";
 
@@ -10,6 +11,12 @@ export interface variable {
   data?: any
   schema?: any
   description?: string
+}
+
+export interface assetUpload {
+  id_variable: number
+  var_name: string
+  file_datas: Array<any>
 }
 
 export default {
@@ -165,6 +172,25 @@ export default {
       ];
       _in = _in.join(',');
       let resData = await SqlService.delete(SqlBricks.delete('variables').where(SqlBricks.in("id", _in)).toString());
+      return {
+        status: 'success',
+        status_code: 200,
+        return: resData
+      }
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async uploadAsset(props: assetUpload) {
+    try {
+      let formData = new FormData();
+      
+      formData.append("id_variable", props.id_variable + "");
+      formData.append("var_name", props.var_name);
+      for (var a = 0; a < props.file_datas.length; a++) {
+        formData.append("file_datas[]", props.file_datas[a].file[0] as any);
+      }
+      let resData = await FileService.upload(formData);
       return {
         status: 'success',
         status_code: 200,

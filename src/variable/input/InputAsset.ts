@@ -1,64 +1,150 @@
 import BaseRactive from "base/BaseRactive";
-import InputText from "./InputText";
+import VariableService from "services/VariableService";
+import InputText, { InputTextInterface } from "./InputText";
 
-export default InputText.extend({
+export interface InputAssetInterface extends InputTextInterface {
+  createNewAttachment: { (): void }
+  deleteAttachment: { (index: number): void }
+  submitFile: { (): void }
+}
+
+export default InputText.extend<InputAssetInterface>({
   template: /* html */`
-  <div class="row align-items-top">
-    <div class="col-auto">
-      <input type="checkbox" class="form-check-input">
-    </div>
-    <div class="col-auto">
-      <select type="text" class="form-select tomselected ts-hidden-accessible" placeholder="Select a date" id="select-users" value="" tabindex="-1">
-        <option value="3">Paweł Kuna</option>
-        <option value="4">Nikola Tesla</option>
-        <option value="1">Chuck Tesla</option>
-        <option value=""></option>
-        <option value="2">Elon Musk</option>
-      </select>
-    </div>
-    <div class="col text-truncate">
-      <input type="text" class="form-control" name="example-text-input" placeholder="Input var name">
-      <br/>
-      <div class="mb-3">
-        <div class="row">
-          <div class="col">
-            <input type="file" class="form-control">
-          </div>
-          <div class="col-auto">
-            <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook">
-              <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path></svg>
-            </a>
+    <div class="row align-items-top">
+      <div class="col-auto">
+        <input type="checkbox" class="form-check-input">
+      </div>
+      <div class="col-auto">
+        <switch-type on-listener="setOnSwitchTypeListener" type="{{form_data.type}}" index="{{index}}"></switch-type>
+      </div>
+      <div class="col text-truncate">
+        <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input var name">
+        <br/>
+        {{#form_scheme.attachment_datas:i}}
+        <div class="mb-3">
+          <div class="row">
+            <div class="col">
+              <input type="file" style="display:none" value="{{form_data.attachment_datas[i].file}}" name="attatchment-{{i}}" class="form-control" placeholder="{{form_data.attachment_datas.file[0].name}}">
+              <input type="text" class="form-control" value="{{form_data.attachment_datas[i].file[0].name}}" on-click="@this.handleClick('CHOOSE_FILE',{ name : 'attatchment-'+i },@event)" placeholder="Choose a file" readonly="readyonly">
+            </div>
+            <div class="col-auto">
+              {{#if (form_scheme.attachment_datas.length - 1) == i}}
+              <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('MOREE_UPLOAD',{},@event)">
+                <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </a>
+              {{else}}
+              <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('DELETE_FILE',{ index : i },@event)">
+                <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </a>
+              {{/if}}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-3">
-        <div class="row">
-          <div class="col">
-            <input type="file" class="form-control">
-          </div>
-          <div class="col-auto">
-            <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook">
-              <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path></svg>
-            </a>
+        {{/form_scheme.attachment_datas}}
+        {{#if form_scheme.attachment_datas.length > 0}}
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-1">
+              <a href="#" class="btn btn-blue w-100" on-click="@this.handleClick('SUBMIT_FILE',{},@event)">
+                Uploads
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-3">
-        <div class="row">
-          <div class="col">
-            <input type="file" class="form-control">
-          </div>
-          <div class="col-auto">
-            <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook">
-              <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path></svg>
-            </a>
-          </div>
-        </div>
+        {{/if}}
       </div>
     </div>
-  </div>
-  `
+  `,
+  data() {
+    return {
+      form_data: {
+        attachment_datas: {}
+      },
+      form_scheme: {}
+    }
+  },
+  onconfig() {
+    let _super = this._super.bind(this);
+    return new Promise((resolve: Function) => {
+      let _form_scheme = this.get("form_scheme");
+      let _attachment_datas = _form_scheme.attachment_datas || [];
+      if (_attachment_datas.length == 0) {
+        this.createNewAttachment();
+      }
+      _super();
+      resolve();
+    })
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'CHOOSE_FILE':
+        $(e.target).siblings(`input[name=${props.name}]`).trigger("click");
+        break;
+      case 'SUBMIT_FILE':
+        e.preventDefault();
+        this.submitFile();
+        break;
+      case 'MOREE_UPLOAD':
+        e.preventDefault();
+        this.createNewAttachment();
+        return;
+      case 'DELETE_FILE':
+        e.preventDefault();
+        this.deleteAttachment(props.index);
+        break;
+    }
+  },
+  async submitFile() {
+    try {
+      let _form_data = this.get("form_data");
+      let _attachment_datas = _form_data.attachment_datas || {};
+      let _id_variable = this.parent.parent.req.params.id;
+      let resData = await VariableService.uploadAsset({
+        id_variable: _id_variable,
+        var_name: _form_data.name,
+        file_datas: _attachment_datas
+      })
+      let _resAttachmentDatas = resData.return;
+      for (let a in _resAttachmentDatas) {
+        _form_data.attachment_datas[a].file[0].temp_name = _resAttachmentDatas[a].filename;
+      }
+      this.set("form_data", _form_data);
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  deleteAttachment(index) {
+    let _form_data = this.get("form_data");
+    let _attachment_datas_form_data = _form_data.attachment_datas;
+    _attachment_datas_form_data.splice(index, 1);
+
+    let _form_scheme = this.get("form_scheme");
+    let _attachment_datas = _form_scheme.attachment_datas || []
+    _attachment_datas.splice(index, 1);
+
+    setTimeout(() => {
+      this.set("form_scheme", _form_scheme);
+      this.set("form_data", _form_data);
+    }, 100)
+  },
+  createNewAttachment() {
+    let _form_scheme = this.get("form_scheme");
+    let _attachment_datas = _form_scheme.attachment_datas || [];
+    _attachment_datas.push({
+      file: "",
+    });
+    _form_scheme.attachment_datas = _attachment_datas;
+    setTimeout(() => {
+      this.set("form_scheme", _form_scheme);
+    }, 100)
+  }
 })

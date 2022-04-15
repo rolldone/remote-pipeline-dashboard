@@ -24,6 +24,7 @@ export interface RactiveExtendInterface extends OriginRactiveExtendListener<Ract
   on?: any
   off?: any
   fire?: { (action: string, ...props: any): void }
+  parent?: any
 }
 
 export interface RactiveStaticInterface extends Omit<Static, 'extend'> {
