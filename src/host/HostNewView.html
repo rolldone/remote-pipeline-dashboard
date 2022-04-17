@@ -5,21 +5,16 @@
       <div class="col">
         <!-- Page pre-title -->
         <div class="page-pretitle">
-          variable
+          host
         </div>
         <h2 class="page-title">
-          Add New Variable
+          Add New Host
         </h2>
       </div>
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
-          <span class="d-none d-sm-inline">
-            <a href="#" class="btn btn-white">
-              Manage Variable
-            </a>
-          </span>
-          <a href="/dashboard/variable" class="btn btn-primary d-none d-sm-inline-block">
+          <a href="/dashboard/host" class="btn btn-primary d-none d-sm-inline-block">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-corner-up-left" width="24"
               height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -27,7 +22,7 @@
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M18 18v-6a3 3 0 0 0 -3 -3h-10l4 -4m0 8l-4 -4"></path>
             </svg>
-            Back to variables
+            Back to hosts
           </a>
         </div>
       </div>
@@ -39,43 +34,24 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">New Variable Form</h3>
+        <h3 class="card-title">New Host Form</h3>
       </div>
       <div class="card-body">
         <form>
           <input type="hidden" name="id" value="{{form_data.id}}">
           <input type="hidden" name="project_id" value="{{form_data.project_id}}">
           <div class="form-group mb-3 ">
-            <label class="form-label">Variable Name</label>
+            <label class="form-label">Host Name</label>
             <div>
               <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Pipeline Name"
                 name="name" value="{{form_data.name}}">
-              <small class="form-hint">This is variable name.</small>
+              <small class="form-hint">This is host name.</small>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description <span class="form-label-description">56/100</span></label>
             <textarea class="form-control" name="description" rows="6"
               placeholder="Content..">{{form_data.description}}</textarea>
-          </div>
-          <div class="mb-3">
-            <div class="form-label">Select Project Name</div>
-            <select class="form-select" name="project_id" on-change="@this.handleChange('PROJECT_SELECT',{},@event)"
-              value="{{form_data.project_id}}">
-              <option value="">--</option>
-              {{#project_datas:i}}
-              <option value="{{id}}">{{name}}</option>
-              {{/project_datas}}
-            </select>
-          </div>
-          <div class="mb-3">
-            <div class="form-label">Select Pipeline Name</div>
-            <select class="form-select" name="pipeline_id" value="{{form_data.pipeline_id}}">
-              <option value="">--</option>
-              {{#pipeline_datas:i}}
-              <option value="{{pip_id}}">{{pip_name}}</option>
-              {{/pipeline_datas}}
-            </select>
           </div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"
@@ -87,8 +63,7 @@
   </div>
   <br>
   {{#if form_data.id != ""}}
-  <variable-group form_schemes={{form_schemes}} default_tab="0" variable_groups="{{variable_groups}}" variable="{{form_data}}">
-  </variable-group>
+  <host-collections datas="{{datas}}"></host-collections>
   {{/if}}
   <br>
 </div>

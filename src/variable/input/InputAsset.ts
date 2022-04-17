@@ -1,4 +1,5 @@
 import BaseRactive from "base/BaseRactive";
+import { cloneDeep } from "lodash";
 import VariableService from "services/VariableService";
 import InputText, { InputTextInterface } from "./InputText";
 
@@ -12,13 +13,20 @@ export default InputText.extend<InputAssetInterface>({
   template: /* html */`
     <div class="row align-items-top">
       <div class="col-auto">
-        <input type="checkbox" class="form-check-input">
+        <a href="#" class="btn btn-red w-100" aria-label="Facebook" on-click="@this.handleClick('DELETE',{ index : index },@event)">
+          <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </a>
       </div>
       <div class="col-auto">
-        <switch-type on-listener="setOnSwitchTypeListener" type="{{form_data.type}}" index="{{index}}"></switch-type>
+        <switch-type on-listener="setOnSwitchTypeListener" type="{{form_scheme.type}}" index="{{index}}"></switch-type>
       </div>
       <div class="col text-truncate">
-        <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input var name">
+        <input type="text" class="form-control" name="name" value="{{form_scheme.name}}" placeholder="Input var name">
         <br/>
         {{#form_scheme.attachment_datas:i}}
         <div class="mb-3">
@@ -102,6 +110,7 @@ export default InputText.extend<InputAssetInterface>({
         this.deleteAttachment(props.index);
         break;
     }
+    this._super(action, props, e)
   },
   async submitFile() {
     try {
@@ -115,7 +124,14 @@ export default InputText.extend<InputAssetInterface>({
       })
       let _resAttachmentDatas = resData.return;
       for (let a in _resAttachmentDatas) {
-        _form_data.attachment_datas[a].file[0].temp_name = _resAttachmentDatas[a].filename;
+        _form_data.attachment_datas[a] = {
+          file: []
+        }
+        _form_data.attachment_datas[a].file[0] = {
+          ..._resAttachmentDatas[a],
+          name: _resAttachmentDatas[a].originalname,
+          temp_name: _resAttachmentDatas[a].filename
+        }
       }
       this.set("form_data", _form_data);
     } catch (ex) {
@@ -123,14 +139,19 @@ export default InputText.extend<InputAssetInterface>({
     }
   },
   deleteAttachment(index) {
+    let _attachment_datas_deleted = [];
     let _form_data = this.get("form_data");
     let _attachment_datas_form_data = _form_data.attachment_datas;
+    // Add to deleted datas attachement
+    _attachment_datas_deleted.push(cloneDeep(_attachment_datas_form_data[index]));
+    _form_data.attachment_datas_deleted = _attachment_datas_deleted;
+    // Then you can delete the attachement
     _attachment_datas_form_data.splice(index, 1);
 
     let _form_scheme = this.get("form_scheme");
     let _attachment_datas = _form_scheme.attachment_datas || []
+    _form_scheme.attachment_datas = _attachment_datas;
     _attachment_datas.splice(index, 1);
-
     setTimeout(() => {
       this.set("form_scheme", _form_scheme);
       this.set("form_data", _form_data);

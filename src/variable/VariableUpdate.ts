@@ -18,14 +18,17 @@ export default VariableNew.extend<VariableUpdateInterface>({
   async submitVariable() {
     try {
       let form_data = this.get("form_data");
+      let _form_schemes = this.get("form_schemes");
+      let _variable_groups = this.get("variable_groups");
       let resData = await VariableService.updateVariable({
         id: form_data.id,
         name: form_data.name,
         description: form_data.description,
         project_id: form_data.project_id,
-        pipeline_id: form_data.pipeline_id
+        pipeline_id: form_data.pipeline_id,
+        schema: _form_schemes,
+        data: _variable_groups
       });
-      debugger;
     } catch (ex) {
       console.error("submitVariable - ex :: ", ex);
     }
@@ -52,6 +55,8 @@ export default VariableNew.extend<VariableUpdateInterface>({
       project_id: props.project_id,
       schema: props.schema
     });
+    this.set("variable_groups", JSON.parse(props.data));
+    this.set("form_schemes", JSON.parse(props.schema));
     this.setPipelines(await this.getPipelines(props.project_id));
   },
 });

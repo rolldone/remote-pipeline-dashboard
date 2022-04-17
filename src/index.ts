@@ -11,13 +11,15 @@ declare global {
     router: Router;
     pipelineRouter: Router,
     projectRouter: Router,
-    variableRouter: Router
+    variableRouter: Router,
+    hostRouter: Router,
+    bootstrap: any
     $: JQueryStatic
   }
 }
 
 export default function () {
-  
+
   window.$ = $;
 
   const App = BaseRactive.extend<BaseRactiveInterface>({
@@ -68,6 +70,12 @@ export default function () {
             target: "#index-body"
           })
         })
+        .get('/host/(.*)?', async (req, context) => {
+          let Host = (await import("./host")).default;
+          new Host({
+            target: "#index-body",
+          })
+        })
         .get("/execution/(.*)?", async (req, context) => {
           let Execution = (await import("./execution/Executions")).default;
           new Execution({
@@ -115,7 +123,7 @@ export default function () {
         .run();
       setTimeout(() => {
         this.set("test", "aaaaaaaaaaaaaaaa");
-        
+
       }, 4000);
     },
     handleClick(action, props, e) {

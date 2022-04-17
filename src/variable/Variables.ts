@@ -22,15 +22,19 @@ export default BaseRactive.extend<VariablesInterface>({
       resolve();
     });
   },
-  handleClick(action,props,e){
-    switch(action){
+  handleClick(action, props, e) {
+    switch (action) {
       case 'TO_VARIABLE':
         break;
     }
   },
   async getVariables() {
     try {
-      let resData = await VariableService.getVariables({});
+      // console.log(this.req);
+      let _pipeline_id = this.req.query.pipeline_id
+      let resData = await VariableService.getVariables({
+        pipeline_id: _pipeline_id
+      });
       return resData;
     } catch (ex) {
       console.error("getVariables - ex :: ", ex);

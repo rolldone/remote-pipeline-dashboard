@@ -67,7 +67,29 @@ export default {
         id: props.id,
         user_id: props.user_id
       }).toString());
-
+      for (let a = 0; a < props.data.length; a++) {
+        let tabs = props.data[a];
+        for (let b = 0; b < tabs.datas.length; b++) {
+          let _data = tabs.datas[b];
+          if (_data.attachment_datas != null) {
+            for (let c = 0; c < _data.attachment_datas.length; c++) {
+              let _item = _data.attachment_datas[c];
+              let _formData = new FormData();
+              _formData.append("from_path", _item.file[0].path);
+              _formData.append("to_path", "./storage/app/" + props.id + "/" + _item.file[0].name)
+              let resMove = await FileService.move(_formData);
+            }
+          }
+          if (_data.attachment_datas_deleted != null) {
+            for (let c = 0; c < _data.attachment_datas_deleted.length; c++) {
+              let _item = _data.attachment_datas_deleted[c];
+              let _formData = new FormData();
+              _formData.append("delete_path", "./storage/app/" + props.id + "/" + _item.file[0].name)
+              let resDelete = await FileService.delete(_formData);
+            }
+          }
+        }
+      }
       return {
         status: 'success',
         status_code: 200,
@@ -106,7 +128,11 @@ export default {
       query = query
         .leftJoin("pip").on("pip.id", "vari.pipeline_id")
         .leftJoin("pro").on("pro.id", "pip.project_id");
-
+      
+      // Where segment
+      if (props.pipeline_id != null) {
+        query = query.where("pip.id", props.pipeline_id);
+      }
       let resData = await SqlService.select(query.toString());
 
       return {
@@ -184,7 +210,7 @@ export default {
   async uploadAsset(props: assetUpload) {
     try {
       let formData = new FormData();
-      
+
       formData.append("id_variable", props.id_variable + "");
       formData.append("var_name", props.var_name);
       for (var a = 0; a < props.file_datas.length; a++) {

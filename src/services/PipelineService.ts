@@ -55,7 +55,12 @@ export default {
         'pro': "projects",
         "pip": "pipelines"
       });
-      let query = SqlBricks.select("*").from("pip");
+      let query = SqlBricks.select(
+        "pip.id as pip_id",
+        "pip.name as pip_name",
+        "pro.id as pro_id",
+        "pro.name as pro_name"
+      ).from("pip");
       query = query.leftJoin("pro").on("pro.id", "pip.project_id");
       if (props.project_id != null) {
         query = query.where("pro.id", props.project_id);

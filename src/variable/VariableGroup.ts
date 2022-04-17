@@ -10,6 +10,7 @@ export interface VariableGroupInterface extends BaseRactiveInterface {
   calibrateVariableGroups: { (index: number): void }
   newTypeInput: { (index: number): any }
   changeTypeInput: { (props: any): any }
+  refreshVariableGroups: { (): void }
 }
 
 declare let window: Window;
@@ -27,6 +28,7 @@ export default BaseRactive.extend<VariableGroupInterface>({
           <ul class="nav nav-tabs" data-bs-toggle="tabs">
             {{#each variable_groups:i}}
             <li class="nav-item">
+              {{#if i>0}}
               <a href="#tabs-home-{{i}}" class="nav-link {{active_tab == i?'active':''}}" data-bs-toggle="tab" on-click="@this.handleClick('SWITCH_TAB',{ index : i },@event)">
                 <svg xmlns="http://www.w3.org/2000/svg" on-click="@this.handleClick('DELETE_TAB',{ index : i },@event)" style="color: red; font-size: 0.5em;" class="icon icon-tabler icon-tabler-x"
                   width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -35,8 +37,17 @@ export default BaseRactive.extend<VariableGroupInterface>({
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
-                {{name}}
+                <span contenteditable="true" value="{{name}}">
+                  {{name}}
+                <span>
               </a>
+              {{else}}
+              <a href="#tabs-home-{{i}}" class="nav-link {{active_tab == i?'active':''}}" data-bs-toggle="tab" on-click="@this.handleClick('SWITCH_TAB',{ index : i },@event)">
+                <span contenteditable="true" value="{{name}}">
+                  {{name}}
+                <span>
+              </a>
+              {{/if}}
             </li>
             {{/each}}
             <li class="nav-item-button">
@@ -84,8 +95,8 @@ export default BaseRactive.extend<VariableGroupInterface>({
       variable: {},
       variable_groups: [],
       active_tab: 0,
-      form_scheme: {},
-      req: null
+      form_schemes: [],
+      req: null,
     }
   },
   partials: {
@@ -94,9 +105,25 @@ export default BaseRactive.extend<VariableGroupInterface>({
   onconstruct() {
     this.newOn = {
       onInputTextListener: (c, action, text, object) => {
+        let _form_schemes = this.get("form_schemes");
+        let _variable_groups = this.get("variable_groups");
+        let _active_tab = this.get("active_tab");
         switch (action) {
           case 'SWITCH_VARIABLE_TYPE':
             this.changeTypeInput(text);
+            break;
+          case 'DELETE':
+            // Delete real and scheme
+            for (var a = 0; a < _variable_groups.length; a++) {
+              _variable_groups[a].datas.splice(text.index, 1);
+            }
+            _form_schemes.splice(text.index, 1);
+            // Save again
+            setTimeout(async () => {
+              await this.set("variable_groups", _variable_groups);
+              await this.set("form_schemes", _form_schemes);
+              this.refreshVariableGroups();
+            }, 100);
             break;
         }
       }
@@ -104,11 +131,19 @@ export default BaseRactive.extend<VariableGroupInterface>({
     this._super();
   },
   oncomplete() {
+    this.observe("variable_groups[*].datas[*].name", (val, val2, path) => {
+      console.log(val, val2, path);
+    })
+    this._super();
+    let _form_schemes = this.get("form_schemes");
+    if (_form_schemes.length > 0) {
+      this.handleClick("SWITCH_TAB", { index: 0 }, { preventDefault: () => { } })
+    }
   },
   newTypeInput(index) {
     return {
       type: "input-text",
-      element: /* html */`<input-text form_data="{{datas[${index}]}}" index="${index}" on-listener="onInputTextListener"></input-text>`,
+      element: /* html */`<input-text form_scheme="{{form_schemes[${index}]}}" form_data="{{datas[${index}]}}" index="${index}" on-listener="onInputTextListener"></input-text>`,
       is_active: true
     }
   },
@@ -123,7 +158,7 @@ export default BaseRactive.extend<VariableGroupInterface>({
       // debugger;
       _datas[_props_index] = {
         type: _props_type,
-        element: /* html */`<${_props_type} form_scheme="{{form_scheme}}" form_data="{{datas[${_props_index}]}}" index="${_props_index}" on-listener="onInputTextListener"></${_props_type}>`,
+        element: /* html */`<${_props_type} form_scheme="{{form_schemes[${_props_index}]}}" form_data="{{datas[${_props_index}]}}" index="${_props_index}" on-listener="onInputTextListener"></${_props_type}>`,
         is_active: true
       }
       this.set("variable_groups", _variable_groups);
@@ -132,8 +167,44 @@ export default BaseRactive.extend<VariableGroupInterface>({
       alert("The Component is not found or not initialized!");
     }
   },
+  refreshVariableGroups() {
+    let _active_tab = this.get("active_tab");
+    let _form_schemes = this.get("form_schemes");
+    let _variable_groups = this.get("variable_groups");
+    // Must override the new array again for get effetct
+    // But for now the skenario is reset it
+    let _input_type_partials = [
+      // ...this.partials.input_type_partials as Array<any>
+    ];
+    let _ractiveView = null;
+    // debugger;
+    let _variable_scheme = _variable_groups[_active_tab];
+    if (_variable_scheme.datas.length > 0) {
+      for (let a = 0; a < _variable_scheme.datas.length; a++) {
+        let _datas = cloneDeep(_variable_groups[_active_tab].datas[a]);
+        _datas.element = /* html */ `<${_datas.type} form_scheme="{{form_schemes[${a}]}}" form_data="{{datas[${a}]}}" index="${a}" on-listener="onInputTextListener"></${_datas.type}>`
+        _ractiveView = Ractive.parse(/* html */`
+          <div class='list-group-item' index='${a}'>
+            ${_datas.element}
+          </div>
+        `);
+        _input_type_partials.push({
+          ..._ractiveView.t[0]
+        })
+      }
+      this.resetPartial("input_type_partials", _input_type_partials);
+    } else {
+      this.resetPartial("input_type_partials", []);
+      this.handleClick('ADD_MORE', {}, {
+        preventDefault: () => { }
+      })
+    }
+    console.log(this.get("form_schemes"))
+    console.log(this.get("variable_groups"))
+  },
   calibrateVariableGroups(index) {
     let _datas = [];
+    let _form_schemes = this.get("form_schemes");
     let _variable_groups = this.get("variable_groups");
     let _variable_group = _variable_groups[index];
     // Must override the new array again for get effetct
@@ -146,16 +217,9 @@ export default BaseRactive.extend<VariableGroupInterface>({
     let _variable_scheme = _variable_groups[0];
     if (_variable_scheme.datas.length > 0) {
       _datas = _variable_group.datas;
-      // debugger;
       for (let a = 0; a < _variable_scheme.datas.length; a++) {
         if (_datas[a] != null && _datas[a].element != null && _datas[a].type == _variable_scheme.datas[a].type) {
-          // _datas[a] = this.newTypeInput(a);
-          // debugger;
-          // let gg = cloneDeep(_variable_scheme.datas[a]);
-          // debugger;
-          // assign(gg, pick(_datas[a], keys(gg)));
-          // _datas[a] = gg;
-          // debugger;
+          _datas[a].element = /* html */ `<${_datas[a].type} form_scheme="{{form_schemes[${a}]}}" form_data="{{datas[${a}]}}" index="${a}" on-listener="onInputTextListener"></${_datas[a].type}>`
         } else {
           _datas[a] = cloneDeep(_variable_scheme.datas[a]);
           // _.assign(obj1, _.pick(obj2, _.keys(obj1)));
@@ -167,11 +231,15 @@ export default BaseRactive.extend<VariableGroupInterface>({
             ${_datas[a].element}
           </div>
         `);
+
         _input_type_partials.push({
           ..._ractiveView.t[0]
         })
       }
     } else {
+      // Create for scheme first
+      _form_schemes.push({});
+
       _datas = _variable_group.datas;
       _datas.push(this.newTypeInput(0));
       _ractiveView = Ractive.parse(/* html */`
@@ -182,9 +250,9 @@ export default BaseRactive.extend<VariableGroupInterface>({
       _input_type_partials.push({
         ..._ractiveView.t[0]
       })
-      // debugger;
     }
     this.set("variable_groups", _variable_groups);
+    this.set("form_schemes", _form_schemes);
     this.resetPartial("input_type_partials", _input_type_partials);
   },
   handleClick(action, props, e) {
@@ -205,7 +273,7 @@ export default BaseRactive.extend<VariableGroupInterface>({
       case 'ADD_TAB':
         e.preventDefault();
         _variable_groups.push({
-          name: "Change This Name..",
+          name: "var-mode-"+(_variable_groups.length),
           datas: [],
           is_active: true
         });
@@ -218,7 +286,6 @@ export default BaseRactive.extend<VariableGroupInterface>({
         e.preventDefault();
         _variable_group = _variable_groups[0];
         _datas = _variable_group.datas;
-        // debugger;
         let _next_index = (_datas.length - 1) + 1;
         _datas.push(this.newTypeInput(_next_index));
         this.set("variable_groups", _variable_groups);

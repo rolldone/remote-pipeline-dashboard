@@ -10,11 +10,11 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   `,
   data() {
     return {
-      type: null,
+      type: "input-text",
       index: null,
       variable_types: {
         "input-text": {
-          label: "Input text"
+          label: "Input text",
         },
         "input-script": {
           label: "Input script"
@@ -24,6 +24,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
         }
       }
     }
+  },
+  oncomplete(){
+    this.observe("type",(val)=>{
+    })
   },
   handleChange(action, props, e) {
     switch (action) {

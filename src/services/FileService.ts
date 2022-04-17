@@ -17,14 +17,14 @@ export default {
       throw ex;
     }
   },
-  delete: async (props: any): Promise<any> => {
+  delete: async (props: FormData): Promise<any> => {
     try {
       let resData = await axios({
         method: "post",
         url: BaseService.FILE + '/delete',
         data: props,
         headers: {
-          'Content-Type': `multipart/form-data;`,
+          // 'Content-Type': `multipart/form-data;`,
         }
       })
       return resData.data;
@@ -32,14 +32,14 @@ export default {
       throw ex;
     }
   },
-  move: async (props: string): Promise<any> => {
+  move: async (props: FormData): Promise<any> => {
     try {
       let resData = await axios({
         method: "post",
         url: BaseService.FILE + '/move',
         data: props,
         headers: {
-          'Content-Type': `multipart/form-data;`,
+          // 'Content-Type': `multipart/form-data;`,
         }
       })
       return resData.data;

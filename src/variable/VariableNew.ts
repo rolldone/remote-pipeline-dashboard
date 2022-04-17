@@ -24,7 +24,9 @@ export default BaseRactive.extend<VariableNewInterface>({
     return {
       form_data: {},
       project_datas: [],
-      pipeline_datas: []
+      pipeline_datas: [],
+      form_schemes: [],
+      variable_groups: []
     }
   },
   oncomplete() {
