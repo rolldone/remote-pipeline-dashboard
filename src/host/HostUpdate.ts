@@ -41,7 +41,11 @@ export default HostNew.extend<HostUpdateInterface>({
         id: _form_data.id,
         name: _form_data.name,
         description: _form_data.description,
-        data: _form_data.datas
+        data: _form_data.datas,
+        auth_type: _form_data.auth_type,
+        private_key: _form_data.private_key,
+        username: _form_data.username,
+        password: _form_data.password
       });
       debugger;
     } catch (ex) {

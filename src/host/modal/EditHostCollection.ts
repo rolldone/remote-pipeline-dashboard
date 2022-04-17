@@ -14,7 +14,9 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
   data() {
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
-      form_data: {},
+      form_data: {
+        auth_type: "parent"
+      },
       index: null
     }
   },

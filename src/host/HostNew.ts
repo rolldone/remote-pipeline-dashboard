@@ -33,7 +33,11 @@ export default BaseRactive.extend<HostNewInterface>({
       let _form_data = this.get("form_data");
       let resData = await HostService.addHost({
         name: _form_data.name,
-        description: _form_data.description
+        description: _form_data.description,
+        auth_type: _form_data.auth_type,
+        private_key: _form_data.private_key,
+        username: _form_data.username,
+        password: _form_data.password
       });
       resData = resData.return;
       window.hostRouter.navigate(window.hostRouter.buildUrl(`/${resData.id}/view`));

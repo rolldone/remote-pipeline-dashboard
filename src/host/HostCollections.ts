@@ -15,7 +15,7 @@ export default BaseRactive.extend<HostCollectionInterface>({
       <div class="col-md-12">
         <div class="card">
           <div class="table-responsive">
-            <edit-host-collection form_data={{edit_form_data}} on-listener="onEditHostCollectionListener"></edit-host-collection>
+            <edit-host-collection form_data={{edit_form_data}} on-listener="onEditHostCollectionListener" index="{{select_index}}"></edit-host-collection>
             <table class="table table-vcenter table-mobile-md card-table">
               <thead>
                 <tr>
@@ -81,7 +81,8 @@ export default BaseRactive.extend<HostCollectionInterface>({
   data() {
     return {
       datas: [],
-      edit_form_data: {}
+      edit_form_data: {},
+      select_index: null
     }
   },
   onconstruct() {
@@ -110,6 +111,7 @@ export default BaseRactive.extend<HostCollectionInterface>({
       case 'EDIT':
         e.preventDefault();
         let _index = props.index;
+        this.set("select_index", _index);
         this.set("edit_form_data", _datas[_index]);
         let editHostCollectionComponent = this.findComponent("edit-host-collection");
         editHostCollectionComponent.show();
@@ -136,7 +138,8 @@ export default BaseRactive.extend<HostCollectionInterface>({
         ip_address: "192.168.0.1",
         from: "Your ip address Location",
         host_name: "Your Host Name",
-        status: true
+        status: true,
+        auth_type: "parent"
       })
       this.set("datas", _datas);
     } catch (ex) {

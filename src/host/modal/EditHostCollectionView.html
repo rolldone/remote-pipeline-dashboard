@@ -28,6 +28,76 @@
             <option value={{false}} >Deactivated</option>
           </select>
         </div>
+        <div class="form-selectgroup-boxes row mb-3">
+          <div class="col-lg-4">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.auth_type}}" value="parent" class="form-selectgroup-input">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Parent</span>
+                  <span class="d-block text-muted">Using parent group authentication</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="col-lg-4">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.auth_type}}" value="basic_auth" class="form-selectgroup-input">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Basic Authentication</span>
+                  <span class="d-block text-muted">Using Password for login server</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="col-lg-4">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.auth_type}}" value="private_key" class="form-selectgroup-input">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">SSH Key Authentication</span>
+                  <span class="d-block text-muted">Using Private key for Authentication</span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+        {{#if form_data.auth_type == "basic_auth"}}
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username"
+            name="password" value="{{form_data.username}}">
+          <small class="form-hint">Set the username.</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password"
+            name="password" value="{{form_data.password}}">
+          <small class="form-hint">Set the password.</small>
+        </div>
+        {{elseif form_data.auth_type == "private_key"}}
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username"
+            name="password" value="{{form_data.username}}">
+          <small class="form-hint">Set the username.</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Private key <span class="form-label-description"></span></label>
+          <textarea class="form-control" name="private_key" rows="6"
+            placeholder="Content..">{{form_data.private_key}}</textarea>
+        </div>
+        {{/if}}
       </div>
       <div class="modal-footer">
         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">

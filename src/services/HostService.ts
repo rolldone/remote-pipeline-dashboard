@@ -6,6 +6,10 @@ export interface Host {
   name?: string,
   description?: string,
   data?: Array<any>
+  auth_type?: string
+  password?: string
+  username?: string
+  private_key?: string
 }
 
 export default {
@@ -21,7 +25,11 @@ export default {
       'hos.id as id',
       'hos.name as name',
       'hos.data as data',
-      'hos.description as description'
+      'hos.description as description',
+      'hos.username as username',
+      'hos.password as password',
+      'hos.auth_type as auth_type',
+      'hos.private_key as private_key'
     ).from("hos");
     query = query.leftJoin('usr').on({
       "usr.id": "hos.user_id"
@@ -49,7 +57,11 @@ export default {
       'hos.id as id',
       'hos.name as name',
       'hos.data as data',
-      'hos.description as description'
+      'hos.description as description',
+      'hos.username as username',
+      'hos.password as password',
+      'hos.auth_type as auth_type',
+      'hos.private_key as private_key'
     ).from("hos");
     query = query.leftJoin('usr').on({
       "usr.id": "hos.user_id"
@@ -71,7 +83,11 @@ export default {
     let resData = await SqlService.insert(SqlBricks.insert('hosts', {
       name: props.name,
       description: props.description,
-      data: props.data
+      data: props.data,
+      auth_type: props.auth_type,
+      private_key: props.private_key,
+      username: props.username,
+      password: props.password
     }).toString());
     resData = await SqlService.selectOne(SqlBricks.select("*").from("hosts").where("id", resData).toString());
     return {
@@ -84,7 +100,11 @@ export default {
     let resData = await SqlService.update(SqlBricks.update('hosts', {
       name: props.name,
       description: props.description,
-      data: JSON.stringify(props.data)
+      data: JSON.stringify(props.data),
+      auth_type: props.auth_type,
+      private_key: props.private_key,
+      username: props.username,
+      password: props.password
     }).where("id", props.id).toString());
     resData = await SqlService.selectOne(SqlBricks.select("*").from("hosts").where("id", props.id).toString());
     return {
