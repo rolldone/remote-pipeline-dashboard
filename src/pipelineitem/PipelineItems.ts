@@ -114,11 +114,11 @@ export default BaseRactive.extend<PipelineItemsInterface>({
     for (var a = 0; a < props.return.length; a++) {
       let _pipeline_item = props.return[a];
       pipeline_items.push({
-        id: _pipeline_item.pip_item_id,
-        name: _pipeline_item.pip_item_name,
-        description: _pipeline_item.pip_item_description,
-        type: _pipeline_item.pip_item_type,
-        order_number: _pipeline_item.pip_item_order_number,
+        id: _pipeline_item.id,
+        name: _pipeline_item.name,
+        description: _pipeline_item.description,
+        type: _pipeline_item.type,
+        order_number: _pipeline_item.order_number,
         project_id: _pipeline_item.pro_id,
         pipeline_id: _pipeline_item.pip_id
       })

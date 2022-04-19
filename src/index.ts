@@ -8,11 +8,12 @@ import $ from 'jquery';
 
 declare global {
   interface Window {
-    router: Router;
-    pipelineRouter: Router,
-    projectRouter: Router,
-    variableRouter: Router,
-    hostRouter: Router,
+    router: Router
+    pipelineRouter: Router
+    projectRouter: Router
+    variableRouter: Router
+    hostRouter: Router
+    executionRouter: Router
     bootstrap: any
     $: JQueryStatic
   }
@@ -77,7 +78,7 @@ export default function () {
           })
         })
         .get("/execution/(.*)?", async (req, context) => {
-          let Execution = (await import("./execution/Executions")).default;
+          let Execution = (await import("./execution")).default;
           new Execution({
             target: "#index-body"
           })
@@ -121,10 +122,8 @@ export default function () {
         // Calling "run" will execute handlers immediately for the current url.
         // You can avoid calling it and wait for the next route change instead.
         .run();
-      setTimeout(() => {
-        this.set("test", "aaaaaaaaaaaaaaaa");
 
-      }, 4000);
+      window.router = this.router;
     },
     handleClick(action, props, e) {
       switch (action) {

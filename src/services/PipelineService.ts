@@ -56,8 +56,8 @@ export default {
         "pip": "pipelines"
       });
       let query = SqlBricks.select(
-        "pip.id as pip_id",
-        "pip.name as pip_name",
+        "pip.id as id",
+        "pip.name as name",
         "pro.id as pro_id",
         "pro.name as pro_name"
       ).from("pip");

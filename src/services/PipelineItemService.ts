@@ -36,11 +36,11 @@ export default {
         'pip_item': "pipeline_items"
       });
       let query = SqlBricks.select(
-        "pip_item.name as pip_item_name",
-        "pip_item.id as pip_item_id",
-        "pip_item.description as pip_item_description",
-        "pip_item.is_active as pip_item_is_active",
-        "pip_item.order_number as pip_item_order_number",
+        "pip_item.name as name",
+        "pip_item.id as id",
+        "pip_item.description as description",
+        "pip_item.is_active as is_active",
+        "pip_item.order_number as order_number",
         "pro.name as pro_name",
         "pro.id as pro_id",
         "pro.description as pro_description",
@@ -78,11 +78,11 @@ export default {
         'pip': "pipelines"
       });
       let query = SqlBricks.select(
-        "pip_item.name as pip_item_name",
-        "pip_item.id as pip_item_id",
-        "pip_item.description as pip_item_description",
-        "pip_item.is_active as pip_item_is_active",
-        "pip_item.order_number as pip_item_order_number",
+        "pip_item.name as name",
+        "pip_item.id as id",
+        "pip_item.description as description",
+        "pip_item.is_active as is_active",
+        "pip_item.order_number as order_number",
         "pro.name as pro_name",
         "pro.id as pro_id",
         "pro.description as pro_description",
