@@ -19,7 +19,7 @@ export default BaseRactive.extend<Step2Interface>({
       <h1 class="mt-1">Create new Execution!</h1>
       <p class="text-muted">Select the pipeline, which the pipeline you want run it.</p>
       </div>
-      <div class="hr-text hr-text-center hr-text-spaceless">Step 1</div>
+      <div class="hr-text hr-text-center hr-text-spaceless">Step 2</div>
       <div class="card-body">
         <div class="mb-3">
           <div class="form-label">Select Pipeline</div>
@@ -40,7 +40,7 @@ export default BaseRactive.extend<Step2Interface>({
               <div class="list-group-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <input type="checkbox" class="form-check-input">
+                    <input type="checkbox" class="form-check-input" name="{{form_data.pipeline_item_ids}}" value="{{id}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
                   </div>
                   <div class="col-auto">
                     <a href="#">
@@ -72,7 +72,7 @@ export default BaseRactive.extend<Step2Interface>({
       <div class="col">
         <div class="btn-list justify-content-end">
           <a href="#" class="btn btn-link link-secondary">
-            Set up later
+            Back
           </a>
           <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">
             Continue
@@ -100,6 +100,25 @@ export default BaseRactive.extend<Step2Interface>({
     switch (action) {
       case 'SELECT_PIPELINE':
         this.setPipelineItems(await this.getPipelineItems());
+        break;
+      case 'CHECK_PIPELINE_ITEM':
+        console.log(this.get("form_data"));
+        break;
+    }
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'BACK':
+        e.preventDefault();
+        this.fire("listener",action,{
+          component: "step-one"
+        },e);
+        break;
+      case 'CONTINUE':
+        e.preventDefault();
+        this.fire("listener", action, {
+          component: "step-three"
+        }, e);
         break;
     }
   },
@@ -133,6 +152,5 @@ export default BaseRactive.extend<Step2Interface>({
   setPipelineItems(props) {
     if (props == null) return;
     this.set("pipeline_item_datas", props.return);
-    debugger;
   },
 });

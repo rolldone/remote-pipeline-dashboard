@@ -1,8 +1,11 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import template from './ExecutionNewView.html'
+import Done from "./step/Done";
 import Step1 from "./step/Step1";
 import Step2 from "./step/Step2";
+import Step3 from "./step/Step3";
+import Step4 from "./step/Step4";
 
 export interface ExecutionNewInterface extends BaseRactiveInterface {
   displayWizardStepPartial?: {
@@ -17,7 +20,10 @@ export interface ExecutionNewInterface extends BaseRactiveInterface {
 export default BaseRactive.extend<ExecutionNewInterface>({
   components: {
     "step-one": Step1,
-    "step-two": Step2
+    "step-two": Step2,
+    "step-three": Step3,
+    "step-four": Step4,
+    "done": Done
   },
   template,
   data() {
@@ -36,6 +42,9 @@ export default BaseRactive.extend<ExecutionNewInterface>({
       onStepListener: (object, action, text, c) => {
         switch (action) {
           case 'CONTINUE':
+            this.displayWizardStepPartial(text);
+            break;
+          case 'BACK':
             this.displayWizardStepPartial(text);
             break;
         }
