@@ -43,12 +43,10 @@ export default BaseRactive.extend<Step2Interface>({
                     <input type="checkbox" class="form-check-input" name="{{form_data.pipeline_item_ids}}" value="{{id}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
                   </div>
                   <div class="col-auto">
-                    <a href="#">
-                      <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
-                    </a>
+                    <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
                   </div>
                   <div class="col text-truncate">
-                    <a href="#" class="text-reset d-block">{{name}}</a>
+                    <span class="text-reset d-block">{{name}}</span>
                     <div class="d-block text-muted text-truncate mt-n1">{{description}}</div>
                   </div>
                 </div>
@@ -92,7 +90,11 @@ export default BaseRactive.extend<Step2Interface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+      let _form_data = this.get("form_data");
       this.setPipelines(await this.getPipelines());
+      if (_form_data.pipeline_id != null) {
+        await this.handleChange('SELECT_PIPELINE', {}, { preventDefault: () => { } })
+      }
       resolve();
     });
   },
@@ -110,9 +112,9 @@ export default BaseRactive.extend<Step2Interface>({
     switch (action) {
       case 'BACK':
         e.preventDefault();
-        this.fire("listener",action,{
+        this.fire("listener", action, {
           component: "step-one"
-        },e);
+        }, e);
         break;
       case 'CONTINUE':
         e.preventDefault();

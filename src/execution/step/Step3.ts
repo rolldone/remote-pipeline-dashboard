@@ -44,15 +44,13 @@ export default BaseRactive.extend<Step3Interface>({
               <div class="list-group-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <input type="radio" class="form-check-input" name="{{form_data.variable_data}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)" disabled={{!is_active}}>
+                    <input type="radio" class="form-check-input" name="{{form_data.variable_option}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)" disabled={{!is_active}}>
                   </div>
                   <div class="col-auto">
-                    <a href="#">
-                      <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
-                    </a>
+                    <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
                   </div>
                   <div class="col text-truncate">
-                    <a href="#" class="text-reset d-block">{{name}}</a>
+                    <span class="text-reset d-block">{{name}}</span>
                     <div class="d-block text-muted text-truncate mt-n1">--</div>
                   </div>
                 </div>
@@ -123,8 +121,15 @@ export default BaseRactive.extend<Step3Interface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+      let _form_data = this.get("form_data");
       this.setVariables(await this.getVariables());
       this.setHOst(await this.getHosts());
+      if (_form_data.variable_id != null) {
+        let e = await $.when($("select[name='variable_id']").get(0));
+        await this.handleChange("SELECT_VARIABLE", {}, {
+          target: e
+        });
+      }
       resolve();
     });
   },
@@ -141,9 +146,9 @@ export default BaseRactive.extend<Step3Interface>({
     switch (action) {
       case 'BACK':
         e.preventDefault();
-        this.fire("listener",action,{
+        this.fire("listener", action, {
           component: "step-two"
-        },e);
+        }, e);
         break;
       case 'CONTINUE':
         e.preventDefault();

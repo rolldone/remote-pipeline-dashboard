@@ -1,6 +1,13 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import ExecutionService, { Execution } from "services/ExecutionService";
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+export interface DoneInterface extends BaseRactiveInterface {
+  submitExecution: { (): Promise<any> }
+}
+
+declare let window: Window
+
+export default BaseRactive.extend<DoneInterface>({
   template:/* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -34,6 +41,11 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       </div>
     </div>
   `,
+  data() {
+    return {
+      form_data: {}
+    }
+  },
   handleClick(action, props, e) {
     switch (action) {
       case 'BACK':
@@ -43,7 +55,48 @@ export default BaseRactive.extend<BaseRactiveInterface>({
         }, e);
         break;
       case 'DONE':
+        e.preventDefault();
+        console.log(this.get("form_data"));
+        this.submitExecution();
         break;
+    }
+  },
+  async submitExecution() {
+    try {
+      let resData = null;
+      let _form_data: Execution = this.get("form_data") as any;
+      if (_form_data.id != null) {
+        resData = await ExecutionService.updateExecution({
+          id: _form_data.id,
+          name: _form_data.name,
+          description: _form_data.description,
+          pipeline_id: _form_data.pipeline_id,
+          project_id: _form_data.project_id,
+          pipeline_item_ids: _form_data.pipeline_item_ids,
+          host_ids: _form_data.host_ids,
+          process_limit: _form_data.process_limit,
+          process_mode: _form_data.process_mode,
+          variable_id: _form_data.variable_id,
+          variable_option: _form_data.variable_option
+        });
+        window.executionRouter.back();
+        return;
+      }
+      resData = await ExecutionService.addExecution({
+        name: _form_data.name,
+        description: _form_data.description,
+        pipeline_id: _form_data.pipeline_id,
+        project_id: _form_data.project_id,
+        pipeline_item_ids: _form_data.pipeline_item_ids,
+        host_ids: _form_data.host_ids,
+        process_limit: _form_data.process_limit,
+        process_mode: _form_data.process_mode,
+        variable_id: _form_data.variable_id,
+        variable_option: _form_data.variable_option
+      });
+      window.executionRouter.back();
+    } catch (ex) {
+      console.error("submitExecution - ex :: ", ex);
     }
   }
 });

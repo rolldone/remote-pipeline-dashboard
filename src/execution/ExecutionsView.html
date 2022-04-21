@@ -87,13 +87,13 @@
               <thead>
                 <tr>
                   <th>Execution Name</th>
-                  <th>Total Hosts</th>
+                  <th>Status</th>
                   <th>Role</th>
                   <th class="w-1"></th>
                 </tr>
               </thead>
               <tbody>
-                {{#each host_datas:i}}
+                {{#each execution_datas:i}}
                 <tr>
                   <td data-label="Name">
                     <div class="d-flex py-1 align-items-center">
@@ -105,15 +105,15 @@
                     </div>
                   </td>
                   <td data-label="Title">
-                    <div>5 Items</div>
-                    <div class="text-muted">30 Tasks</div>
+                    <div>Ready</div>
+                    <!-- <div class="text-muted">30 Tasks</div> -->
                   </td>
                   <td class="text-muted" data-label="Role">
                     User
                   </td>
                   <td>
                     <div class="btn-list flex-nowrap">
-                      <a href="/dashboard/host/{{id}}/view" class="btn">
+                      <a href="/dashboard/execution/{{id}}/view" class="btn">
                         Edit
                       </a>
                       <div class="dropdown">
@@ -122,10 +122,10 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" href="#">
-                            Action
+                            Running <!-- If running can stop to -->
                           </a>
                           <a class="dropdown-item" href="#">
-                            Another action
+                            Running with schedule
                           </a>
                         </div>
                       </div>
