@@ -1,6 +1,6 @@
-import FileService from "./FileService";
+import FileService from "./core/FileService";
 import SqlBricks from "./SqlBricks";
-import SqlService from "./SqlService";
+import SqlService from "./core/SqlService";
 
 export interface variable {
   id?: number

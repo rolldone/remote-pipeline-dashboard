@@ -14,6 +14,11 @@
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
+          <span class="d-none d-sm-inline">
+            <a href="/dashboard/queue-record" class="btn btn-white">
+              Manage Queue Records
+            </a>
+          </span>
           <a href="/dashboard/execution/new" class="btn btn-primary d-none d-sm-inline-block">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -42,7 +47,8 @@
               <div class="form-group mb-3 row">
                 <label class="form-label col-3 col-form-label">Search Executions</label>
                 <div class="col">
-                  <input type="search_text" class="form-control" aria-describedby="emailHelp" placeholder="Enter search">
+                  <input type="search_text" class="form-control" aria-describedby="emailHelp"
+                    placeholder="Enter search">
                   <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
                 </div>
               </div>
@@ -121,11 +127,19 @@
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" href="#">
-                            Running <!-- If running can stop to -->
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('ADD_TO_QUEUE',{ id : id },@event)">
+                            Add to queue
+                            <!-- If running can stop to -->
                           </a>
-                          <a class="dropdown-item" href="#">
-                            Running with schedule
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('ADD_TO_QUEUE_AND_RUN_IT',{ id : id },@event)">
+                            Add to queue and Run it
+                            <!-- If running can stop to -->
+                          </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('ADD_TO_QUEUE_SCHEDULER',{ id : id },@event)">
+                            Add to queue scheduler
                           </a>
                         </div>
                       </div>
@@ -179,3 +193,4 @@
     </div>
   </div>
 </footer>
+<scheduler-modal on-listener="onSchedulerModalListener"></scheduler-modal>

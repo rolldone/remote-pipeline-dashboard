@@ -1,7 +1,7 @@
 import localStorageDB from "localstoragedb"
 import { command_data } from "./PipelineTaskService";
 import SqlBricks from "./SqlBricks";
-import SqlService from "./SqlService";
+import SqlService from "./core/SqlService";
 
 export interface pipeline_item {
   id?: number

@@ -1,5 +1,6 @@
 import SqlBricks from "./SqlBricks";
-import SqlService from "./SqlService";
+import SqlService from "./core/SqlService";
+import QueueService from "./core/QueueService";
 
 export interface Execution {
   id?: number
@@ -187,6 +188,67 @@ export default {
         status: 'success',
         status_code: 200,
         return: resData
+      }
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async runExecution(props) {
+    try {
+      /* Get the execution data first */
+      SqlBricks.aliasExpansions({
+        'pro': "projects",
+        "pip": "pipelines",
+        "pip_item": "pipeline_items",
+        "var": "variables",
+        'usr': "users",
+        'exe': "executions",
+      });
+      let query = SqlBricks.select(
+        'exe.id as id',
+        'exe.name as name',
+        'exe.process_mode as process_mode',
+        'exe.process_limit as process_limit',
+        'exe.pipeline_id as pipeline_id',
+        'exe.project_id as project_id',
+        'exe.user_id as user_id',
+        'exe.variable_id as variable_id',
+        'exe.variable_option as variable_option',
+        'exe.pipeline_item_ids as pipeline_item_ids',
+        'exe.host_ids as host_ids',
+        'exe.description as description',
+        'pro.name as pro_name',
+        'pip.name as pip_name',
+        'var.name as var_name'
+      ).from("exe");
+      query = query.leftJoin('pro').on({
+        "pro.id": "exe.project_id"
+      });
+      query = query.leftJoin('pip').on({
+        "pip.id": "exe.pipeline_id"
+      });
+      query = query.leftJoin("usr").on({
+        "usr.id": "exe.user_id"
+      });
+      query = query.leftJoin("var").on({
+        "var.id": "exe.variable_id"
+      });
+      if (props.user_id != null) {
+        query = query.where("usr.id", props.user_id);
+      }
+      query = query.where("exe.id", props.id);
+      query = query.orderBy("exe.id DESC");
+      query = query.limit(1);
+      let resData = await SqlService.selectOne(query.toString());
+      /* Generate the on bull queue */
+      let resDataQueue = await QueueService.queue(resData.id);
+      if (resDataQueue == "") {
+        let _form_data = new FormData();
+        _form_data.append("id", resData.id);
+        _form_data.append("data", "{}");
+        _form_data.append("process_mode_path", resData.process_mode == "sequential" ? "queue.request.basic" : "queue.request.parallel");
+        resDataQueue = await QueueService.create(_form_data);
+        debugger;
       }
     } catch (ex) {
       throw ex;

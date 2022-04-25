@@ -1,5 +1,5 @@
 import SqlBricks from "./SqlBricks";
-import SqlService from "./SqlService";
+import SqlService from "./core/SqlService";
 
 export interface Host {
   id?: number,

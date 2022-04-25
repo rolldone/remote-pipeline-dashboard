@@ -1,6 +1,6 @@
 import localStorageDB from "localstoragedb"
 import SqlBricks from "./SqlBricks";
-import SqlService from "./SqlService";
+import SqlService from "./core/SqlService";
 
 export default {
   async addProject(props): Promise<any> {

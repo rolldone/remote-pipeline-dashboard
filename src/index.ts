@@ -14,6 +14,8 @@ declare global {
     variableRouter: Router
     hostRouter: Router
     executionRouter: Router
+    queueRecordRouter: Router
+    queueRecordSchedulerRouter: Router
     bootstrap: any
     $: JQueryStatic
   }
@@ -80,6 +82,18 @@ export default function () {
         .get("/execution/(.*)?", async (req, context) => {
           let Execution = (await import("./execution")).default;
           new Execution({
+            target: "#index-body"
+          })
+        })
+        .get("/queue-record/(.*)?", async (req, context) => {
+          let queue_record = (await import("./queue_record")).default;
+          new queue_record({
+            target: "#index-body"
+          })
+        })
+        .get("/queue-record-scheduler/(.*)?", async (req, context) => {
+          let queue_record = (await import("./queue_record_scheduler")).default;
+          new queue_record({
             target: "#index-body"
           })
         })
