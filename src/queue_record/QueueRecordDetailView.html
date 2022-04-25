@@ -1,0 +1,250 @@
+<div class="container-xl">
+  <!-- Page title -->
+  <div class="page-header d-print-none">
+    <div class="row g-2 align-items-center">
+      <div class="col">
+        <!-- Page pre-title -->
+        <div class="page-pretitle">
+          queue record
+        </div>
+        <h2 class="page-title">
+          Queue Records
+        </h2>
+      </div>
+      <!-- Page title actions -->
+      <div class="col-12 col-md-auto ms-auto d-print-none">
+        <div class="btn-list">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-cards">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Form Filter</h3>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-group mb-3 row">
+                <label class="form-label col-3 col-form-label">Search Executions</label>
+                <div class="col">
+                  <input type="search_text" class="form-control" aria-describedby="emailHelp"
+                    placeholder="Enter search">
+                  <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
+                </div>
+              </div>
+              <div class="form-group mb-3 row">
+                <label class="form-label col-3 col-form-label">Group By</label>
+                <div class="col">
+                  <select class="form-select">
+                    <option value="project">Project</option>
+                    <option value="pipeline">Pipeline</option>
+                    <option value="host">Host</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="form-label col-3 col-form-label pt-0">Checkboxes</label>
+                <div class="col">
+                  <label class="form-check">
+                    <input class="form-check-input" type="checkbox" checked="">
+                    <span class="form-check-label">Option 1</span>
+                  </label>
+                  <label class="form-check">
+                    <input class="form-check-input" type="checkbox">
+                    <span class="form-check-label">Option 2</span>
+                  </label>
+                  <label class="form-check">
+                    <input class="form-check-input" type="checkbox" disabled="">
+                    <span class="form-check-label">Option 3</span>
+                  </label>
+                </div>
+              </div>
+              <!-- <div class="form-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div> -->
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table table-vcenter table-mobile-md card-table">
+              <thead>
+                <tr>
+                  <th>Queue Name</th>
+                  <th>Process Mode</th>
+                  <th>Status</th>
+                  <th>Host</th>
+                  <th class="w-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each queue_record_detail_datas:i}}
+                <tr>
+                  <td data-label="Name">
+                    <div class="d-flex py-1 align-items-center">
+                      <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)">{{id}}</span>
+                      <div class="flex-fill">
+                        <div class="font-weight-medium">{{queue_name}}</div>
+                        <div class="text-muted"><a href="#" class="text-reset">10 Dec 2020 10:10:am</a></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td data-label="Title">
+                    <div>{{exe_process_mode}}</div>
+                    <!-- <div class="text-muted">30 Tasks</div> -->
+                  </td>
+                  <td data-label="Title">
+                    {{#if status == 0}}
+                    <div>Stand By</div>
+                    {{elseif status == 1}}
+                    <div>Running</div>
+                    {{elseif status == 5}}
+                    <div>Completed</div>
+                    {{elseif status == 2}}
+                    <div>Failed</div>
+                    {{elseif status == 4}}
+                    <div>Delayed</div>
+                    {{elseif status == 3}}
+                    <div>Waiting</div>
+                    {{elseif status == 6}}
+                    <div>Stopped</div>
+                    {{/if}}
+                    <!-- <div class="text-muted">30 Tasks</div> -->
+                  </td>
+                  <td class="text-muted" data-label="Role">
+                    {{data.host_id}}
+                  </td>
+                  <td>
+                    <div class="btn-list flex-nowrap">
+                      <a href="#" class="btn"
+                        on-click="@this.handleClick('DISPLAY_PROCESS',{ id : id, index : i },@event)">
+                        Display Process
+                      </a>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                          Actions
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          {{#if status == 0 || status == 5 || status == 3 || status == 6}}
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('RETRY',{ id : id, index : i },@event)">
+                            Retry
+                          </a>
+                          {{else}}
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('STOP',{ id : id, index : i },@event)">
+                            Stop
+                          </a>
+                          {{/if}}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer footer-transparent d-print-none">
+  <div class="container-xl">
+    <div class="row text-center align-items-center flex-row-reverse">
+      <div class="col-lg-auto ms-lg-auto">
+        <ul class="list-inline list-inline-dots mb-0">
+          <li class="list-inline-item"><a href="./docs/index.html" class="link-secondary">Documentation</a></li>
+          <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
+          <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary"
+              rel="noopener">Source code</a></li>
+          <li class="list-inline-item">
+            <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+              <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24"
+                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+              </svg>
+              Sponsor
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+        <ul class="list-inline list-inline-dots mb-0">
+          <li class="list-inline-item">
+            Copyright © 2022
+            <a href="." class="link-secondary">Tabler</a>.
+            All rights reserved.
+          </li>
+          <li class="list-inline-item">
+            Generated 2022-03-29 21:06 UTC
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="modal modal-blur fade show" id="modal-display-process" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Display Process</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+          eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+          laoreet rutrum faucibus dolor auctor.</p>
+        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+          consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
