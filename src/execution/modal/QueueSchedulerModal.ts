@@ -76,7 +76,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                   Every 30 Minutes
                 </a>
               </div>
-              <input type="number" class="form-control" aria-label="Text input with dropdown button" name="minute" value="{{form_data.minute}}">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" name="minute" value="{{form_data.minute}}">
             </div>
           </div>
           <div class="mb-3">
@@ -102,7 +102,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                   Every 12 Hours
                 </a>
               </div>
-              <input type="number" class="form-control" aria-label="Text input with dropdown button" name="hour" value="{{form_data.hour}}">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" name="hour" value="{{form_data.hour}}">
             </div>
           </div>
           <div class="mb-3">
@@ -131,7 +131,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                   Every half month
                 </a>
               </div>
-              <input type="number" class="form-control" aria-label="Text input with dropdown button" name="day" value="{{form_data.day}}">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" name="day" value="{{form_data.day}}">
             </div>
           </div>
           <div class="mb-3">
@@ -157,7 +157,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                   Every half year
                 </a>
               </div>
-              <input type="number" class="form-control" aria-label="Text input with dropdown button" name="month" value="{{form_data.month}}">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" name="month" value="{{form_data.month}}">
             </div>
           </div>
           <div class="mb-3">
@@ -177,7 +177,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                   Weekend Days
                 </a>
               </div>
-              <input type="number" class="form-control" aria-label="Text input with dropdown button" name="weekday" value="{{form_data.weekday}}">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" name="weekday" value="{{form_data.weekday}}">
             </div>
           </div>
         </div>

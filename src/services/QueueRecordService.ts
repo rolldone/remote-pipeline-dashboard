@@ -156,6 +156,7 @@ export default {
         'qrec.execution_id as execution_id',
         'qrec.status as status',
         'qrec.data as data',
+        'qrec.type as type',
         'exe.id as exe_id',
         'exe.name as exe_name',
         'exe.process_mode as exe_process_mode',

@@ -12,6 +12,7 @@ export interface QueueRecordSchedulerInterface extends BaseRactiveInterface {
     (props: {
       id: number,
       status: number,
+      type: string
     }): Promise<any>
   }
   submitDeleteQueueRecord?: {
@@ -117,6 +118,7 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
         ...props,
         id: props.id,
         status: props.status,
+        type: props.type || 'schedule'
       })
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
