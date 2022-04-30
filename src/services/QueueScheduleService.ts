@@ -82,7 +82,7 @@ export default {
   },
   async updateQueueSchedule(props: QueueScheduleInterface) {
     try {
-      let query = SqlBricks.update("queue_record_details", {
+      let query = SqlBricks.update("queue_schedules", {
         queue_record_id: props.queue_record_id,
         execution_id: props.execution_id,
         schedule_type: props.schedule_type,

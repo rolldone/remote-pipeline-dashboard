@@ -35,6 +35,10 @@ export default QueueSchedulerModal.extend<QueueSchedulerInterface>({
     if (props == null) return;
     let resData = props.return;
     resData.data = JSON.parse(resData.data);
-    this.set("form_data", resData.data);
+    this.set("form_data", {
+      ...this.get("form_data"),
+      ...resData.data,
+      id: resData.id,
+    });
   }
 });

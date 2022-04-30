@@ -236,6 +236,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
   },
   show(props) {
     this.set("form_data", {
+      ...props,
       execution_id: props.execution_id,
       status: props.status
     });

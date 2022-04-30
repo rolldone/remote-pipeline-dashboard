@@ -1,11 +1,13 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueRecordService from "services/QueueRecordService";
+import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
 import QueueScheduleModal, { QueueSchedulerInterface } from "./modal/QueueScheduleModal";
 import template from './QueueRecordSchedulersView.html';
 
 export interface QueueRecordSchedulerInterface extends BaseRactiveInterface {
   getQueueRecords?: { (): Promise<any> }
   setQueueRecords?: { (props: any): void }
+  submitUpdateQueueSchedule?: { (props: QueueScheduleInterface): void }
   submitUpdateQueueRecord?: {
     (props: {
       id: number,
@@ -32,11 +34,13 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
       onSChedulerModalListener: (object, action, text, c) => {
         switch (action) {
           case 'SUBMIT':
-            // this.submitAddQueueSchedule({
-            //   schedule_type: text.schedule_type,
-            //   data: text,
-            //   execution_id: text.execution_id,
-            // })
+            this.submitUpdateQueueSchedule({
+              schedule_type: text.schedule_type,
+              data: text,
+              execution_id: text.execution_id,
+              id: text.id,
+              queue_record_id: text.queue_record_id
+            })
             break;
           case 'DISPOSE':
             break;
@@ -98,8 +102,17 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
     });
     this.set("queue_record_datas", props.return);
   },
+  async submitUpdateQueueSchedule(props) {
+    try {
+      let resData = await QueueScheduleService.updateQueueSchedule(props);
+      this.setQueueRecords(await this.getQueueRecords());
+    } catch (ex) {
+      console.error("submitUpdateQueueSchedule - ex :: ", ex);
+    }
+  },
   async submitUpdateQueueRecord(props) {
     try {
+      debugger;
       let resData = await QueueRecordService.updateQueueRecord({
         ...props,
         id: props.id,
