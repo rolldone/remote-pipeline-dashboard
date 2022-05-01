@@ -1,16 +1,9 @@
-import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import QueueRecordDetail, { QueueRecordDetailInterface } from "queue_record/QueueRecordDetail";
 import QueueRecordDetailService from "services/QueueRecordDetailService";
-import template from './QueueRecordSchedulerDetailView.html';
 
-export interface QueueRecordSchedulerDetailInterface extends BaseRactiveInterface {
-  getQueueRecordDetails: { (): Promise<any> }
-  setQueueRecordDetails: { (props: any): void }
-}
+declare let window: Window;
 
-declare let window:Window;
-
-export default BaseRactive.extend<QueueRecordSchedulerDetailInterface>({
-  template,
+export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
   data() {
     return {
       queue_record_detail_datas: []
@@ -53,7 +46,9 @@ export default BaseRactive.extend<QueueRecordSchedulerDetailInterface>({
   async getQueueRecordDetails() {
     try {
       let resData = await QueueRecordDetailService.getQueueRecordDetails({
-        queue_record_id: this.req.params.id
+        queue_record_id: this.req.params.id,
+        limit: 10,
+        offset: 0
       });
       return resData;
     } catch (ex) {

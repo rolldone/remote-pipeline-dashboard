@@ -10,6 +10,8 @@ export interface QueueRecordDetailInterface {
   job_id?: number
   data?: any
   status?: number
+  limit?: number
+  offset?: number
 
 }
 
@@ -178,6 +180,13 @@ export default {
       if (props.queue_record_id != null) {
         query = query.where("qrec_detail.queue_record_id", props.queue_record_id);
       }
+      if (props.limit != null) {
+        query = query.limit(props.limit);
+        if(props.offset != null){
+          query = query.offset(props.offset * props.limit);
+        }
+      }
+
       query = query.orderBy("qrec_detail.id DESC");
       let resData = await SqlService.select(query.toString());
       return {
