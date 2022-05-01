@@ -30,7 +30,6 @@ devsync:
         - docker-compose up --build
         - docker-compose up
         - docker-compose exec app bash -l
-        - docker-compose exec app bash -c "npm install && npm run watch"
   trigger_permission:
     unlink_folder: true
     unlink: true
@@ -52,4 +51,7 @@ direct_access:
   ssh_commands:
     - access_name: Enter Server
       command: ssh -v workspaces
+    - access_name: Compile rollup
+      command: ssh -v -o RemoteCommand=none workspaces -t "cd =remotePath &&
+        docker-compose exec app bash -l"
 saved_file_name: donny_desktop.yaml.yaml
