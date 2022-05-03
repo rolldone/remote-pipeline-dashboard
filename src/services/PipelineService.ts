@@ -1,4 +1,3 @@
-import localStorageDB from "localstoragedb"
 import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 

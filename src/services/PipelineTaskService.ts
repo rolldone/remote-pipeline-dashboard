@@ -53,7 +53,7 @@ export default {
           type: _command_data.type,
           order_number: _command_data.order_number,
           temp_id: _command_data.temp_id,
-          parent_order_temp_ids: JSON.stringify(_command_data.parent_order_temp_ids),
+          parent_order_temp_ids: _command_data.parent_order_temp_ids == null ? null : JSON.stringify(_command_data.parent_order_temp_ids),
           is_active: _command_data.is_active,
           data: JSON.stringify(_command_data.data)
         }).toString());

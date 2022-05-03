@@ -41,6 +41,12 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
           this.set("form_data.data.condition_values", _condition_values);
           this.set("form_data.data.parent_condition_type", val);
           return;
+        case 'next':
+        case 'failed':
+        case 'success':
+          this.set("form_data.data.parent_condition_type", val);
+          this.resetPartial('parent_conditon_partial', []);
+          break;
         default:
           this.resetPartial('parent_conditon_partial', []);
           return;
@@ -175,6 +181,7 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
           case 'success':
           case 'failed':
           case 'next_turn':
+            // this.set("form_data.data.parent_condition_type", props.value);
             break;
         }
         break;

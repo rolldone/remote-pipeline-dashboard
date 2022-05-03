@@ -45,7 +45,9 @@ export default HostNew.extend<HostUpdateInterface>({
         auth_type: _form_data.auth_type,
         private_key: _form_data.private_key,
         username: _form_data.username,
-        password: _form_data.password
+        password: _form_data.password,
+        // Override the value on top
+        ...this.get("set_auth_value")
       });
       debugger;
     } catch (ex) {

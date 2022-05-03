@@ -102,7 +102,8 @@ export default BaseRactive.extend<ExecutionsInterface>({
       let resData = await QueueRecordService.addQueueRecord({
         execution_id: props.execution_id,
         status: props.status,
-        queue_key: null
+        queue_key: null,
+        type: 'instant'
       })
       debugger;
     } catch (ex) {

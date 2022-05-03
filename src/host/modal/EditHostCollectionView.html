@@ -13,7 +13,12 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Ip Address</label>
-          <input type="text" class="form-control" name="ip_address" value="{{form_data.ip_address}}"
+          <input type="text" class="form-control" name="host" value="{{form_data.host}}"
+            placeholder="Your report name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Port</label>
+          <input type="number" class="form-control" name="port" value="{{form_data.port}}"
             placeholder="Your report name">
         </div>
         <div class="mb-3">
@@ -96,6 +101,11 @@
           <label class="form-label">Private key <span class="form-label-description"></span></label>
           <textarea class="form-control" name="private_key" rows="6"
             placeholder="Content..">{{form_data.private_key}}</textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Passphrase <span class="form-label-description"></span></label>
+          <textarea class="form-control" name="passphrase" rows="6"
+            placeholder="Content..">{{form_data.passphrase}}</textarea>
         </div>
         {{/if}}
       </div>
