@@ -128,17 +128,21 @@ export default {
       query = query
         .leftJoin("pip").on("pip.id", "vari.pipeline_id")
         .leftJoin("pro").on("pro.id", "pip.project_id");
-      
+
       // Where segment
       if (props.pipeline_id != null) {
         query = query.where("pip.id", props.pipeline_id);
       }
-      let resData = await SqlService.select(query.toString());
-
+      let resDatas: Array<any> = await SqlService.select(query.toString());
+      resDatas.forEach((resData) => {
+        resData.data = JSON.parse(resData.data);
+        resData.schema = JSON.parse(resData.schema);
+        return resData;
+      })
       return {
         status: 'success',
         status_code: 200,
-        return: resData
+        return: resDatas
       }
     } catch (ex) {
       throw ex;
@@ -181,7 +185,8 @@ export default {
 
       query = query.limit(1);
       let resData = await SqlService.selectOne(query.toString());
-
+      resData.data = JSON.parse(resData.data);
+      resData.schema = JSON.parse(resData.schema);
       return {
         status: 'success',
         status_code: 200,

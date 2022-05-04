@@ -2,6 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import BasicCommand from "./input/BasicCommand";
 import ConditionalCommand from "./input/ConditionalCommand";
+import FileTransferCommand from "./input/FileTransferCommand";
 
 export default BaseRactive.extend<BaseRactiveInterface>({
   data() {
@@ -16,13 +17,16 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   },
   components: {
     "basic-command": BasicCommand,
-    "conditional-command": ConditionalCommand
+    "conditional-command": ConditionalCommand,
+    "file-transfer": FileTransferCommand
   },
   template:/* html */`
     {{#if command_data.type == "basic-command"}}
     <basic-command index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></basic-command>
     {{elseif command_data.type == "conditional-command"}}
     <conditional-command index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></conditional-command>
+    {{elseif command_data.type == "file-transfer"}}
+    <file-transfer index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></file-transfer>
     {{/if}}
   `,
   onconfig() {

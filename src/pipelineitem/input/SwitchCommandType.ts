@@ -31,6 +31,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           value: "conditional-command"
         },
         {
+          label: "File transfer",
+          value: "file-transfer"
+        },
+        {
           label: "Delete",
           value: "delete"
         },
