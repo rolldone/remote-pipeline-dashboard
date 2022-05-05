@@ -32,6 +32,16 @@ export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
         break;
       case 'STOP':
         e.preventDefault();
+        await QueueRecordDetailService.stopQueueDetail({
+          id: props.id
+          // id: item.qrec_id,
+          // data: item.qrec_data,
+          // process_mode: item.exe_process_mode,
+          // host_id: item.data.host_id
+        })
+        setTimeout(async () => {
+          this.setQueueRecordDetails(await this.getQueueRecordDetails());
+        }, 2000)
         break;
       case 'DISPLAY_PROCESS':
         e.preventDefault();

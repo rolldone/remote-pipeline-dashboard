@@ -55,8 +55,9 @@ export default VariableNew.extend<VariableUpdateInterface>({
       project_id: props.project_id,
       schema: props.schema
     });
-    this.set("variable_groups", JSON.parse(props.data));
-    this.set("form_schemes", JSON.parse(props.schema));
+    this.set("variable_groups", props.data);
+    this.set("form_schemes", props.schema);
+    
     this.setPipelines(await this.getPipelines(props.project_id));
   },
 });
