@@ -7,11 +7,11 @@ import template from './FileTransferCommandView.html';
 declare let window: Window;
 
 export interface FileTransferCommandInterface extends BasicCommandInterface {
-  getVariables: { (): Promise<any> }
-  setVariables: { (props: any): void }
-  addMoreAssetString: { (): ParsedTemplate }
-  addMoreButtonAssetString: { (): ParsedTemplate }
-  initAssetPartial: { (): void }
+  getVariables?: { (): Promise<any> }
+  setVariables?: { (props: any): void }
+  addMoreAssetString?: { (): ParsedTemplate }
+  addMoreButtonAssetString?: { (): ParsedTemplate }
+  initAssetPartial?: { (): void }
 }
 
 export default BasicCommand.extend<FileTransferCommandInterface>({

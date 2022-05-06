@@ -35,6 +35,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           value: "file-transfer"
         },
         {
+          label: "Write transfer",
+          value: "write-transfer"
+        },
+        {
           label: "Delete",
           value: "delete"
         },
