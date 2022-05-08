@@ -1,7 +1,8 @@
-export default function (key): Promise<{
+export interface WebSocketCreatedInterface {
   webSocket: WebSocket
   key: string
-}> {
+}
+export default function (key): Promise<WebSocketCreatedInterface> {
   // Connect websocket
   return new Promise((resolve: Function) => {
     let webSocket = new WebSocket("ws://" + window.location.host);

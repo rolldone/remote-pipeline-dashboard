@@ -1,6 +1,10 @@
-import BaseRactive from "base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './RegisterView.html';
 
-export default BaseRactive.extend({
+export interface RegisterInterface extends BaseRactiveInterface {
+  submit: { (): void }
+}
+
+export default BaseRactive.extend<RegisterInterface>({
   template
 });
