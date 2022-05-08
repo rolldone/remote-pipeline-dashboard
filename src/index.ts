@@ -5,6 +5,8 @@ import "@tabler/core/dist/css/tabler.css";
 import "./style.scss";
 import template from './indexView.html';
 import $ from 'jquery';
+import MasterData, { MasterDataInterface } from "base/MasterData";
+import PubSub from "base/PubSub";
 
 declare global {
   interface Window {
@@ -17,12 +19,16 @@ declare global {
     queueRecordRouter: Router
     queueRecordSchedulerRouter: Router
     bootstrap: any
+    websocket: WebSocket
+    masterData: MasterDataInterface
+    pubsub: any
     $: JQueryStatic
   }
 }
 
 export default function () {
-
+  window.pubsub = PubSub;
+  window.masterData = MasterData;
   window.$ = $;
 
   const App = BaseRactive.extend<BaseRactiveInterface>({
@@ -138,6 +144,9 @@ export default function () {
         .run();
 
       window.router = this.router;
+
+      
+
     },
     handleClick(action, props, e) {
       switch (action) {

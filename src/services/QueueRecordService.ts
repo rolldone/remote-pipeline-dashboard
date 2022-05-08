@@ -1,6 +1,8 @@
 import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import QueueService from "./core/QueueService";
+import BaseService from "./BaseService";
+import axios from "axios";
 
 export interface QueueRecordInterface {
   id?: number
@@ -146,83 +148,91 @@ export default {
   },
   async getQueueRecords(props) {
     try {
-      SqlBricks.aliasExpansions({
-        'qrec': "queue_records",
-        'exe': "executions",
-      });
-      let query = SqlBricks.select(
-        'qrec.id as id',
-        'qrec.queue_key as queue_key',
-        'qrec.execution_id as execution_id',
-        'qrec.status as status',
-        'qrec.data as data',
-        'qrec.type as type',
-        'exe.id as exe_id',
-        'exe.name as exe_name',
-        'exe.process_mode as exe_process_mode',
-        'exe.process_limit as exe_process_limit',
-        'exe.pipeline_id as exe_pipeline_id',
-        'exe.project_id as exe_project_id',
-        'exe.user_id as exe_user_id',
-        'exe.variable_id as exe_variable_id',
-        'exe.variable_option as exe_variable_option',
-        'exe.pipeline_item_ids as exe_pipeline_item_ids',
-        'exe.host_ids as exe_host_ids',
-        'exe.description as exe_description',
-      ).from("qrec");
-      query = query.leftJoin('exe').on({
-        "qrec.execution_id": "exe.id"
-      });
-      if (props.type != null) {
-        query = query.where("type", props.type);
-      }
-      query = query.orderBy("exe.id DESC");
-      let resData = await SqlService.select(query.toString());
-      return {
-        status: 'success',
-        status_code: 200,
-        return: resData
-      }
+      let query = new URLSearchParams(props);
+      let resData = await axios.get(BaseService.QUEUE_RECORD + '/queue-records?' + query, {});
+      return resData.data;
+      // SqlBricks.aliasExpansions({
+      //   'qrec': "queue_records",
+      //   'exe': "executions",
+      // });
+      // let query = SqlBricks.select(
+      //   'qrec.id as id',
+      //   'qrec.queue_key as queue_key',
+      //   'qrec.execution_id as execution_id',
+      //   'qrec.status as status',
+      //   'qrec.data as data',
+      //   'qrec.type as type',
+      //   'exe.id as exe_id',
+      //   'exe.name as exe_name',
+      //   'exe.process_mode as exe_process_mode',
+      //   'exe.process_limit as exe_process_limit',
+      //   'exe.pipeline_id as exe_pipeline_id',
+      //   'exe.project_id as exe_project_id',
+      //   'exe.user_id as exe_user_id',
+      //   'exe.variable_id as exe_variable_id',
+      //   'exe.variable_option as exe_variable_option',
+      //   'exe.pipeline_item_ids as exe_pipeline_item_ids',
+      //   'exe.host_ids as exe_host_ids',
+      //   'exe.description as exe_description',
+      // ).from("qrec");
+      // query = query.leftJoin('exe').on({
+      //   "qrec.execution_id": "exe.id"
+      // });
+      // if (props.type != null) {
+      //   query = query.where("type", props.type);
+      // }
+      // query = query.orderBy("exe.id DESC");
+      // let resData = await SqlService.select(query.toString());
+      // return {
+      //   status: 'success',
+      //   status_code: 200,
+      //   return: resData
+      // }
     } catch (ex) {
       throw ex;
     }
   },
   async getQueueRecord(props) {
     try {
-      SqlBricks.aliasExpansions({
-        'qrec': "queue_records",
-        'exe': "executions",
-      });
-      let query = SqlBricks.select(
-        'qrec.id as id',
-        'qrec.queue_key as queue_key',
-        'qrec.execution_id as execution_id',
-        'qrec.status as status',
-        'qrec.data as data',
-        'exe.id as exe_id',
-        'exe.name as exe_name',
-        'exe.process_mode as exe_process_mode',
-        'exe.process_limit as exe_process_limit',
-        'exe.pipeline_id as exe_pipeline_id',
-        'exe.project_id as exe_project_id',
-        'exe.user_id as exe_user_id',
-        'exe.variable_id as exe_variable_id',
-        'exe.variable_option as exe_variable_option',
-        'exe.pipeline_item_ids as exe_pipeline_item_ids',
-        'exe.host_ids as exe_host_ids',
-        'exe.description as exe_description',
-      ).from("qrec");
-      query = query.leftJoin('exe').on({
-        "qrec.execution_id": "exe.id"
-      });
-      query = query.orderBy("exe.id DESC");
-      query = query.limit(1);
-      let resData = await SqlService.selectOne(query.toString());
-      return {
-        status: 'success',
-        status_code: 200,
-        return: resData
-      }
+      let id = props.id;
+      delete props.id;
+      let queryString = new URLSearchParams(props).toString();
+      let resData = await axios.get(BaseService.QUEUE_RECORD + '/' + id + "/view?" + queryString, {});
+      return resData.data;
+      // SqlBricks.aliasExpansions({
+      //   'qrec': "queue_records",
+      //   'exe': "executions",
+      // });
+      // let query = SqlBricks.select(
+      //   'qrec.id as id',
+      //   'qrec.queue_key as queue_key',
+      //   'qrec.execution_id as execution_id',
+      //   'qrec.status as status',
+      //   'qrec.data as data',
+      //   'exe.id as exe_id',
+      //   'exe.name as exe_name',
+      //   'exe.process_mode as exe_process_mode',
+      //   'exe.process_limit as exe_process_limit',
+      //   'exe.pipeline_id as exe_pipeline_id',
+      //   'exe.project_id as exe_project_id',
+      //   'exe.user_id as exe_user_id',
+      //   'exe.variable_id as exe_variable_id',
+      //   'exe.variable_option as exe_variable_option',
+      //   'exe.pipeline_item_ids as exe_pipeline_item_ids',
+      //   'exe.host_ids as exe_host_ids',
+      //   'exe.description as exe_description',
+      // ).from("qrec");
+      // query = query.leftJoin('exe').on({
+      //   "qrec.execution_id": "exe.id"
+      // });
+      // query = query.orderBy("exe.id DESC");
+      // query = query.limit(1);
+      // let resData = await SqlService.selectOne(query.toString());
+      // return {
+      //   status: 'success',
+      //   status_code: 200,
+      //   return: resData
+      // }
     } catch (ex) {
       throw ex;
     }

@@ -98,9 +98,6 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
   },
   setQueueRecords(props) {
     if (props == null) return;
-    props.return.forEach(element => {
-      element.data = JSON.parse(element.data);
-    });
     this.set("queue_record_datas", props.return);
   },
   async submitUpdateQueueSchedule(props) {

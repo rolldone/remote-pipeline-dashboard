@@ -53,7 +53,10 @@ export default BaseRactive.extend<QueueRecordInterface>({
   async getQueueRecords() {
     try {
       let resData = await QueueRecordService.getQueueRecords({
-        type: "instant"
+        type: "instant",
+        order_by: "qrec.id DESC",
+        limit: 10,
+        offset: 0
       });
       return resData;
     } catch (ex) {
@@ -62,9 +65,6 @@ export default BaseRactive.extend<QueueRecordInterface>({
   },
   setQueueRecords(props) {
     if (props == null) return;
-    props.return.forEach(element => {
-      element.data = JSON.parse(element.data);
-    });
     this.set("queue_record_datas", props.return);
   },
   async submitUpdateQueueRecord(props) {

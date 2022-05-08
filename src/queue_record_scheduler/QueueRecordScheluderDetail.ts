@@ -68,10 +68,6 @@ export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
   setQueueRecordDetails(props) {
     if (props == null) return;
     let _datas = props.return;
-    _datas.forEach(element => {
-      element.data = JSON.parse(element.data);
-      return element;
-    });
     this.set("queue_record_detail_datas", _datas);
   }
 });

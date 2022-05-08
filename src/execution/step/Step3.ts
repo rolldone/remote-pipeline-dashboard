@@ -186,11 +186,6 @@ export default BaseRactive.extend<Step3Interface>({
   setVariables(props) {
     if (props == null) return;
     let _datas = props.return;
-    for (let a = 0; a < _datas.length; a++) {
-      _datas[a].data = JSON.parse(_datas[a].data);
-      _datas[a].schema = JSON.parse(_datas[a].schema);
-    }
-    console.log(_datas);
     this.set("variable_datas", _datas);
   }
 });
