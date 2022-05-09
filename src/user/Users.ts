@@ -10,17 +10,30 @@ export interface UsersInterface extends BaseRactiveInterface {
 
 export default BaseRactive.extend<UsersInterface>({
   template,
+  data() {
+    return {
+      user_datas: []
+    }
+  },
   onconfig() {
 
+  },
+  oncomplete() {
+    let _super = this._super.bind(this);
+    return new Promise(async (resolve: Function) => {
+      this.setUsers(await this.getUsers());
+    })
   },
   async getUsers() {
     try {
       let resData = await UserService.getUsers({});
+      return resData;
     } catch (ex) {
       console.error("getUsers - ex :: ", ex);
     }
   },
   setUsers(props) {
     if (props == null) return;
+    this.set("user_datas", props.return);
   }
 });

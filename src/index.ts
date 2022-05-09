@@ -18,6 +18,7 @@ declare global {
     executionRouter: Router
     queueRecordRouter: Router
     queueRecordSchedulerRouter: Router
+    userRouter: Router
     authRouter: Router
     bootstrap: any
     websocket: WebSocket
@@ -105,7 +106,7 @@ export default function () {
           })
         })
         .get("/user/(.*)?", async (req, context) => {
-          let User = (await import("./user/Users")).default;
+          let User = (await import("./user/index")).default;
           new User({
             target: "#index-body"
           })
@@ -146,7 +147,7 @@ export default function () {
 
       window.router = this.router;
 
-      
+
 
     },
     handleClick(action, props, e) {

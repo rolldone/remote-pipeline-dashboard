@@ -20,7 +20,7 @@ export default {
   getUsers: async function (props: UserServiceInterface) {
     try {
       let query = new URLSearchParams(props as any);
-      let resData = await axios.get(BaseService.AUTH + '/users?' + query, {});
+      let resData = await axios.get(BaseService.USER + '/users?' + query, {});
       return resData.data;
     } catch (ex) {
       throw ex;
@@ -29,7 +29,7 @@ export default {
   getUser: async function (props: UserServiceInterface) {
     try {
       let query = new URLSearchParams(props as any);
-      let resData = await axios.get(BaseService.AUTH + '/' + props.id + "/view?" + query, {});
+      let resData = await axios.get(BaseService.USER + '/' + props.id + "/view?" + query, {});
       return resData.data;
     } catch (ex) {
       throw ex;

@@ -25,8 +25,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
         let User = (await import("./UserUpdate")).default;
         new User({
           target: "#index-body",
+          req: req
         })
       })
       .run();
+    window.userRouter = this.router
   }
 });
