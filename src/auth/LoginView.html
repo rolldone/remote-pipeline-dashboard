@@ -3,12 +3,13 @@
     <div class="text-center mb-4">
       <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
     </div>
-    <form class="card card-md" action="." method="get" autocomplete="off">
+    <form class="card card-md" action="." method="get" autocomplete="off" id="form-auth-login">
       <div class="card-body">
         <h2 class="card-title text-center mb-4">Login to your account</h2>
         <div class="mb-3">
           <label class="form-label">Email address</label>
-          <input type="email" class="form-control" placeholder="Enter email">
+          <input type="email" class="form-control" value="{{form_data.email}}" placeholder="Enter email">
+          <div class="invalid-feedback">{{form_error.email}}</div>
         </div>
         <div class="mb-2">
           <label class="form-label">
@@ -18,7 +19,8 @@
             </span>
           </label>
           <div class="input-group input-group-flat">
-            <input type="password" class="form-control" placeholder="Password" autocomplete="off">
+            <input type="password" class="form-control" value="{{form_data.password}}" placeholder="Password"
+              autocomplete="off">
             <span class="input-group-text">
               <a href="#" class="link-secondary" title="" data-bs-toggle="tooltip"
                 data-bs-original-title="Show password">
@@ -33,6 +35,7 @@
                 </svg>
               </a>
             </span>
+            <div class="invalid-feedback">{{form_error.password}}</div>
           </div>
         </div>
         <div class="mb-2">
@@ -42,7 +45,8 @@
           </label>
         </div>
         <div class="form-footer">
-          <button type="submit" class="btn btn-primary w-100">Sign in</button>
+          <button type="submit" class="btn btn-primary w-100" on-click="@this.handleClick('SUBMIT',{},@event)">Sign
+            in</button>
         </div>
       </div>
       <div class="hr-text">or</div>

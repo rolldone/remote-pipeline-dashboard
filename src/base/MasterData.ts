@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce';
+import { debounce } from "lodash"
 
 export interface MasterDataInterface {
   record_url: null | String,

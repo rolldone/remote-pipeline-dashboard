@@ -18,6 +18,7 @@ declare global {
     executionRouter: Router
     queueRecordRouter: Router
     queueRecordSchedulerRouter: Router
+    authRouter: Router
     bootstrap: any
     websocket: WebSocket
     masterData: MasterDataInterface

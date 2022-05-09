@@ -1,31 +1,26 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
+import UserService from "services/UserService";
 import template from './UsersView.html';
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+export interface UsersInterface extends BaseRactiveInterface {
+  getUsers?: { (): void }
+  setUsers?: { (props: any): void }
+}
+
+export default BaseRactive.extend<UsersInterface>({
   template,
   onconfig() {
-    this.router = createRouter({
-      engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/user"
-    }).get('/', async (req, context) => {
 
-    })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let User = (await import("./UserNew")).default;
-        new User({
-          target: "#index-body",
-        })
-      })
-      .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let User = (await import("./UserUpdate")).default;
-        new User({
-          target: "#index-body",
-        })
-      })
-      .run();
+  },
+  async getUsers() {
+    try {
+      let resData = await UserService.getUsers({});
+    } catch (ex) {
+      console.error("getUsers - ex :: ", ex);
+    }
+  },
+  setUsers(props) {
+    if (props == null) return;
   }
 });

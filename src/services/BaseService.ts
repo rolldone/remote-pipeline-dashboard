@@ -4,5 +4,7 @@ export default {
   FILE: ENDPOINT + '/file',
   QUEUE: ENDPOINT + '/queue',
   QUEUE_RECORD: ENDPOINT + '/queue-record',
-  QUEUE_RECORD_DETAIL: ENDPOINT + "/queue-record-detail"
+  QUEUE_RECORD_DETAIL: ENDPOINT + "/queue-record-detail",
+  AUTH: ENDPOINT + '/auth',
+  USER: ENDPOINT + '/user'
 }
