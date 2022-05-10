@@ -76,7 +76,7 @@ export default {
               let _item = _data.attachment_datas[c];
               let _formData = new FormData();
               _formData.append("from_path", _item.file[0].path);
-              _formData.append("to_path", "./storage/app/" + props.id + "/" + _item.file[0].name)
+              _formData.append("to_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
               let resMove = await FileService.move(_formData);
             }
           }
@@ -84,7 +84,7 @@ export default {
             for (let c = 0; c < _data.attachment_datas_deleted.length; c++) {
               let _item = _data.attachment_datas_deleted[c];
               let _formData = new FormData();
-              _formData.append("delete_path", "./storage/app/" + props.id + "/" + _item.file[0].name)
+              _formData.append("delete_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
               let resDelete = await FileService.delete(_formData);
             }
           }
