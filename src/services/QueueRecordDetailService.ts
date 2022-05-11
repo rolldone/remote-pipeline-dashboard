@@ -47,95 +47,121 @@ export default {
   },
   async addQueueRecordDetail(props: QueueRecordDetailInterface) {
     try {
-      let query = SqlBricks.insert("queue_record_details", {
-        queue_record_id: props.queue_record_id,
-        queue_name: props.queue_name,
-        job_id: props.job_id,
-        data: props.data,
-        status: props.status,
-      }).toString();
-      let resDataId = await SqlService.insert(query);
-      SqlBricks.aliasExpansions({
-        'qrec_detail': "queue_record_details",
-        'qrec': "queue_records",
-      });
-      // Get again
-      let querySelect = SqlBricks.select(
-        'qrec_detail.id as id',
-        'qrec_detail.queue_record_id as queue_record_id',
-        'qrec_detail.queue_name as queue_name',
-        'qrec_detail.job_id as job_id',
-        'qrec_detail.data as data',
-        'qrec_detail.status as status',
-        'qrec.id as qrec_id',
-        'qrec.queue_key as qrec_queue_key',
-        'qrec.execution_id as qrec_execution_id',
-        'qrec.status as qrec_status',
-        'qrec.data as qrec_data',
-      ).from("qrec_detail");
-      querySelect = querySelect.leftJoin('qrec').on({
-        "qrec.id": "qrec_detail.queue_record_id"
-      });
-      querySelect = querySelect.orderBy("qrec_detail.id DESC");
-      querySelect = querySelect.limit(1);
-      querySelect = querySelect.where({
-        "qrec_detail.id": resDataId
-      })
-      let resData = await SqlService.selectOne(querySelect.toString());
-
-      return {
-        status: 'success',
-        status_code: 200,
-        return: resData
+      let formData = new FormData();
+      for (var key in props) {
+        formData.append(key, props[key]);
       }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE_RECORD_DETAIL + '/add',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+      // let query = SqlBricks.insert("queue_record_details", {
+      //   queue_record_id: props.queue_record_id,
+      //   queue_name: props.queue_name,
+      //   job_id: props.job_id,
+      //   data: props.data,
+      //   status: props.status,
+      // }).toString();
+      // let resDataId = await SqlService.insert(query);
+      // SqlBricks.aliasExpansions({
+      //   'qrec_detail': "queue_record_details",
+      //   'qrec': "queue_records",
+      // });
+      // // Get again
+      // let querySelect = SqlBricks.select(
+      //   'qrec_detail.id as id',
+      //   'qrec_detail.queue_record_id as queue_record_id',
+      //   'qrec_detail.queue_name as queue_name',
+      //   'qrec_detail.job_id as job_id',
+      //   'qrec_detail.data as data',
+      //   'qrec_detail.status as status',
+      //   'qrec.id as qrec_id',
+      //   'qrec.queue_key as qrec_queue_key',
+      //   'qrec.execution_id as qrec_execution_id',
+      //   'qrec.status as qrec_status',
+      //   'qrec.data as qrec_data',
+      // ).from("qrec_detail");
+      // querySelect = querySelect.leftJoin('qrec').on({
+      //   "qrec.id": "qrec_detail.queue_record_id"
+      // });
+      // querySelect = querySelect.orderBy("qrec_detail.id DESC");
+      // querySelect = querySelect.limit(1);
+      // querySelect = querySelect.where({
+      //   "qrec_detail.id": resDataId
+      // })
+      // let resData = await SqlService.selectOne(querySelect.toString());
+
+      // return {
+      //   status: 'success',
+      //   status_code: 200,
+      //   return: resData
+      // }
     } catch (ex) {
       throw ex;
     }
   },
   async updateQueueRecordDetail(props: QueueRecordDetailInterface) {
     try {
-      let query = SqlBricks.update("queue_record_details", {
-        queue_record_id: props.queue_record_id,
-        queue_name: props.queue_name,
-        job_id: props.job_id,
-        data: props.data,
-        status: props.status,
-      }).where("id", props.id).toString();
-      let resDataUpdate = await SqlService.update(query);
-      SqlBricks.aliasExpansions({
-        'qrec_detail': "queue_record_details",
-        'qrec': "queue_records",
-        'exe': "executions"
-      });
-      // Get again
-      let querySelect = SqlBricks.select(
-        'qrec_detail.id as id',
-        'qrec_detail.queue_record_id as queue_record_id',
-        'qrec_detail.queue_name as queue_name',
-        'qrec_detail.job_id as job_id',
-        'qrec_detail.data as data',
-        'qrec_detail.status as status',
-        'qrec.id as qrec_id',
-        'qrec.queue_key as qrec_queue_key',
-        'qrec.execution_id as qrec_execution_id',
-        'qrec.status as qrec_status',
-        'qrec.data as qrec_data',
-      ).from("qrec_detail");
-      querySelect = querySelect.leftJoin('qrec').on({
-        "qrec.id": "qrec_detail.queue_record_id"
-      });
-      querySelect = querySelect.orderBy("qrec_detail.id DESC");
-      querySelect = querySelect.limit(1);
-      querySelect = querySelect.where({
-        "qrec_detail.id": props.id
-      })
-      let resData = await SqlService.selectOne(querySelect.toString());
-
-      return {
-        status: 'success',
-        status_code: 200,
-        return: resData
+      let formData = new FormData();
+      for (var key in props) {
+        formData.append(key, props[key]);
       }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE_RECORD_DETAIL + '/update',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+      // let query = SqlBricks.update("queue_record_details", {
+      //   queue_record_id: props.queue_record_id,
+      //   queue_name: props.queue_name,
+      //   job_id: props.job_id,
+      //   data: props.data,
+      //   status: props.status,
+      // }).where("id", props.id).toString();
+      // let resDataUpdate = await SqlService.update(query);
+      // SqlBricks.aliasExpansions({
+      //   'qrec_detail': "queue_record_details",
+      //   'qrec': "queue_records",
+      //   'exe': "executions"
+      // });
+      // // Get again
+      // let querySelect = SqlBricks.select(
+      //   'qrec_detail.id as id',
+      //   'qrec_detail.queue_record_id as queue_record_id',
+      //   'qrec_detail.queue_name as queue_name',
+      //   'qrec_detail.job_id as job_id',
+      //   'qrec_detail.data as data',
+      //   'qrec_detail.status as status',
+      //   'qrec.id as qrec_id',
+      //   'qrec.queue_key as qrec_queue_key',
+      //   'qrec.execution_id as qrec_execution_id',
+      //   'qrec.status as qrec_status',
+      //   'qrec.data as qrec_data',
+      // ).from("qrec_detail");
+      // querySelect = querySelect.leftJoin('qrec').on({
+      //   "qrec.id": "qrec_detail.queue_record_id"
+      // });
+      // querySelect = querySelect.orderBy("qrec_detail.id DESC");
+      // querySelect = querySelect.limit(1);
+      // querySelect = querySelect.where({
+      //   "qrec_detail.id": props.id
+      // })
+      // let resData = await SqlService.selectOne(querySelect.toString());
+
+      // return {
+      //   status: 'success',
+      //   status_code: 200,
+      //   return: resData
+      // }
     } catch (ex) {
       throw ex;
     }

@@ -14,4 +14,5 @@ export default {
   PIPELINE_TASK: ENDPOINT + '/pipeline-task',
   HOST: ENDPOINT + '/host',
   EXECUTION: ENDPOINT + '/execution',
+  VARIABLE: ENDPOINT + '/variable'
 }
