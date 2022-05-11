@@ -216,8 +216,8 @@ export default BaseRactive.extend<ListGroupItemInterface>({
       let _tasks: Array<any> = props.return as any;
       for (var a = 0; a < _tasks.length; a++) {
         _commands.push({
-          data: JSON.parse(_tasks[a].data),
-          parent_order_temp_ids: JSON.parse(_tasks[a].parent_order_temp_ids),
+          data: _tasks[a].data,
+          parent_order_temp_ids: _tasks[a].parent_order_temp_ids,
           description: _tasks[a].description,
           id: _tasks[a].id,
           is_active: _tasks[a].is_active,

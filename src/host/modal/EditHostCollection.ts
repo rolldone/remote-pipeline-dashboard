@@ -52,6 +52,11 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
             });
             break;
         }
+        this.set("form_data", {
+          ...this.get("form_data"),
+          // Override the value on top
+          ...this.get("set_auth_value")
+        })
       }
     }, {
       // Dont let start on first load
@@ -81,11 +86,6 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
   handleClick(action, props, e) {
     switch (action) {
       case 'SUBMIT':
-        this.set("form_data", {
-          ...this.get("form_data"),
-          // Override the value on top
-          ...this.get("set_auth_value")
-        })
         this.fire("listener", action, props, e);
         break;
     }

@@ -9,5 +9,8 @@ export default {
   USER: ENDPOINT + '/user',
   PROJECT: ENDPOINT + '/project',
   PIPELINE: ENDPOINT + '/pipeline',
-  PIPELINE_ITEM: ENDPOINT + '/pipeline-item'
+  PIPELINE_ITEM: ENDPOINT + '/pipeline-item',
+  PIPELINE_TASK: ENDPOINT + '/pipeline-task',
+  HOST: ENDPOINT + '/host',
+  EXECUTION: ENDPOINT + '/execution'
 }
