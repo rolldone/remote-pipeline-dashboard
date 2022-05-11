@@ -28,7 +28,6 @@ export default HostNew.extend<HostUpdateInterface>({
   setHost(props) {
     if (props == null) return;
     let _form_data = props.return;
-    _form_data.data = JSON.parse(_form_data.data);
     this.set("form_data", _form_data);
     this.set("datas", _form_data.data);
   },
@@ -41,7 +40,7 @@ export default HostNew.extend<HostUpdateInterface>({
         id: _form_data.id,
         name: _form_data.name,
         description: _form_data.description,
-        data: _form_data.datas,
+        data: JSON.stringify(_form_data.datas),
         auth_type: _form_data.auth_type,
         private_key: _form_data.private_key,
         username: _form_data.username,
