@@ -8,7 +8,8 @@ export interface command_data {
   project_id?: number
   pipeline_id?: number
   pipeline_item_id?: number
-  type: string
+  pipeline_item_ids?: Array<number>
+  type?: string
   description?: string
   name?: string
   order_number?: number
@@ -19,14 +20,15 @@ export interface command_data {
     parent_condition_type?: string
     condition_values?: string
     command?: string
-  }
+  },
+  order_by?: string
 }
 
 export default {
   async deletePipelineTaskByPipelineItemId(pipeline_item_id: number) {
     try {
       let formData = new FormData();
-      formData.append("pipeline_item_id", pipeline_item_id+"");
+      formData.append("pipeline_item_id", pipeline_item_id + "");
       let resData = await axios({
         method: "post",
         url: BaseService.PIPELINE_TASK + '/delete-by-pipeline',
@@ -95,7 +97,7 @@ export default {
       throw ex;
     }
   },
-  async getPipelineTasks(props: any) {
+  async getPipelineTasks(props: command_data) {
     try {
       let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_TASK + '/pipeline-tasks?' + query, {});

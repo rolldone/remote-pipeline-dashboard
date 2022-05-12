@@ -1,11 +1,14 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import _ from "lodash";
 import CreateWebSocket, { WebSocketCreatedInterface } from "services/CreateWebSocket";
+import PipelineItemService from "services/PipelineItemService";
+import PipelineTaskService from "services/PipelineTaskService";
 import QueueRecordDetailService from "services/QueueRecordDetailService";
 import template from './DisplayProcessModalView.html';
 
 declare let window: Window;
 var fff = null;
-let _ws : WebSocketCreatedInterface = null;
+let _ws: WebSocketCreatedInterface = null;
 export interface DisplayProcessModalInterface extends BaseRactiveInterface {
   show?: { (props: any): void }
   hide?: { (): void }
@@ -18,7 +21,18 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
       queue_record_detail: null,
-      log_array: {}
+      log_array: {},
+      log_socket_messages: {},
+      log_status: {},
+      show_process_id: null
+    }
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'SHOW_PROGRESS':
+        e.preventDefault();
+        this.set("show_process_id", props.id);
+        break;
     }
   },
   async show(props) {
@@ -29,7 +43,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
     })
     myModalEl.addEventListener('hidden.bs.modal', function (event) {
       // do something...
-      if(_ws != null){
+      if (_ws != null) {
         _ws.webSocket.close();
       }
     })
@@ -48,36 +62,87 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
   async getDisplayProcess() {
     try {
       let _queue_record_detail = this.get("queue_record_detail");
-      _ws = await CreateWebSocket("print_process_" + _queue_record_detail.id);
-      let _log_array = {};
-      fff = (event) => {
-        for (var a = 0; a < _queue_record_detail.exe_pipeline_item_ids.length; a++) {
-          let _sss = _queue_record_detail.exe_pipeline_item_ids[a];
-          let _action = "job_id_" + _queue_record_detail.job_id + "_pipeline_id_" + _sss;
-          if (_log_array[_action] == null) {
-            _log_array[_action] = {
-              label: _sss,
-              data: []
-            };
-            this.set("log_array", {
-              ...this.get("log_array"),
-              [_action]: _log_array[_action]
-            })
-          }
-          try {
-            let _data = JSON.parse(event.data);
-            if (_data.action == _action) {
-              var element = document.getElementById("modal-theboyd");
-              var element2 = document.getElementById("modal-theboyd2");
-              element.scrollTo(0, element2.offsetHeight);
-              _log_array[_action].data.push(_data);
-              this.set("log_array." + _action + ".data", _log_array[_action].data);
-              // console.log(_data.action + " :: ", _data.data);
-            }
+      // console.log("_queue_record_detail :: ", _queue_record_detail);
+      let res_pipeline_item = await PipelineTaskService.getPipelineTasks({
+        pipeline_id: _queue_record_detail.exe_pipeline_id,
+        order_by: "pip_item.id ASC, pip_task.order_number ASC"
+      })
 
-          } catch (ex) {
-            console.log("vmadfvkdfvmkdfv :: ", event.data);
-            throw ex;
+      // Create a group
+      let resGroupPipeline = _(res_pipeline_item.return).groupBy("pip_item_id").map((g) => {
+        return {
+          name: g[0].pip_item_name,
+          data: g
+        }
+      }).value();
+
+      // And save it
+      await this.set("log_array", resGroupPipeline);
+
+      // Define the action key
+      for (let i = 0; i < resGroupPipeline.length; i++) {
+        let _tasks = resGroupPipeline[i].data;
+        for (var a = 0; a < _tasks.length; a++) {
+          let gg = _tasks[a];
+          let _action = "job_id_" + _queue_record_detail.job_id + "_pipeline_id_" + gg.pip_item_id + "_task_id_" + gg.id;
+          gg.action = _action;
+        }
+      }
+
+      // And save again
+      await this.set("log_array", [
+        ...resGroupPipeline
+      ]);
+
+      // And try call websocket
+      _ws = await CreateWebSocket("print_process_" + _queue_record_detail.id);
+      let _log_socket_messages = {};
+      let _log_status = {};
+      let _currentActionRunning = null;
+      fff = (event) => {
+        for (let i = 0; i < resGroupPipeline.length; i++) {
+          let _tasks = resGroupPipeline[i].data;
+          for (var a = 0; a < _tasks.length; a++) {
+            let gg = _tasks[a];
+            let _action = gg.action;
+            if (_log_status[_action] == null) {
+              _log_status[_action] = "WAITING";
+              this.set("log_status", _log_status);
+            }
+            if (_log_socket_messages[_action] == null) {
+              _log_socket_messages[_action] = [];
+              this.set("log_socket_messages", {
+                ...this.get("log_socket_messages"),
+                [_action]: _log_socket_messages[_action]
+              })
+            }
+            try {
+              let _data = JSON.parse(event.data);
+
+              if (_data.action == _action) {
+                if (_data.data.includes("error-error") == true) {
+                  _log_status[_action] = "FAILED";
+                  break;
+                }
+                if (_data.data != "--") {
+                  _log_status[_action] = "RUNNING";
+                  if (_currentActionRunning != _data.action) {
+                    _currentActionRunning = _data.action;
+                  }
+                }
+                // var element = document.getElementById("modal-theboyd");
+                //  var element2 = document.getElementById("modal-theboyd2");
+                // element.scrollTo(0, element2.offsetHeight);
+                console.log(_data.action + " :: ", _data.data);
+                _log_socket_messages[_action].push(_data.data);
+                this.set("log_socket_messages." + _action, _log_socket_messages[_action]);
+                this.set("log_status", _log_status);
+                // console.log(_data.action + " :: ", _data.data);
+              }
+            } catch (ex) {
+              console.log("vmadfvkdfvmkdfv :: ", event.data);
+              throw ex;
+            }
           }
         }
       }
@@ -86,6 +151,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
         id: _queue_record_detail.id,
         key: _ws.key
       });
+
     } catch (ex) {
       console.error("getDisplayProcess - ex :: ", ex);
     }

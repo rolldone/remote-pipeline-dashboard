@@ -8,14 +8,70 @@
       </div>
 
       <div class="modal-body" style="padding: 0;" id="modal-theboyd">
-        <div style="background: black;color: white; padding: 12px;" id="modal-theboyd2">
+        {{#log_array:i}}
+        <div class="card" style="border-radius: 0;border: none;">
+          <div class="card-header">
+            <h3 class="card-title">{{name}}</h3>
+          </div>
+          <div class="list-group list-group-flush list-group-hoverable">
+            {{#data:j}}
+            <div>
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    {{#if log_status[action] == "WAITING"}}
+                    <span class="badge bg-yellow"></span>
+                    {{elseif log_status[action] == "DONE"}}
+                    <span class="badge bg-blue"></span>
+                    {{elseif log_status[action] == "FAILED"}}
+                    <span class="badge bg-red"></span>
+                    {{elseif log_status[action] == "RUNNING"}}
+                    <span class="badge bg-green"></span>
+                    {{/if}}
+                  </div>
+                  <div class="col-auto">
+                    <a href="#">
+                      <span class="avatar" style="background-image: url(./static/avatars/000m.jpg)"></span>
+                    </a>
+                  </div>
+                  <div class="col text-truncate">
+                    <a href="#" class="text-reset d-block">{{name}}</a>
+                    <div class="d-block text-muted text-truncate mt-n1">{{description}}</div>
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" class="btn btn-cyan w-100 btn-sm"
+                      on-click="@this.handleClick('SHOW_PROGRESS',{id: id, index:j },@event)">
+                      Show
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {{#if show_process_id == id}}
+              <div>
+                <div style="background: black;color: white; padding: 12px;">
+                  {{#log_socket_messages:p}}
+                  {{#if action == p}}
+                  {{#log_socket_messages[p]:ui}}
+                  <p>{{log_socket_messages[p][ui]}}</p>
+                  {{/log_socket_messages}}
+                  {{/if}}
+                  {{/log_socket_messages}}
+                </div>
+              </div>
+              {{/if}}
+            </div>
+            {{/data}}
+          </div>
+        </div>
+        {{/log_array}}
+        <!-- <div style="background: black;color: white; padding: 12px;" id="modal-theboyd2">
           {{#log_array:key}}
           <h1>key nya :: {{key}}</h1>
           {{#each log_array[key].data:i}}
           <p>{{log_array[key].data[i].data}}</p>
           {{/each}}
           {{/log_array}}
-        </div>
+        </div> -->
       </div>
       <div class="modal-footer">
         <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
