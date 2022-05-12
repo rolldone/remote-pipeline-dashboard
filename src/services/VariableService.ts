@@ -3,6 +3,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import axios from "axios";
 import BaseService from "./BaseService";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface variable {
   id?: number
@@ -176,8 +177,8 @@ export default {
   },
   async getVariables(props): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
-      let resData = await axios.get(BaseService.VARIABLE + '/variables?' + query, {});
+      let query = SmartUrlSearchParams(props);
+      let resData = await axios.get(BaseService.VARIABLE + '/variables?' + query.toString(), {});
       return resData.data;
     } catch (ex) {
       throw ex;
@@ -234,7 +235,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.VARIABLE + '/' + id + "/view?" + query, {});
       return resData.data;
     } catch (ex) {

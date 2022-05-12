@@ -96,6 +96,7 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'data':
+            console.log("props[key]",props[key]);
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
@@ -116,7 +117,7 @@ export default {
       // And register to the bullmq
       formData = new FormData();
       formData.append("id", resData.id);
-      formData.append("data", resData.data);
+      formData.append("data", JSON.stringify(resData.data));
       formData.append("process_mode", resData.exe_process_mode);
       if (resData.exe_process_mode == "parallel") {
         formData.append("process_limit", resData.exe_process_limit);

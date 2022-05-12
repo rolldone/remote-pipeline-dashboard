@@ -3,6 +3,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface pipeline_item {
   id?: number
@@ -26,7 +27,7 @@ export default {
         pipeline_id,
         order_number
       }
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_ITEM + '/pipeline-item-parents?' + query, {});
       return resData.data;
       // let resData = await SqlService.select(SqlBricks.select("*").from("pipeline_items")
@@ -43,7 +44,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_ITEM + '/' + id + '/view?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({
@@ -88,7 +89,7 @@ export default {
   },
   async getPipelineItems(props: pipeline_item) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_ITEM + '/pipeline-items?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({

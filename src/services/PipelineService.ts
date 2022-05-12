@@ -2,6 +2,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export default {
   async addPipeline(props): Promise<any> {
@@ -67,7 +68,7 @@ export default {
   },
   async getPipeline(props): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE + '/' + props.id + "/view?" + query, {});
       return resData.data;
       // let resData = await SqlService.selectOne(SqlBricks.select("*").from("pipelines").where("id", props.id).toString());
@@ -82,7 +83,7 @@ export default {
   },
   async getPipelines(props): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE + '/pipelines?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({

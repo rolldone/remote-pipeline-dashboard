@@ -69,7 +69,7 @@ export default BaseRactive.extend<Step3Interface>({
               <div class="list-group-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <input type="checkbox" class="form-check-input" name="{{form_data.host_ids}}" value="{{id}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
+                    <input type="checkbox" data-name="host_ids" class="form-check-input" name="{{form_data.host_ids}}" value="{{id}}" on-change="@this.handleChange('CHECK_HOST_IDS',{ id : id, index : i },@event)">
                   </div>
                   <div class="col-auto">
                     <a href="#">
@@ -135,6 +135,16 @@ export default BaseRactive.extend<Step3Interface>({
   },
   handleChange(action, props, e) {
     switch (action) {
+      case 'CHECK_HOST_IDS':
+        let host_ids = $("input[data-name=host_ids]");
+        let checked = [];
+        host_ids.each((i, el) => {
+          if ($(el).is(":checked") == true) {
+            checked.push($(el).val());
+          }
+        })
+        this.set("form_data.host_ids", checked);
+        break;
       case 'SELECT_VARIABLE':
         var element = $(e.target).find('option:selected');
         this.set("select_variable_index", element.attr("index"));

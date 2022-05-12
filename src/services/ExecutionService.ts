@@ -3,6 +3,7 @@ import SqlService from "./core/SqlService";
 import QueueService from "./core/QueueService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface Execution {
   id?: number
@@ -76,6 +77,7 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'pipeline_item_ids':
+          case 'host_ids':
             formData.append(key, JSON.stringify(props[key]));
             break;
           default:
@@ -152,7 +154,7 @@ export default {
   },
   async getExecutions(props: any) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.EXECUTION + '/executions?' + query, {});
       return resData.data;
     } catch (ex) {
@@ -214,7 +216,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.EXECUTION + '/' + id + '/view?' + query, {});
       return resData.data;
     } catch (ex) {

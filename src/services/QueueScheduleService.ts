@@ -4,6 +4,7 @@ import QueueService from "./core/QueueService";
 import { QueueRecordInterface } from "./QueueRecordService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface QueueScheduleInterface {
   id?: any
@@ -183,7 +184,7 @@ export default {
   },
   async getQueueSchedules(props: QueueScheduleInterface) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.QUEUE_RECORD_SCHEDULE + '/queue-record-schedules?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({
@@ -237,7 +238,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.QUEUE_RECORD_SCHEDULE + '/' + id + '/view?' + query, {});
       return resData.data;
     } catch (ex) {

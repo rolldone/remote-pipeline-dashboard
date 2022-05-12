@@ -2,6 +2,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import axios from "axios";
 import BaseService from "./BaseService";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface command_data {
   project_id?: number
@@ -96,7 +97,7 @@ export default {
   },
   async getPipelineTasks(props: any) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_TASK + '/pipeline-tasks?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({
@@ -157,7 +158,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_TASK + '/' + id + "/view?" + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({

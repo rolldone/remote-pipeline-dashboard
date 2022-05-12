@@ -3,6 +3,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export default {
   async addProject(props): Promise<any> {
@@ -65,7 +66,7 @@ export default {
   },
   async getProject(props): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PROJECT + '/' + props.id + "/view?" + query, {});
       return resData.data;
       // let resData = await SqlService.selectOne(SqlBricks.select("*").from("projects").where("id", props.id).toString());
@@ -80,7 +81,7 @@ export default {
   },
   async getProjects(props): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PROJECT + '/projects?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({

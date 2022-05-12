@@ -33,7 +33,7 @@ export default BaseRactive.extend<VariablesInterface>({
       // console.log(this.req);
       let _pipeline_id = this.req.query.pipeline_id
       let resData = await VariableService.getVariables({
-        pipeline_id: _pipeline_id
+        pipeline_id: _pipeline_id || null
       });
       return resData;
     } catch (ex) {

@@ -14,12 +14,12 @@
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
-          <span class="d-none d-sm-inline">
+         <!--  <span class="d-none d-sm-inline">
             <a href="#" class="btn btn-white">
               Manage Variable
             </a>
-          </span>
-          <a href="/dashboard/variable" class="btn btn-primary d-none d-sm-inline-block">
+          </span> -->
+          <a href="#" class="btn btn-primary d-none d-sm-inline-block" on-click="@this.handleClick('BACK',{},@event)">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-corner-up-left" width="24"
               height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -87,7 +87,8 @@
   </div>
   <br>
   {{#if form_data.id != ""}}
-  <variable-group form_schemes={{form_schemes}} default_tab="0" variable_groups="{{variable_groups}}" variable="{{form_data}}">
+  <variable-group form_schemes={{form_schemes}} default_tab="0" variable_groups="{{variable_groups}}"
+    variable="{{form_data}}">
   </variable-group>
   {{/if}}
   <br>

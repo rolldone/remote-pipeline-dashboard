@@ -4,6 +4,7 @@ import QueueService from "./core/QueueService";
 import { QueueRecordInterface } from "./QueueRecordService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface QueueRecordDetailInterface {
   id?: any
@@ -168,7 +169,7 @@ export default {
   },
   async getQueueRecordDetails(props: QueueRecordDetailInterface) {
     try {
-      let queryString = new URLSearchParams(props as any).toString();
+      let queryString = SmartUrlSearchParams(props).toString();
       let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/queue-record-details?' + queryString, {});
       return resData.data;
       // SqlBricks.aliasExpansions({
@@ -233,7 +234,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let queryString = new URLSearchParams(props as any).toString();
+      let queryString = SmartUrlSearchParams(props).toString();
       let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/' + id + "/view?" + queryString, {});
       return resData.data;
     } catch (ex) {
@@ -293,7 +294,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let queryString = new URLSearchParams(props as any).toString();
+      let queryString = SmartUrlSearchParams(props).toString();
       let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/' + id + "/display-process?" + queryString, {});
       return resData.data;
     } catch (ex) {

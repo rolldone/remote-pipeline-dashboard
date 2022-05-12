@@ -1,4 +1,5 @@
 import axios from "axios"
+import SmartUrlSearchParams from "base/SmartUrlSearchParams"
 import BaseService from "./BaseService"
 
 
@@ -19,7 +20,7 @@ export interface UserServiceInterface {
 export default {
   getUsers: async function (props: UserServiceInterface) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.USER + '/users?' + query, {});
       return resData.data;
     } catch (ex) {
@@ -28,7 +29,7 @@ export default {
   },
   getUser: async function (props: UserServiceInterface) {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.USER + '/' + props.id + "/view?" + query, {});
       return resData.data;
     } catch (ex) {

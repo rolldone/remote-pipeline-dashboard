@@ -28,8 +28,6 @@ export default ExecutionNew.extend<ExecutionUpdateInterface>({
   setExecution(props) {
     if (props == null) return;
     let _form_data: Execution = props.return as any;
-    _form_data.host_ids = JSON.parse(props.return.host_ids);
-    _form_data.pipeline_item_ids = JSON.parse(props.return.pipeline_item_ids);
     this.set("form_data", _form_data);
   }
 })

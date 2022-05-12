@@ -2,6 +2,7 @@ import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export interface Host {
   id?: number,
@@ -17,7 +18,7 @@ export interface Host {
 export default {
   async getHosts(props: any): Promise<any> {
     try {
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.HOST + '/hosts?' + query, {});
       return resData.data;
     } catch (ex) {
@@ -58,7 +59,7 @@ export default {
     try {
       let id = props.id;
       delete props.id;
-      let query = new URLSearchParams(props as any);
+      let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.HOST + '/' + id + '/view?' + query, {});
       return resData.data;
     } catch (ex) {

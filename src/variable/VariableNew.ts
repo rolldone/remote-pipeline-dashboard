@@ -51,6 +51,10 @@ export default BaseRactive.extend<VariableNewInterface>({
   },
   handleClick(action, props, e) {
     switch (action) {
+      case 'BACK':
+        e.preventDefault();
+        window.history.back();
+        break;
       case 'SUBMIT':
         e.preventDefault();
         this.submitVariable();
