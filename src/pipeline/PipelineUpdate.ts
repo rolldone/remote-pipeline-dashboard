@@ -22,10 +22,13 @@ export default PipelineNew.extend<PipelineNewInterface>({
   },
   setPipeline(props) {
     if (props == null) return;
+    props.return.source_from = props.return.source_from || '';
     this.set("form_data", props.return);
   },
   async handleClick(action, props, e) {
     switch (action) {
+      case 'OPEN_REPOSITORY_AUTH':
+        break;
       case 'SUBMIT':
         e.preventDefault();
         let form_data = this.get("form_data");

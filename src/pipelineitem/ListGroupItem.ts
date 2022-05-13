@@ -7,8 +7,8 @@ import SwitchCommandType from "./input/SwitchCommandType";
 
 export interface ListGroupItemInterface extends BaseRactiveInterface {
   calibrateCommandItem: { (): void }
-  getPipelineTask: { (): Promise<any> }
-  setPipelineTask: { (props: any): void }
+  getPipelineTasks: { (): Promise<any> }
+  setPipelineTasks: { (props: any): void }
   returnDisplayCommandRactive: { (index: number): ParsedTemplate }
   addNewCommandItem: { (): void }
 }
@@ -194,18 +194,18 @@ export default BaseRactive.extend<ListGroupItemInterface>({
     this.set("command_datas", command_datas);
     this.resetPartial('pipeline_type_partial', partial_input);
   },
-  async getPipelineTask() {
+  async getPipelineTasks() {
     try {
       let pipeline_item = this.get("pipeline_item");
       let resData = await PipelineTaskService.getPipelineTasks({
-        pipeline_item_id: pipeline_item.id
+        pipeline_item_id: pipeline_item.id || -1
       });
       return resData;
     } catch (ex) {
       console.error("getPipelineTask - ex :: ", ex);
     }
   },
-  setPipelineTask(props): void {
+  setPipelineTasks(props): void {
     if (props == null) return;
     /**
      * If have edit before and hide and show again
@@ -250,7 +250,7 @@ export default BaseRactive.extend<ListGroupItemInterface>({
         e.preventDefault();
         this.set("is_edit_task", this.get("is_edit_task") == true ? false : true)
         if (this.get("is_edit_task") == true) {
-          this.setPipelineTask(await this.getPipelineTask());
+          this.setPipelineTasks(await this.getPipelineTasks());
         }
         break;
     }

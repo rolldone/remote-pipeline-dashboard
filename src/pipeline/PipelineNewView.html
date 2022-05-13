@@ -67,6 +67,21 @@
               {{/project_datas}}
             </select>
           </div>
+          <div class="mb-3">
+            <label class="form-label">Source From</label>
+            <div class="btn-group w-100">
+              <button type="button" class="btn {{select_source_from==''?'btn-primary':''}}"
+                on-click="@this.handleClick('SELECT_SOURCE_FROM',{ key : ''},@event)">No Just Pipeline Only</button>
+              <button type="button" class="btn {{select_source_from!=''?'btn-primary':''}}"
+                on-click="@this.handleClick('SELECT_SOURCE_FROM',{ key : 'repository'},@event)">Select
+                Repository</button>
+            </div>
+          </div>
+          <div class="mb-3">
+            {{#if select_source_from == "github"}}
+              <github-list on-listener="onGithubListListener"></github-list>
+            {{/if}}
+          </div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"
               on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>
@@ -79,5 +94,6 @@
   {{#if form_data.id != ""}}
   <pipeline-items pipeline_items="{{pipeline_items}}" pipeline="{{form_data}}"></pipeline-items>
   {{/if}}
+  <repository-popup on-listener="onRepositoryPopupListener"></repository-popup>
   <br>
 </div>

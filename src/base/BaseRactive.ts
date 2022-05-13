@@ -9,6 +9,7 @@ export interface BaseRactiveInterface extends RactiveExtendInterface {
   req?: any
   reInitializeObserve?: { (): void }
   getLang?: any
+  parseQuery?: { (queryString: string) }
 }
 
 export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
@@ -31,6 +32,15 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       self.off(key);
       self.on(key, self.newOn[key]);
     }
+  },
+  parseQuery(queryString) {
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+      var pair = pairs[i].split('=');
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
   },
   newOn: {},
 })

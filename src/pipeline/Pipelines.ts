@@ -27,7 +27,10 @@ export default BaseRactive.extend<PipelinesInterface>({
   },
   async getPipelines() {
     try {
-      let resData = await PipelineService.getPipelines({});
+      let project_id = this.req.query.project_id;
+      let resData = await PipelineService.getPipelines({
+        project_id
+      });
       return resData;
     } catch (ex) {
       console.log("getPipelines - ex :: ", ex);

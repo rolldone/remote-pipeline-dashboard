@@ -25,7 +25,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           req: req
         })
       })
-      .get('/:id/view', async (req, context) => {
+      .get('/:id/view/(.*)?', async (req, context) => {
         // Handle the route here...
         let Pipeline = (await import("./PipelineUpdate")).default;
         new Pipeline({

@@ -168,7 +168,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       let pipeline = this.get("pipeline");
       let pipeline_items: Array<pipeline_item> = this.get("pipeline_items");
       let pipeline_item = pipeline_items[index];
-      let resData = await PipelineItemService.deletePipelineItem([pipeline_item.id]);
+      let resData = await PipelineItemService.deletePipelineItem([pipeline_item.id||null]);
     } catch (ex) {
       console.error("deletePipelineItem - ex :: ", ex);
     }

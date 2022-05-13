@@ -1,0 +1,82 @@
+<div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Import an existing project from a Git repository</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{#if select_repository == "github"}}
+        <github></github>
+        {{else}}
+        <div class="task-body tw-mt-5 md:tw-mt-6">
+          <h2>Connect to Git provider</h2>
+          <p>Choose the Git provider where your site’s source code is hosted. When you push to Git, we run your build
+            tool of choice on our servers and deploy the result.</p>
+          <p class="tw-pt-2">You can <a
+              class="tw-text-inherit tw-underline tw-text-decoration-color-gray tw-font-weight-inherit hover:tw-text-black hover:tw-text-decoration-color-inherit dark:hover:tw-text-white dark:tw-text-inherit dark:tw-text-decoration-color-inherit"
+              href="/teams/donny-rollproject/settings/general#self-hosted-git">unlock options for self-hosted
+              GitHub/GitLab</a> by upgrading to the Business plan.</p>
+          <div class="tw-mt-4">
+            <div>
+              <div class="row g-2 align-items-center mb-n3">
+                <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+                  <a href="#" class="btn btn-github w-100"
+                    on-click="@this.handleClick('OAUTH_CLICK',{ action : 'github' }, @event)">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <desc>Download more icon variants from https://tabler-icons.io/i/brand-github</desc>
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5">
+                      </path>
+                    </svg>
+                    Github
+                  </a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+                  <a href="#" class="btn btn-bitbucket w-100"
+                    on-click="@this.handleClick('OAUTH_CLICK',{ action : 'bitbucket' }, @event)">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/brand-bitbucket -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <desc>Download more icon variants from https://tabler-icons.io/i/brand-bitbucket</desc>
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M3.648 4a0.64 .64 0 0 0 -.64 .744l3.14 14.528c.07 .417 .43 .724 .852 .728h10a0.644 .644 0 0 0 .642 -.539l3.35 -14.71a0.641 .641 0 0 0 -.64 -.744l-16.704 -.007z">
+                      </path>
+                      <path d="M14 15h-4l-1 -6h6z"></path>
+                    </svg>
+                    Bitbucket
+                  </a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+                  <a href="#" class="btn btn-orange w-100"
+                    on-click="@this.handleClick('OAUTH_CLICK',{ action : 'gitlab' }, @event)">
+                    <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                      aria-hidden="true" class="!tw-fill-current tw-flex-shrink-0 tw-mr-1" focusable="false">
+                      <path fill-rule="evenodd"
+                        d="M1.33 6.36v-.02l1.56-4.8a.77.77 0 011.46 0L5.79 6h4.42l1.44-4.47a.77.77 0 011.46 0l1.55 4.8v.02l.79 2.43c.14.42-.01.9-.37 1.16L8.3 14.9a.5.5 0 01-.62 0L.92 9.93a1.04 1.04 0 01-.37-1.16l.78-2.42zm2.29-3.83L2.5 6h2.24L3.62 2.53zm3.03 9.4L2.83 7h2.23l1.59 4.94zM1.99 7.57L1.5 9.09c0 .01 0 .03.02.04L5.43 12 2 7.56zM9.9 7H6.11L8 12.87 9.9 7zm-.54 4.94L13.17 7h-2.23l-1.59 4.94zM11.26 6h2.24l-1.12-3.47L11.26 6zm-.7 6l3.92-2.87c.02 0 .02-.03.02-.04L14 7.56 10.58 12z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    Gitlab
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="tw-pt-3">Don’t have a project yet? <a
+              class="tw-text-inherit tw-underline tw-text-decoration-color-gray tw-font-weight-inherit hover:tw-text-black hover:tw-text-decoration-color-inherit dark:hover:tw-text-white dark:tw-text-inherit dark:tw-text-decoration-color-inherit"
+              href="/start-with-template?entryPoint=from%20Sites%20page">Start from a template instead.</a></p>
+        </div>
+        {{/if}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+          on-click="@this.handleClick('SUBMIT',{},@event)">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
