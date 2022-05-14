@@ -129,7 +129,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     try {
       let form_data = this.get("form_data");
       let resData = await RepositoryService.getRepository({
-        from: form_data.from,
+        from_provider: form_data.from_provider,
         repo_name: form_data.repo_name,
         oauth_user_id: form_data.oauth_user_id
       });
@@ -146,7 +146,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     try {
       let form_data = this.get("form_data");
       let resData = await RepositoryService.getOwnerRepo({
-        from: form_data.from,
+        from_provider: form_data.from_provider,
         oauth_user_id: form_data.oauth_user_id
       });
       return resData;
@@ -162,7 +162,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     try {
       let form_data = this.get("form_data");
       let resData = await RepositoryService.getCommits({
-        from: form_data.from,
+        from_provider: form_data.from_provider,
         repo_name: form_data.repo_name,
         oauth_user_id: form_data.oauth_user_id
       })
@@ -177,7 +177,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     let commit_datas = [];
     let resDats = props.return;
     resDats.forEach(element => {
-      switch (form_data.from) {
+      switch (form_data.from_provider) {
         case 'github':
           commit_datas.push({
             message: element.commit.message,

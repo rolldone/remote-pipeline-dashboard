@@ -9,7 +9,7 @@ export interface RepositoryInterface {
   owner?: string
   orgName?: string
   repo_name?: string
-  from?: string
+  from_provider?: string
 }
 
 export default {

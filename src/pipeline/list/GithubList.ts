@@ -83,7 +83,7 @@ const GithubList = BaseRactive.extend<GithubListInterface>({
         this.fire("listener", 'SUBMIT', {
           repo_name: repository.name,
           source_type: 'git',
-          from: FROM
+          from_provider: FROM
         }, e);
         // let _github_select_branch: GithubSelectBranchInterface = this.findComponent("github-select-branch");
         // _github_select_branch.show({
@@ -99,7 +99,7 @@ const GithubList = BaseRactive.extend<GithubListInterface>({
     try {
       let form_data = this.get("form_data");
       let resData = await RepositoryService.getRepositories({
-        from: FROM,
+        from_provider: FROM,
         oauth_user_id: form_data.oauth_user_id
       })
       return resData;

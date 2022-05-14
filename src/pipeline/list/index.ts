@@ -1,5 +1,5 @@
 export type GitProps = {
-  from: string;
+  from_provider: string;
   repo_name: string;
   source_type: string;
 }

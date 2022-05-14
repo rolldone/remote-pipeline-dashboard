@@ -38,7 +38,7 @@ const RepositoryPopup = BaseRactive.extend<RepositoryInterface>({
         }
       ],
       form_data: {
-        from: 'github'
+        from_provider: 'github'
       }
     }
   },
@@ -65,7 +65,7 @@ const RepositoryPopup = BaseRactive.extend<RepositoryInterface>({
     try {
       let select_repository = this.get("select_repository");
       let resData = await AuthService.oauthGeneate({
-        oauth: select_repository,
+        from_provider: select_repository,
         forward_to: window.location.origin + window.location.pathname
       });
       return resData;
@@ -75,8 +75,6 @@ const RepositoryPopup = BaseRactive.extend<RepositoryInterface>({
   },
   setOauthUrl(props) {
     if (props == null) return;
-    // this.set("url_redirect", props.return);
-    // window.open(props.return, '_blank');
     window.location.href = props.return;
   }
 });

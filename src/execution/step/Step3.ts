@@ -197,5 +197,5 @@ export default BaseRactive.extend<Step3Interface>({
     if (props == null) return;
     let _datas = props.return;
     this.set("variable_datas", _datas);
-  }
+  },
 });

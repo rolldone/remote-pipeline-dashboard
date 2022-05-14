@@ -13,6 +13,7 @@ export interface Execution {
   pipeline_id?: number
   project_id?: number
   user_id?: number
+  branch?: string
   variable_id?: number
   variable_option?: string
   pipeline_item_ids?: Array<number>
@@ -27,10 +28,10 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'pipeline_item_ids':
-            formData.append(key, JSON.stringify(props[key]));
+            formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            formData.append(key, props[key]);
+            formData.append(key, props[key] || "");
             break;
         }
       }
@@ -78,10 +79,10 @@ export default {
         switch (key) {
           case 'pipeline_item_ids':
           case 'host_ids':
-            formData.append(key, JSON.stringify(props[key]));
+            formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            formData.append(key, props[key]);
+            formData.append(key, props[key] || "");
             break;
         }
       }

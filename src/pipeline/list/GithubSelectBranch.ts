@@ -65,7 +65,7 @@ const GithubSelectBranch = BaseRactive.extend<GithubSelectBranchInterface>({
     await this.set("form_data", {
       ...props,
       // Just for make sure 
-      from: props.from,
+      from_provider: props.from_provider,
       repo_name: props.repo_name,
       source_type: props.source_type
     });
@@ -81,7 +81,7 @@ const GithubSelectBranch = BaseRactive.extend<GithubSelectBranchInterface>({
       let _form_Data = this.get("form_data");
       let resData = await RepositoryService.getBranchs({
         repo_name: _form_Data.repo_name,
-        from: _form_Data.from,
+        from_provider: _form_Data.from_provider,
         oauth_user_id: _form_Data.oauth_user_id
       })
       return resData;

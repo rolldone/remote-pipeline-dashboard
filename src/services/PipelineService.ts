@@ -4,6 +4,10 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
+export interface PipelineInterface {
+  id?: number
+}
+
 export default {
   async addPipeline(props): Promise<any> {
     try {
@@ -11,7 +15,7 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'repo_data':
-            formData.append(key, JSON.stringify(props[key]||{}));
+            formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
             formData.append(key, props[key]);
@@ -49,7 +53,7 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'repo_data':
-            formData.append(key, JSON.stringify(props[key]||{}));
+            formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
             formData.append(key, props[key]);
@@ -80,7 +84,7 @@ export default {
       throw ex;
     }
   },
-  async getPipeline(props): Promise<any> {
+  async getPipeline(props: PipelineInterface): Promise<any> {
     try {
       let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE + '/' + props.id + "/view?" + query, {});

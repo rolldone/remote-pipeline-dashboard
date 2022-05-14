@@ -75,7 +75,7 @@ export default BaseRactive.extend<PipelineNewInterface>({
       this.setProjectDatas(await this.getProjectDatas());
       let parseQuery = this.parseQuery(window.location.search);
       this.set("form_data.oauth_user_id", parseQuery.oauth_user_id);
-      this.set("select_source_from", parseQuery.from);
+      this.set("select_source_from", parseQuery.from_provider);
       resolve();
     })
   },
