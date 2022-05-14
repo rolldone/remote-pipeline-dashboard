@@ -66,7 +66,7 @@ const RepositoryPopup = BaseRactive.extend<RepositoryInterface>({
       let select_repository = this.get("select_repository");
       let resData = await AuthService.oauthGeneate({
         oauth: select_repository,
-        forward_to: window.location.href
+        forward_to: window.location.origin + window.location.pathname
       });
       return resData;
     } catch (ex) {

@@ -67,21 +67,26 @@
               {{/project_datas}}
             </select>
           </div>
+          {{#if form_data.id != ""}}
           <div class="mb-3">
-            <label class="form-label">Source From</label>
-            <div class="btn-group w-100">
-              <button type="button" class="btn {{select_source_from==''?'btn-primary':''}}"
-                on-click="@this.handleClick('SELECT_SOURCE_FROM',{ key : ''},@event)">No Just Pipeline Only</button>
-              <button type="button" class="btn {{select_source_from!=''?'btn-primary':''}}"
-                on-click="@this.handleClick('SELECT_SOURCE_FROM',{ key : 'repository'},@event)">Select
-                Repository</button>
+            <label class="form-label">Source From </label>
+            <div>
+              <a href="#" class="btn btn-cyan" on-click="@this.handleClick('SELECT_PROVIDER',{},@event)">
+                Select source provider
+              </a>
+              <small class="form-hint" style="margin-top: 0.5rem;">This is optional.</small>
             </div>
           </div>
           <div class="mb-3">
+            {{#if form_data.repo_name != null}}
+            <repo-selected on-listener="onRepoSelectedListener" form_data={{form_data}}></repo-selected>
+            {{else}}
             {{#if select_source_from == "github"}}
-              <github-list on-listener="onGithubListListener"></github-list>
+            <github-list on-listener="onGithubListListener" form_data={{form_data}}></github-list>
+            {{/if}}
             {{/if}}
           </div>
+          {{/if}}
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"
               on-click="@this.handleClick('SUBMIT',{},@event)">Submit</button>

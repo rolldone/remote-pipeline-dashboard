@@ -22,8 +22,16 @@ export default PipelineNew.extend<PipelineNewInterface>({
   },
   setPipeline(props) {
     if (props == null) return;
-    props.return.source_from = props.return.source_from || '';
     this.set("form_data", props.return);
+    let parseQuery = this.parseQuery(window.location.search);
+    if (parseQuery.oauth_user_id != null) {
+      this.set("form_data", {
+        ...this.get("form_data"),
+        // Set repo_name null it mean you need change repository
+        repo_name: null
+      })
+      this.set("form_data.oauth_user_id", parseQuery.oauth_user_id);
+    }
   },
   async handleClick(action, props, e) {
     switch (action) {

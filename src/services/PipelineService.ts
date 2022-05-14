@@ -9,7 +9,14 @@ export default {
     try {
       let formData = new FormData();
       for (var key in props) {
-        formData.append(key, props[key]);
+        switch (key) {
+          case 'repo_data':
+            formData.append(key, JSON.stringify(props[key]||{}));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
       }
       let resData = await axios({
         method: "post",
@@ -40,7 +47,14 @@ export default {
     try {
       let formData = new FormData();
       for (var key in props) {
-        formData.append(key, props[key]);
+        switch (key) {
+          case 'repo_data':
+            formData.append(key, JSON.stringify(props[key]||{}));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
       }
       let resData = await axios({
         method: "post",
