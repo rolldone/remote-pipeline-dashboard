@@ -1,0 +1,165 @@
+<div class="col-md-6 col-xl-12">
+  <label class="form-label">Full Remote Syncronise (Rsync)</label>
+  <fieldset class="form-fieldset">
+    <div class="mb-3">
+      <label class="form-label">Command Name</label>
+      <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Parent</label>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
+      </select>
+      <!-- <input class="form-control" list="datalistOptions" placeholder="Type to search...">
+      <datalist id="datalistOptions">
+        <option value="Command 1">
+        </option>
+        <option value="Command 2">
+        </option>
+        <option value="Command xxx">
+        </option>
+      </datalist> -->
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Rsync Transfer Action</label>
+      <div class="btn-group w-100">
+        <button type="button" class="btn {{form_data.data.transfer_action=='upload'?'btn-primary':''}}"
+          on-click="@this.handleClick('TRANSFER_ACTION',{ value : 'upload'},@event)">Upload</button>
+        <button type="button" class="btn {{form_data.data.transfer_action=='download'?'btn-primary':''}}"
+          on-click="@this.handleClick('TRANSFER_ACTION',{ value : 'download'},@event)">Download</button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Rsync Transfer Mode</label>
+      <div class="btn-group w-100">
+        <button type="button" class="btn {{form_data.data.transfer_mode=='soft'?'btn-primary':''}}"
+          on-click="@this.handleClick('TRANSFER_MODE',{ value : 'soft'},@event)">Soft Mode</button>
+        <button type="button" class="btn {{form_data.data.transfer_mode=='force'?'btn-primary':''}}"
+          on-click="@this.handleClick('TRANSFER_MODE',{ value : 'force'},@event)">Force Mode</button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Working Directory</label>
+      <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}"
+        placeholder="Input Working Dir">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Target Path</label>
+      <input type="text" class="form-control" name="target_path" value="{{form_data.data.target_path}}"
+        placeholder="Target Path">
+    </div>
+    <div class="form-selectgroup-boxes row mb-3">
+      <div class="col-lg-4">
+        <label class="form-selectgroup-item">
+          <input type="radio" name="{{form_data.data.auth_type}}" value="local" class="form-selectgroup-input">
+          <span class="form-selectgroup-label d-flex align-items-center p-3">
+            <span class="me-3">
+              <span class="form-selectgroup-check"></span>
+            </span>
+            <span class="form-selectgroup-label-content">
+              <span class="form-selectgroup-title strong mb-1">Local</span>
+              <span class="d-block text-muted">Local syncronise</span>
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="col-lg-4">
+        <label class="form-selectgroup-item">
+          <input type="radio" name="{{form_data.data.auth_type}}" value="basic_auth" class="form-selectgroup-input">
+          <span class="form-selectgroup-label d-flex align-items-center p-3">
+            <span class="me-3">
+              <span class="form-selectgroup-check"></span>
+            </span>
+            <span class="form-selectgroup-label-content">
+              <span class="form-selectgroup-title strong mb-1">Basic Authentication</span>
+              <span class="d-block text-muted">Using Password for login server</span>
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="col-lg-4">
+        <label class="form-selectgroup-item">
+          <input type="radio" name="{{form_data.data.auth_type}}" value="private_key" class="form-selectgroup-input">
+          <span class="form-selectgroup-label d-flex align-items-center p-3">
+            <span class="me-3">
+              <span class="form-selectgroup-check"></span>
+            </span>
+            <span class="form-selectgroup-label-content">
+              <span class="form-selectgroup-title strong mb-1">SSH Key Authentication</span>
+              <span class="d-block text-muted">Using Private key for Authentication</span>
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+    {{#if form_data.data.auth_type == "basic_auth"}}
+    <div class="mb-3">
+      <label class="form-label">Host Address</label>
+      <input class="form-control" type="text" placeholder="Your report name" value="{{form_data.data.host}}"
+        name="host">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Port</label>
+      <input class="form-control" type="number" placeholder="Your report name" value="{{form_data.data.port}}"
+        name="port">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username" name="password"
+        value="{{form_data.data.username}}">
+      <small class="form-hint">Set the username.</small>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password"
+        name="password" value="{{form_data.data.password}}">
+      <small class="form-hint">Set the password.</small>
+    </div>
+    {{elseif form_data.data.auth_type == "private_key"}}
+    <div class="mb-3">
+      <label class="form-label">Host Address</label>
+      <input class="form-control" type="text" placeholder="Your report name" value="{{form_data.data.host}}"
+        name="host">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Port</label>
+      <input class="form-control" type="number" placeholder="Your report name" value="{{form_data.data.port}}"
+        name="port">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username" name="password"
+        value="{{form_data.data.username}}">
+      <small class="form-hint">Set the username.</small>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Private key <span class="form-label-description"></span></label>
+      <textarea class="form-control" name="private_key" rows="6"
+        placeholder="Content..">{{form_data.data.private_key}}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Passphrase <span class="form-label-description"></span></label>
+      <input type="text" class="form-control" aria-describedby="passphraseHelp" placeholder="Enter passphrase"
+        name="passphrase" value="{{form_data.data.passphrase}}">
+      <small class="form-hint">Set the passphrase.</small>
+    </div>
+    {{/if}}
+    <div class="mb-3">
+      <label class="form-label">Exclude file or folder <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="example-textarea-input" rows="6"
+        placeholder="Content..">{{form_data.data.exclude}}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Include file or folder <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="example-textarea-input" rows="6"
+        placeholder="Content..">{{form_data.data.include}}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
+    </div>
+  </fieldset>
+</div>

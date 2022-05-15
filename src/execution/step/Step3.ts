@@ -44,7 +44,7 @@ export default BaseRactive.extend<Step3Interface>({
               <div class="list-group-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <input type="radio" class="form-check-input" name="{{form_data.variable_option}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)" disabled={{!is_active}}>
+                    <input type="radio" data-value="{{value}}" class="form-check-input" name="{{form_data.variable_option}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)" disabled={{!is_active}}>
                   </div>
                   <div class="col-auto">
                     <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>

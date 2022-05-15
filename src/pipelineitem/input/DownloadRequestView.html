@@ -1,0 +1,43 @@
+<div class="col-md-6 col-xl-12">
+  <label class="form-label">Download Request</label>
+  <fieldset class="form-fieldset">
+    <div class="mb-3">
+      <label class="form-label">Command Name</label>
+      <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Parent</label>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
+      </select>
+      <!-- <input class="form-control" list="datalistOptions" placeholder="Type to search...">
+      <datalist id="datalistOptions">
+        <option value="Command 1">
+        </option>
+        <option value="Command 2">
+        </option>
+        <option value="Command xxx">
+        </option>
+      </datalist> -->
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Method Type</label>
+      <div class="btn-group w-100">
+        <button type="button" class="btn {{form_data.data.method_type=='rsync'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'rsync'},@event)">Rsync</button>
+        <button type="button" class="btn {{form_data.data.method_type=='sftp'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'sftp'},@event)">Sftp</button>
+      </div>
+    </div>
+    <div class="mb-3">
+      {{> method_type_partial}}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
+    </div>
+  </fieldset>
+</div>

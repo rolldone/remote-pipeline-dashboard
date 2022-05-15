@@ -9,7 +9,20 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       </button> 
       <div class="dropdown-menu">
         {{#command_types:i}}
-          <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+          {{#if value == 'group'}}
+          <div class="dropend">
+            <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+              {{label}}
+            </a>
+            <div class="dropdown-menu" data-bs-popper="none">
+            {{#command_types:u}}
+              <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+            {{/command_types}}
+            </div>
+          </div>
+          {{else}}
+            <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+          {{/if}}
         {{/command_types}}
       </div>
     </div>
@@ -21,6 +34,32 @@ export default BaseRactive.extend<BaseRactiveInterface>({
         {
           label: "Calibrate the task",
           value: "calibrate"
+        },
+        {
+          label: "Repo install location",
+          value: "repo-install"
+        },
+        {
+          label: "Remote Command",
+          value: "group",
+          command_types: [
+            {
+              label: "Transfer Remote Command",
+              value: "transfer-remote"
+            },
+            {
+              label: "Download Remote Command",
+              value: "download-remote"
+            },
+          ]
+        },
+        {
+          label: "Transfer Remote Command",
+          value: "transfer-remote"
+        },
+        {
+          label: "Download Remote Command",
+          value: "download-remote"
         },
         {
           label: "Basic Command",
@@ -39,6 +78,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           value: "write-transfer"
         },
         {
+          label: "Full Download Request",
+          value: "download-request"
+        },
+        {
           label: "Delete",
           value: "delete"
         },
@@ -46,7 +89,13 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     }
   },
   oncomplete() {
-
+    // let dropdowns = document.querySelectorAll('.dropdown-toggle')
+    // dropdowns.forEach((dd) => {
+    //   dd.addEventListener('click', function (this: any, e) {
+    //     var el = this.nextElementSibling
+    //     el.style.display = el.style.display === 'block' ? 'none' : 'block'
+    //   })
+    // })
   },
   handleClick(action, props, e) {
     switch (action) {
