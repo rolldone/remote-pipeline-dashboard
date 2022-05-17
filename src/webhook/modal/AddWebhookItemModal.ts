@@ -1,0 +1,81 @@
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import Ractive from "ractive";
+import template from './AddWebHookItemModalView.html';
+
+export interface AddWebHookItemModalInterface extends BaseRactiveInterface {
+  show?: { (props: any): void }
+  hide?: { (): void }
+  importWebHookItem: { (whatHooItem: string): void }
+}
+
+const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
+  template,
+  partials: {
+    webhook_type_partials: []
+  },
+  data() {
+    return {
+      id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+      form_data: {}
+    }
+  },
+  handleClick(action, props, e) {
+    let _form_data = this.get("form_data");
+    switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        this.fire("listener", action, _form_data, e);
+        break;
+    }
+  },
+  async handleChange(action, props, e) {
+    let _webhook_type_partials = [
+      // Reset it
+    ]
+    switch (action) {
+      case 'SELECT_WEBHOOK_TYPE':
+        let _selectHook = $(e.target).find(":selected").val();
+        let _com = await this.importWebHookItem(_selectHook as string);
+        this.components[_selectHook as string] = _com;
+        let _template = Ractive.parse(/* html */`
+          <${_selectHook} form_data="{{form_data}}"></${_selectHook}>
+        `);
+        _webhook_type_partials.push({
+          ..._template.t[0]
+        });
+        this.resetPartial('webhook_type_partials', _webhook_type_partials);
+        break;
+    }
+  },
+
+  show(props) {
+    let _id_element = this.get("id_element");
+    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
+      keyboard: false
+    });
+    myModal.show();
+  },
+  hide() {
+
+  },
+  async importWebHookItem(whatHooItem) {
+    let _comp = null;
+    switch (whatHooItem) {
+      case 'smtp':
+        _comp = (await import("./SmtpHook")).default;
+        break;
+      case 'discord':
+        _comp = (await import("./DiscordHook")).default;
+        break;
+      case 'slack':
+        _comp = (await import("./SlackHook")).default;
+        break;
+      case 'telegram':
+        _comp = (await import("./TelegramHook")).default;
+        break;
+    }
+    return _comp;
+  }
+});
+
+export default AddWebHookItemModal;

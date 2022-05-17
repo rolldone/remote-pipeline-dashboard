@@ -1,0 +1,36 @@
+<div class="modal modal-blur" tabindex="-1" aria-modal="true" role="dialog" id="{{id_element}}">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Webhook Collection</h5>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Select Service Type</label>
+          <select class="form-select" name="webhook_type" value="{{form_data.webhook_type}}"
+            on-change="@this.handleChange('SELECT_WEBHOOK_TYPE',{},@event)">
+            <option value="">--</option>
+            <option value="smtp">Smtp Mail Service</option>
+            <option value="discord">Discord Webhook</option>
+            <option value="slack">Slack Webhook</option>
+            <option value="telegram">Telegram Webhook</option>
+          </select>
+        </div>
+      </div>
+      {{>webhook_type_partials}}
+
+      <div class="modal-footer">
+        <a class="btn btn-link link-secondary" href="#" data-bs-dismiss="modal">Cancel</a>
+        <a class="btn btn-primary ms-auto" href="#" data-bs-dismiss="modal"
+          on-click="@this.handleClick('SUBMIT',{},@event)">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg> Update </a>
+      </div>
+    </div>
+  </div>
+</div>

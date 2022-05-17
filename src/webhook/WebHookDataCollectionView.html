@@ -1,0 +1,58 @@
+<div class="row row-cards">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="table-responsive">
+        <add-webhook-item-modal on-listener="onAddWebHookItemListener"></add-webhook-item-modal>
+        {{#if webhook_datas.length > 0}}
+        <table class="table table-vcenter table-mobile-md card-table">
+          <thead>
+            <tr>
+              <th>Service Name</th>
+              <th>Call key</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th class="w-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Name">
+                <div>Name</div>
+                <div class="text-muted">Gmail SMPTP</div>
+              </td>
+              <td data-label="Title">
+                <div>Key</div>
+                <div class="text-muted">gmail-smptp</div>
+              </td>
+              <td class="text-muted" data-label="Role">Email Service</td>
+              <td class="text-muted" data-label="Role">Active</td>
+              <td>
+                <div class="btn-list flex-nowrap"><a class="btn" href="#">Edit</a>
+                  <div class="dropdown">
+                    <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown"
+                      aria-expanded="false">Actions
+                    </button>
+                    <div style=";" class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="#">Add More</a>
+                      <a class="dropdown-item" href="#">Deactivated</a>
+                      <a class="dropdown-item" href="#">Delete</a>
+                      <a class="dropdown-item" href="#">Webhook Test</a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {{else}}
+        <div>
+          <a href="#" class="btn btn-outline-primary w-100"
+            on-click="@this.handleClick('ADD_NEW_WEBHOOK_ITEM',{},@event)">
+            Add Webhook Item
+          </a>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

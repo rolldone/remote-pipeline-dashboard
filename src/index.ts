@@ -17,6 +17,7 @@ declare global {
     hostRouter: Router
     executionRouter: Router
     queueRecordRouter: Router
+    webhookRouter: Router
     queueRecordSchedulerRouter: Router
     userRouter: Router
     authRouter: Router
@@ -102,6 +103,12 @@ export default function () {
         .get("/queue-record-scheduler/(.*)?", async (req, context) => {
           let queue_record = (await import("./queue_record_scheduler")).default;
           new queue_record({
+            target: "#index-body"
+          })
+        })
+        .get("/webhook/(.*)?", async (req, context) => {
+          let webhook = (await import("./webhook")).default;
+          new webhook({
             target: "#index-body"
           })
         })

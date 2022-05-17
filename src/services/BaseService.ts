@@ -15,5 +15,6 @@ export default {
   HOST: ENDPOINT + '/host',
   EXECUTION: ENDPOINT + '/execution',
   VARIABLE: ENDPOINT + '/variable',
-  REPOSITORY: ENDPOINT + '/repository'
+  REPOSITORY: ENDPOINT + '/repository',
+  WEBHOOK: ENDPOINT + '/webhook'
 }
