@@ -1,7 +1,11 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { debounce } from "lodash";
 
-const SmtpHook = BaseRactive.extend<BaseRactiveInterface>({
+export interface SmtpHookInterface extends BaseRactiveInterface {
+  listenNameToBeKeySlug?: { (): void }
+}
+
+const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
   template: /* html */`
     <div class="modal-body">
       <div class="card">
@@ -16,6 +20,14 @@ const SmtpHook = BaseRactive.extend<BaseRactiveInterface>({
         <div class="card-body">
           <div class="tab-content">
             <div class="tab-pane active show" id="tabs-home-15">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input class="form-control" type="text" placeholder="" value="{{form_data.name}}" name="name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Key Tag</label>
+                <input class="form-control" type="text" placeholder="" value="{{form_data.key}}" name="key" readonly>
+              </div>
               <div class="mb-3">
                 <label class="form-label">Smtp Server</label>
                 <input class="form-control" type="text" placeholder="xxx.xxx.xxx.xxx" value="{{form_data.host_name}}" name="host_name">
@@ -95,6 +107,17 @@ const SmtpHook = BaseRactive.extend<BaseRactiveInterface>({
         </div>
       </div>
     </div>
+    <div class="modal-footer">
+      <a class="btn btn-link link-secondary" href="#" data-bs-dismiss="modal">Cancel</a>
+      <a class="btn btn-primary ms-auto" href="#" data-bs-dismiss="modal"
+        on-click="@this.handleClick('SUBMIT',{},@event)">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg> Update </a>
+    </div>
   `,
   data() {
     return {
@@ -106,31 +129,25 @@ const SmtpHook = BaseRactive.extend<BaseRactiveInterface>({
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise((resolve: Function) => {
-
-      // let observerInput = () => {
-      //   let _pending = null;
-      //   return this.observe("input_to", (data) => {
-      //     if (_pending != null) {
-      //       _pending.cancel();
-      //     }
-      //     _pending = debounce(() => {
-      //       let _to_datas = this.get("to_datas");
-      //       let _form_data = this.get("form_data");
-      //       _form_data.to_datas = _to_datas;
-      //       this.set("form_data", _form_data);
-      //       console.log("form_data ::: ", _form_data);
-      //     }, 1000);
-      //     _pending();
-      //   })
-      // }
-      // let _stopObserveInput = observerInput();
+      this.listenNameToBeKeySlug();
       _super();
       resolve();
     })
   },
+  listenNameToBeKeySlug() {
+    this.observe("form_data.name", (val) => {
+      if (val == null) return;
+      this.set("form_data.key", val.split(" ").join("-"));
+    })
+  },
   handleClick(action, props, e) {
     let _to_datas = this.get("to_datas");
+    let _form_data = this.get("form_data");
     switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        this.fire("listener", action, _form_data, e);
+        break;
       case 'ADD_TO':
         e.preventDefault();
         let _input_to = this.get("input_to");

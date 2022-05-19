@@ -10,16 +10,30 @@ const WebHookDataCollections = BaseRactive.extend<BaseRactiveInterface>({
   onconstruct() {
     this.newOn = {
       onAddWebHookItemListener: (object, action, text, c) => {
-        debugger;
+        switch (action) {
+          case 'SUBMIT':
+            let _webhook_datas = this.get("webhook_datas") || [];
+            _webhook_datas.push(text);
+            this.set("webhook_datas", _webhook_datas);
+            debugger;
+            break;
+        }
       }
     }
     this._super();
   },
   handleClick(action, props, e) {
+    let addWebhookItemModal: AddWebHookItemModalInterface = null;
     switch (action) {
+      case 'ADD_MORE':
+        e.preventDefault();
+        addWebhookItemModal = this.findComponent("add-webhook-item-modal");
+        addWebhookItemModal.show({});
+
+        break;
       case 'ADD_NEW_WEBHOOK_ITEM':
         e.preventDefault();
-        let addWebhookItemModal: AddWebHookItemModalInterface = this.findComponent("add-webhook-item-modal");
+        addWebhookItemModal = this.findComponent("add-webhook-item-modal");
         addWebhookItemModal.show({});
         break;
     }

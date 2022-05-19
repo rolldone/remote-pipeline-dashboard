@@ -13,6 +13,19 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
   partials: {
     webhook_type_partials: []
   },
+  onconstruct() {
+    this.newOn = {
+      onWebHookItemListener: (c, action, props, e) => {
+        switch (action) {
+          case 'SUBMIT':
+            this.set("form_data", props);
+            this.fire("listener", action, props, e);
+            break;
+        }
+      }
+    }
+    this._super();
+  },
   data() {
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
@@ -21,12 +34,7 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
   },
   handleClick(action, props, e) {
     let _form_data = this.get("form_data");
-    switch (action) {
-      case 'SUBMIT':
-        e.preventDefault();
-        this.fire("listener", action, _form_data, e);
-        break;
-    }
+    switch (action) { }
   },
   async handleChange(action, props, e) {
     let _webhook_type_partials = [
@@ -38,7 +46,7 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
         let _com = await this.importWebHookItem(_selectHook as string);
         this.components[_selectHook as string] = _com;
         let _template = Ractive.parse(/* html */`
-          <${_selectHook} form_data="{{form_data}}"></${_selectHook}>
+          <${_selectHook} form_data="{{form_data}}" on-listener="onWebHookItemListener"></${_selectHook}>
         `);
         _webhook_type_partials.push({
           ..._template.t[0]
@@ -47,7 +55,6 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
         break;
     }
   },
-
   show(props) {
     let _id_element = this.get("id_element");
     var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
