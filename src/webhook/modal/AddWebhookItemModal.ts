@@ -6,6 +6,7 @@ export interface AddWebHookItemModalInterface extends BaseRactiveInterface {
   show?: { (props: any): void }
   hide?: { (): void }
   importWebHookItem: { (whatHooItem: string): void }
+  displayPartial?: { (_selectHook: string): void }
 }
 
 const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
@@ -37,25 +38,20 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
     switch (action) { }
   },
   async handleChange(action, props, e) {
-    let _webhook_type_partials = [
-      // Reset it
-    ]
+
     switch (action) {
       case 'SELECT_WEBHOOK_TYPE':
         let _selectHook = $(e.target).find(":selected").val();
-        let _com = await this.importWebHookItem(_selectHook as string);
-        this.components[_selectHook as string] = _com;
-        let _template = Ractive.parse(/* html */`
-          <${_selectHook} form_data="{{form_data}}" on-listener="onWebHookItemListener"></${_selectHook}>
-        `);
-        _webhook_type_partials.push({
-          ..._template.t[0]
-        });
-        this.resetPartial('webhook_type_partials', _webhook_type_partials);
+        this.displayPartial(_selectHook as string);
         break;
     }
   },
-  show(props) {
+  async show(props) {
+    this.resetPartial("webhook_type_partials", []);
+    this.set("form_data", props);
+    if (props.webhook_type != null) {
+      await this.displayPartial(props.webhook_type as string);
+    }
     let _id_element = this.get("id_element");
     var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
       keyboard: false
@@ -65,20 +61,34 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
   hide() {
 
   },
+  async displayPartial(_selectHook: string) {
+    let _webhook_type_partials = [
+      // Reset it
+    ]
+    let _com = await this.importWebHookItem(_selectHook as string);
+    this.components[_selectHook as string] = _com;
+    let _template = Ractive.parse(/* html */`
+          <${_selectHook} form_data="{{form_data}}" on-listener="onWebHookItemListener"></${_selectHook}>
+        `);
+    _webhook_type_partials.push({
+      ..._template.t[0]
+    });
+    this.resetPartial('webhook_type_partials', _webhook_type_partials);
+  },
   async importWebHookItem(whatHooItem) {
     let _comp = null;
     switch (whatHooItem) {
       case 'smtp':
-        _comp = (await import("./SmtpHook")).default;
+        _comp = (await import("./webhook_item/SmtpHook")).default;
         break;
       case 'discord':
-        _comp = (await import("./DiscordHook")).default;
+        _comp = (await import("./webhook_item/DiscordHook")).default;
         break;
       case 'slack':
-        _comp = (await import("./SlackHook")).default;
+        _comp = (await import("./webhook_item/SlackHook")).default;
         break;
       case 'telegram':
-        _comp = (await import("./TelegramHook")).default;
+        _comp = (await import("./webhook_item/TelegramHook")).default;
         break;
     }
     return _comp;

@@ -28,7 +28,8 @@
               <td class="text-muted" data-label="Role">{{webhook_type}}</td>
               <td class="text-muted" data-label="Role">Active</td>
               <td>
-                <div class="btn-list flex-nowrap"><a class="btn" href="#">Edit</a>
+                <div class="btn-list flex-nowrap"><a class="btn" href="#"
+                    on-click="@this.handleClick('EDIT',{ index : i },@event)">Edit</a>
                   <div class="dropdown">
                     <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown"
                       aria-expanded="false">Actions

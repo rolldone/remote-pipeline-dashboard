@@ -1,6 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import PushServiceCollection from "./PushServiceCollections";
 import template from './WebhookNewView.html';
+import WebHookDataCollections from "./WebHookDataCollections";
 import WebHookService from '../services/WebHookService';
 
 declare let window: Window;
@@ -21,10 +21,10 @@ const makeid = (length: number) => {
 }
 
 const WebhookNew = BaseRactive.extend<WebhookNewInterface>({
-  template,
   components: {
-    "push-service-collections": PushServiceCollection
+    "webhook-data-collections": WebHookDataCollections
   },
+  template,
   data() {
     return {
       form_data: {},
@@ -32,35 +32,6 @@ const WebhookNew = BaseRactive.extend<WebhookNewInterface>({
       webhook_datas: [],
       set_auth_value: {}
     }
-  },
-  oncomplete() {
-    this.observe("form_data.auth_type", (val: string, val2: string) => {
-      if (val2 == null) return;
-      if (val != val2) {
-        let form_data = this.get("form_data");
-        switch (val) {
-          case 'basic_auth':
-            this.set("set_auth_value", {
-              username: form_data.username,
-              password: form_data.password,
-              private_key: null,
-              passphrase: null,
-            });
-            break;
-          case 'private_key':
-            this.set("set_auth_value", {
-              username: form_data.username,
-              private_key: form_data.private_key,
-              passphrase: form_data.passphrase,
-              password: null
-            });
-            break;
-        }
-      }
-    }, {
-      // Dont let start on first load
-      init: false
-    })
   },
   handleClick(action, props, e) {
     switch (action) {

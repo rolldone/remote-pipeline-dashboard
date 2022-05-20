@@ -61,11 +61,11 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
             </div>
             <div class="tab-pane" id="tabs-profile-15">
               <label class="form-label">Send Mail To</label>
-              {{#each to_datas:i}}
+              {{#each form_data.to_datas:i}}
               <div class="row">
                 <div class="col-lg-11">
                   <div class="mb-3">
-                    <input type="text" class="form-control" name="to_data" value="{{to_datas[i]}}" placeholder="Input placeholder">
+                    <input type="text" class="form-control" name="to_data" value="{{form_data.to_datas[i]}}" placeholder="Input placeholder">
                   </div>
                 </div>
                 <div class="col-lg-1">
@@ -121,9 +121,10 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
   `,
   data() {
     return {
-      to_datas: [],
       input_to: "",
-      form_data: {}
+      form_data: {
+        to_datas: []
+      }
     }
   },
   oncomplete() {
@@ -141,7 +142,7 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
     })
   },
   handleClick(action, props, e) {
-    let _to_datas = this.get("to_datas");
+    let _to_datas = this.get("form_data.to_datas") || [];
     let _form_data = this.get("form_data");
     switch (action) {
       case 'SUBMIT':
@@ -152,22 +153,14 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
         e.preventDefault();
         let _input_to = this.get("input_to");
         _to_datas.push(_input_to);
-        this.set("to_datas", _to_datas);
-        this.set("form_data", {
-          ...this.get("form_data"),
-          to_datas: _to_datas
-        });
+        this.set("form_data.to_datas", _to_datas);
         this.set("input_to", "");
         break;
       case 'REMOVE_TO':
         e.preventDefault();
         _to_datas.splice(props.index, 1);
         setTimeout(() => {
-          this.set("to_datas", _to_datas);
-          this.set("form_data", {
-            ...this.get("form_data"),
-            to_datas: _to_datas
-          });
+          this.set("form_data.to_datas", _to_datas);
         }, 100)
         break;
     }
