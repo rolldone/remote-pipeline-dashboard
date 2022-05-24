@@ -3,10 +3,10 @@ import BasicCommand, { BasicCommandInterface } from "./BasicCommand";
 import FileTransferCommand, { FileTransferCommandInterface } from "./FileTransferCommand";
 import template from './WriteTransferCommandView.html';
 
-export interface WriteTransferCommand extends FileTransferCommandInterface {
+export interface WriteTransferCommandInterface extends FileTransferCommandInterface {
 }
 
-const WriteTransferCommand = FileTransferCommand.extend<WriteTransferCommand>({
+const WriteTransferCommand = FileTransferCommand.extend<WriteTransferCommandInterface>({
   template,
   oncomplete() {
     let _super = this._super.bind(this);

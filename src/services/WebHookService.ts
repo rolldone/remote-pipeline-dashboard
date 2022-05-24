@@ -2,6 +2,13 @@ import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 import BaseService from "./BaseService";
 
+export interface SubmitWebhookTestInterface {
+  webhook_id?: number
+  key?: string
+  type?: string
+  data?: object
+}
+
 export default {
   async getWebHooks(props) {
     try {
@@ -117,6 +124,32 @@ export default {
           // 'Content-Type': `multipart/form-data;`,
         }
       })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async executeItemTest(props: SubmitWebhookTestInterface) {
+    try {
+      let formData = new FormData();
+      for (var key in props) {
+        switch (key) {
+          case 'data':
+            formData.append(key, JSON.stringify(props.data));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
+      }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.WEBHOOK + '/execute/test-item',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      });
       return resData.data;
     } catch (ex) {
       throw ex;

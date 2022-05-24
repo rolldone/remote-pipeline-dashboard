@@ -3,6 +3,7 @@
     <div class="card">
       <div class="table-responsive">
         <add-webhook-item-modal on-listener="onAddWebHookItemListener"></add-webhook-item-modal>
+        <webhook-item-test-modal on-listener="onWebhookItemTestListener"></webhook-item-test-modal>
         {{#if webhook_datas.length > 0}}
         <table class="table table-vcenter table-mobile-md card-table">
           <thead>
@@ -37,8 +38,10 @@
                     <div class="dropdown-menu dropdown-menu-end">
                       <a class="dropdown-item" href="#" on-click="@this.handleClick('ADD_MORE',{},@event)">Add More</a>
                       <a class="dropdown-item" href="#">Deactivated</a>
-                      <a class="dropdown-item" href="#">Delete</a>
-                      <a class="dropdown-item" href="#">Webhook Test</a>
+                      <a class="dropdown-item" href="#"
+                        on-click="@this.handleClick('DELETE',{ index : i },@event)">Delete</a>
+                      <a class="dropdown-item" href="#"
+                        on-click="@this.handleClick('TEST',{ index : i },@event)">Webhook Test</a>
                     </div>
                   </div>
                 </div>

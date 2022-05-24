@@ -6,6 +6,7 @@ import DownloadRequest from "./input/DownloadRequest";
 import FileTransferCommand from "./input/FileTransferCommand";
 import RepoInstallCommand from "./input/RepoInstallCommand";
 import TransferRemoteCommand from "./input/TransferRemoteCommand";
+import WriteSCriptCode from "./input/WriteScriptCode";
 import WriteTransferCommand from "./input/WriteTransferCommand";
 
 export default BaseRactive.extend<BaseRactiveInterface>({
@@ -24,6 +25,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     "conditional-command": ConditionalCommand,
     "file-transfer": FileTransferCommand,
     "write-transfer": WriteTransferCommand,
+    "write-script": WriteSCriptCode,
     "repo-install": RepoInstallCommand,
     "transfer-remote": TransferRemoteCommand,
     "download-request": DownloadRequest
@@ -43,6 +45,8 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     <transfer-remote index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></transfer-remote>
     {{elseif command_data.type == "download-request"}}
     <download-request index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></download-request>
+    {{elseif command_data.type == "write-script"}}
+    <write-script index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></write-script>
     {{/if}}
   `,
   onconfig() {
