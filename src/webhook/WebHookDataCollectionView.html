@@ -15,25 +15,27 @@
             </tr>
           </thead>
           <tbody>
+            {{#each webhook_datas:i}}
             <tr>
               <td data-label="Name">
                 <div>Name</div>
-                <div class="text-muted">Gmail SMPTP</div>
+                <div class="text-muted">{{name}}</div>
               </td>
               <td data-label="Title">
                 <div>Key</div>
-                <div class="text-muted">gmail-smptp</div>
+                <div class="text-muted">{{key}}</div>
               </td>
-              <td class="text-muted" data-label="Role">Email Service</td>
+              <td class="text-muted" data-label="Role">{{webhook_type}}</td>
               <td class="text-muted" data-label="Role">Active</td>
               <td>
-                <div class="btn-list flex-nowrap"><a class="btn" href="#">Edit</a>
+                <div class="btn-list flex-nowrap"><a class="btn" href="#"
+                    on-click="@this.handleClick('EDIT',{ index : i },@event)">Edit</a>
                   <div class="dropdown">
                     <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown"
                       aria-expanded="false">Actions
                     </button>
-                    <div style=";" class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">Add More</a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="#" on-click="@this.handleClick('ADD_MORE',{},@event)">Add More</a>
                       <a class="dropdown-item" href="#">Deactivated</a>
                       <a class="dropdown-item" href="#">Delete</a>
                       <a class="dropdown-item" href="#">Webhook Test</a>
@@ -42,6 +44,7 @@
                 </div>
               </td>
             </tr>
+            {{/each}}
           </tbody>
         </table>
         {{else}}
