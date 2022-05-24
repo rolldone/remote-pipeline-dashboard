@@ -55,6 +55,10 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
                 <input class="form-control" type="password" placeholder="xxx.." value="{{form_data.password}}" name="password">
               </div>
               <div class="mb-3">
+                <label class="form-label">From name</label>
+                <input class="form-control" type="text" placeholder="xxx.." value="{{form_data.from_name}}" name="from_name">
+              </div>
+              <div class="mb-3">
                 <label class="form-label">From email address</label>
                 <input class="form-control" type="email" placeholder="xxx.." value="{{form_data.from_email}}" name="from_email">
               </div>

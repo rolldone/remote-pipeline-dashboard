@@ -1,0 +1,31 @@
+<div class="col-md-6 col-xl-12">
+  <label class="form-label">Write Script</label>
+  <fieldset class="form-fieldset">
+    <div class="mb-3">
+      <label class="form-label">Command Name</label>
+      <input type="text" class="form-control" name="name" value="{{form_data.data.name}}" placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Parent</label>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Working Directory</label>
+      <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}"
+        placeholder="Input working directory">
+    </div>
+    <div class="mb-3">
+      {{> script_collections}}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
+    </div>
+  </fieldset>
+</div>
+<write-script-modal on-listener="onWriteScriptModalListener"></write-script-modal>

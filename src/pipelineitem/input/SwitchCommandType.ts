@@ -78,6 +78,10 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           value: "write-transfer"
         },
         {
+          label: "Write Script",
+          value: "write-script"
+        },
+        {
           label: "Full Download Request",
           value: "download-request"
         },
