@@ -1,8 +1,8 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import ExecutionService, { Execution } from "services/ExecutionService";
+import ExecutionService, { ExecutionServiceInterface } from "services/ExecutionService";
 
 export interface DoneInterface extends BaseRactiveInterface {
-  submitExecution: { (): Promise<any> }
+  submitExecution?: { (): Promise<any> }
 }
 
 declare let window: Window
@@ -64,7 +64,7 @@ export default BaseRactive.extend<DoneInterface>({
   async submitExecution() {
     try {
       let resData = null;
-      let _form_data: Execution = this.get("form_data") as any;
+      let _form_data: ExecutionServiceInterface = this.get("form_data") as any;
       if (_form_data.id != null) {
         resData = await ExecutionService.updateExecution({
           id: _form_data.id,

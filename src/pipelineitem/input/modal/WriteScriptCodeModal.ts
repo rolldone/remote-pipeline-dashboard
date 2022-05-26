@@ -8,6 +8,7 @@ import { EditorSelection, Compartment, EditorState, Text as TextState } from "@c
 import { dirname } from "path";
 
 const languageConf = new Compartment
+let myModal = null;
 
 export interface WriteScriptCodeModalInterface extends BaseRactiveInterface {
   show: { (props: any): void }
@@ -21,24 +22,32 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
   data() {
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
-      form_data: {}
+      form_data: {},
+      allow_var_environment: null
     }
   },
   handleClick(action, props, e) {
+    let _form_data = this.get("form_data");
+    let _allow_var_environment = this.get("allow_var_environment");
     switch (action) {
       case 'SUBMIT':
-        this.set("form_data.content", editor.state.doc.toJSON());
+        e.preventDefault();
+        _form_data.allow_var_environment = _allow_var_environment.length > 0 ? true : false;
+        _form_data.content = editor.state.doc.toJSON();
+        this.set("form_data", _form_data);
+        console.log(this.get("form_data"));
         this.fire("listener", action, this.get("form_data"), e);
-        // editor = null;
+        editor = null;
         break;
     }
   },
   async show(props) {
     this.set("form_data", props);
+    this.set("allow_var_environment", props.allow_var_environment == true ? [null] : []);
     let _id_element = this.get("id_element");
 
     var _trrr = document.getElementById(_id_element);
-    var myModal = new window.bootstrap.Modal(_trrr, {
+    myModal = new window.bootstrap.Modal(_trrr, {
       backdrop: 'static',
       keyboard: false
     });
@@ -83,12 +92,6 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
     // })))
   },
   hide() {
-    let _id_element = this.get("id_element");
-    var _trrr = document.getElementById(_id_element);
-    var myModal = new window.bootstrap.Modal(_trrr, {
-      backdrop: 'static',
-      keyboard: false
-    });
     myModal.hide();
   },
   async selectLanguage(whatLang) {

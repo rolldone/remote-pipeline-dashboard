@@ -10,3 +10,4 @@ node_modules/
 docker-compose.yaml
 sync-config.yaml
 .sync_temp/
+/dist

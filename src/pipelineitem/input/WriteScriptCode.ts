@@ -1,5 +1,5 @@
 import Ractive, { ParsedTemplate } from 'ractive';
-import WriteScriptCodeModal from './modal/WriteScriptCodeModal';
+import WriteScriptCodeModal, { WriteScriptCodeModalInterface } from './modal/WriteScriptCodeModal';
 import template from './WriteScriptCodeView.html';
 import WriteTransferCommand, { WriteTransferCommandInterface } from "./WriteTransferCommand";
 
@@ -32,7 +32,7 @@ const WriteSCriptCode = WriteTransferCommand.extend<WriteScriptCodeInterface>({
             let _script_datas = this.get("script_datas");
             this.set("form_data.data.script_datas", _script_datas);
             console.log("form_data", this.get("form_data"));
-            let _write_script_modal = this.findComponent("write-script-modal");
+            let _write_script_modal: WriteScriptCodeModalInterface = this.findComponent("write-script-modal");
             _write_script_modal.hide();
             break;
         }
@@ -57,7 +57,7 @@ const WriteSCriptCode = WriteTransferCommand.extend<WriteScriptCodeInterface>({
       case 'FILE_PATH_EDIT':
         e.preventDefault();
         _script_data = _script_datas[props.index];
-        let _write_script_modal = this.findComponent("write-script-modal");
+        let _write_script_modal: WriteScriptCodeModalInterface = this.findComponent("write-script-modal");
         _write_script_modal.show(_script_data);
         break;
       case 'FILE_PATH_DELETE':

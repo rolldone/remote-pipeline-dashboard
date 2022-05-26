@@ -39,7 +39,7 @@ export default BaseRactive.extend<Step1Interface>({
     </div>
     <div class="col">
       <div class="btn-list justify-content-end">
-        <a href="#" style="visibility:hidden;" class="btn btn-link link-secondary">
+        <a href="#" style="visibility:hidden;" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
           Back
         </a>
         <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">
@@ -81,7 +81,7 @@ export default BaseRactive.extend<Step1Interface>({
     switch (action) {
       case 'BACK':
         e.preventDefault();
-        this.fire("listener",action,props,e);
+        // this.fire("listener",action,props,e);
         break;
       case 'CONTINUE':
         e.preventDefault();

@@ -1,9 +1,9 @@
-import ExecutionService, { Execution } from "services/ExecutionService";
+import ExecutionService, { ExecutionServiceInterface } from "services/ExecutionService";
 import ExecutionNew, { ExecutionNewInterface } from "./ExecutionNew";
 
 export interface ExecutionUpdateInterface extends ExecutionNewInterface {
-  getExecution: { (): Promise<any> }
-  setExecution: { (props: any): void }
+  getExecution?: { (): Promise<any> }
+  setExecution?: { (props: any): void }
 }
 
 export default ExecutionNew.extend<ExecutionUpdateInterface>({
@@ -27,7 +27,7 @@ export default ExecutionNew.extend<ExecutionUpdateInterface>({
   },
   setExecution(props) {
     if (props == null) return;
-    let _form_data: Execution = props.return as any;
+    let _form_data: ExecutionServiceInterface = props.return as any;
     this.set("form_data", _form_data);
   }
 })

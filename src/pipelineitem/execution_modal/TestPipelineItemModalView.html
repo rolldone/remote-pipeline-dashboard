@@ -1,0 +1,95 @@
+<div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Manage Execution Test</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        {{#if execution_datas.length > 0}}
+        <div class="list-group list-group-flush">
+          {{#each execution_datas:i}}
+          <div class="list-group-item">
+            <div class="row align-items-center">
+              <div class="col-auto"><input type="radio" name="{{execution_index}}" value="{{i}}"
+                  class="form-check-input">
+              </div>
+
+              <div class="col text-truncate">
+                <label class="text-reset d-block">{{name}}</label>
+                <div class="d-block text-muted text-truncate mt-n1" style="margin-top: 6px;">
+                  {{#each pipeline_items:u}}
+                  <span class="badge ms-2" style="margin-left: 0 !important; margin-right: 6px;">{{name}}</span>
+                  {{/each}}
+                </div>
+                <div class="d-block text-muted text-truncate mt-n1" style="margin-top: 6px;">
+                  {{#each hosts:v}}
+                  <span class="badge ms-2" style="margin-left: 0 !important; margin-right: 6px;">{{name}}</span>
+                  {{/each}}
+                </div>
+              </div>
+              <div class="col-auto">
+                <div class="dropdown">
+                  <a href="#" class="btn-action" data-bs-toggle="dropdown" aria-expanded="true">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <desc>Download more icon variants from https://tabler-icons.io/i/dots-vertical</desc>
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="12" cy="19" r="1"></circle>
+                      <circle cx="12" cy="5" r="1"></circle>
+                    </svg>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end"
+                    style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 34px);"
+                    data-popper-placement="bottom-end">
+                    <a href="#" class="dropdown-item"
+                      on-click="@this.handleClick('EDIT',{ index : i, id: id },@event)">Edit</a>
+                    <a href="#" class="dropdown-item"
+                      on-click="@this.handleClick('DELETE',{ index : i, id: id },@event)">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+          <div style="padding: 12px;">
+            <a href="#" class="btn btn-outline-info w-100"
+              on-click="@this.handleClick('ADD_NEW_EXECUTION_TEST',{},@event)">
+              Add New Execution Test
+            </a>
+          </div>
+        </div>
+        {{else}}
+        <div style="padding: 12px;">
+          <a href="#" class="btn btn-outline-info w-100"
+            on-click="@this.handleClick('ADD_NEW_EXECUTION_TEST',{},@event)">
+            Add New Execution Test
+          </a>
+        </div>
+        {{/if}}
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+          Cancel
+        </a>
+        <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('RUN',{},@event)">
+          <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <desc>Download more icon variants from https://tabler-icons.io/i/plus</desc>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Run
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<execution-test-wizard-modal on-listener="onExecutionTestWizardModalListener"></execution-test-wizard-modal>
+<queue-record-detail-modal on-listener="onQueueRecordDetailModalListener"></queue-record-detail-modal>

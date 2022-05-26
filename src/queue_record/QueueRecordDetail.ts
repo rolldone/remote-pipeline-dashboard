@@ -4,8 +4,8 @@ import DisplayProcessModal from "./modal/DisplayProcessModal";
 import template from './QueueRecordDetailView.html';
 
 export interface QueueRecordDetailInterface extends BaseRactiveInterface {
-  getQueueRecordDetails: { (): Promise<any> }
-  setQueueRecordDetails: { (props: any): void }
+  getQueueRecordDetails?: { (): Promise<any> }
+  setQueueRecordDetails?: { (props: any): void }
   connectWebSocket?: { (): void }
 }
 

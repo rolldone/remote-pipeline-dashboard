@@ -81,7 +81,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       </div>
       <div class="col">
         <div class="btn-list justify-content-end">
-          <a href="#" class="btn btn-link link-secondary">
+          <a href="#" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
             Back
           </a>
           <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">

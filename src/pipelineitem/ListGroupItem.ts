@@ -4,6 +4,7 @@ import PipelineTaskService, { command_data } from "services/PipelineTaskService"
 import CommandItem from "./CommandItem";
 import AddCommand from "./input/AddCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
+import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
 
 export interface ListGroupItemInterface extends BaseRactiveInterface {
   calibrateCommandItem: { (): void }
@@ -16,7 +17,8 @@ export default BaseRactive.extend<ListGroupItemInterface>({
   components: {
     "add-command": AddCommand,
     "switch-command-type": SwitchCommandType,
-    "command-item": CommandItem
+    "command-item": CommandItem,
+    "test-pipeline-modal": TestPipelineItemModal
   },
   partials: {
     "pipeline_type_partial": []
@@ -67,6 +69,9 @@ export default BaseRactive.extend<ListGroupItemInterface>({
               <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE_PIPELINE_ITEM',{},@event)">
                 Delete
               </a>
+              <a class="dropdown-item" href="#" on-click="@this.handleClick('TEST_PIPELINE_ITEM',{},@event)">
+                Test
+              </a>
               <a class="dropdown-item" href="#" on-click="@this.handleClick('EDIT_TASKS',{},@event)">
                 {{#if is_edit_task == true}}
                 Hide Tasks
@@ -95,10 +100,14 @@ export default BaseRactive.extend<ListGroupItemInterface>({
         </div>
       </div>
       {{/if}}
+      <test-pipeline-modal on-listener="onTestPipelineModalListener"></test-pipeline-modal>
     </div>
   `,
   onconstruct() {
     this.newOn = {
+      onTestPipelineModalListener: (c, action, text, object) => {
+
+      },
       onSwitchCommandTypeListener: (c, action, text, object) => {
         switch (action) {
           case 'SWITCH_COMMAND':
@@ -152,6 +161,37 @@ export default BaseRactive.extend<ListGroupItemInterface>({
         name: "New Pipeline Item",
         description: "Description for new pipeline item"
       },
+    }
+  },
+  async handleClick(action, props, e) {
+    let _pipeline_item = this.get("pipeline_item");
+    switch (action) {
+      case 'TEST_PIPELINE_ITEM':
+        e.preventDefault();
+        let _testPipelineItemModal: TestPipelineItemModalInterface = this.findComponent("test-pipeline-modal");
+        _testPipelineItemModal.show({
+          pipeline_id: _pipeline_item.pipeline_id,
+          project_id: _pipeline_item.project_id,
+
+        });
+        break;
+      case 'SAVE_PIPELINE_ITEM':
+        e.preventDefault();
+        this.set("pipeline_item.command_datas", this.get("command_datas"));
+        this.fire("listener", action, { index: this.get("index") }, e);
+        this.set("is_edit_task", false);
+        break;
+      case 'DELETE_PIPELINE_ITEM':
+        e.preventDefault();
+        this.fire("listener", action, { index: this.get("index") }, e);
+        break;
+      case 'EDIT_TASKS':
+        e.preventDefault();
+        this.set("is_edit_task", this.get("is_edit_task") == true ? false : true)
+        if (this.get("is_edit_task") == true) {
+          this.setPipelineTasks(await this.getPipelineTasks());
+        }
+        break;
     }
   },
   returnDisplayCommandRactive(index: number) {
@@ -233,26 +273,5 @@ export default BaseRactive.extend<ListGroupItemInterface>({
       this.set("command_datas", _commands);
     }
     this.calibrateCommandItem();
-  },
-  async handleClick(action, props, e) {
-    switch (action) {
-      case 'SAVE_PIPELINE_ITEM':
-        e.preventDefault();
-        this.set("pipeline_item.command_datas", this.get("command_datas"));
-        this.fire("listener", action, { index: this.get("index") }, e);
-        this.set("is_edit_task", false);
-        break;
-      case 'DELETE_PIPELINE_ITEM':
-        e.preventDefault();
-        this.fire("listener", action, { index: this.get("index") }, e);
-        break;
-      case 'EDIT_TASKS':
-        e.preventDefault();
-        this.set("is_edit_task", this.get("is_edit_task") == true ? false : true)
-        if (this.get("is_edit_task") == true) {
-          this.setPipelineTasks(await this.getPipelineTasks());
-        }
-        break;
-    }
   }
 })

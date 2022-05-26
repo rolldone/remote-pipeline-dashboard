@@ -69,7 +69,7 @@ export default BaseRactive.extend<Step3Interface>({
               <div class="list-group-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <input type="checkbox" data-name="host_ids" class="form-check-input" name="{{form_data.host_ids}}" value="{{id}}" on-change="@this.handleChange('CHECK_HOST_IDS',{ id : id, index : i },@event)">
+                    <input type="checkbox" data-name="host_ids" class="form-check-input" name="{{host_ids}}" value="{{id}}" on-change="@this.handleChange('CHECK_HOST_IDS',{ id : id, index : i },@event)">
                   </div>
                   <div class="col-auto">
                     <a href="#">
@@ -99,7 +99,7 @@ export default BaseRactive.extend<Step3Interface>({
       </div>
       <div class="col">
         <div class="btn-list justify-content-end">
-          <a href="#" class="btn btn-link link-secondary">
+          <a href="#" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
             Back
           </a>
           <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">
@@ -114,7 +114,8 @@ export default BaseRactive.extend<Step3Interface>({
       form_data: {},
       variable_datas: {},
       select_variable_index: null,
-      host_datas: []
+      host_datas: [],
+      host_ids: []
     }
   },
   oncomplete() {
@@ -122,6 +123,7 @@ export default BaseRactive.extend<Step3Interface>({
     return new Promise(async (resolve: Function) => {
       _super();
       let _form_data = this.get("form_data");
+      this.set("host_ids", _form_data.host_ids || []);
       this.setVariables(await this.getVariables());
       this.setHOst(await this.getHosts());
       if (_form_data.variable_id != null) {
@@ -143,7 +145,7 @@ export default BaseRactive.extend<Step3Interface>({
             checked.push($(el).val());
           }
         })
-        this.set("form_data.host_ids", checked);
+        // this.set("form_data.host_ids", checked);
         break;
       case 'SELECT_VARIABLE':
         var element = $(e.target).find('option:selected');
@@ -162,6 +164,7 @@ export default BaseRactive.extend<Step3Interface>({
         break;
       case 'CONTINUE':
         e.preventDefault();
+        this.set("form_data.host_ids", this.get("host_ids") || []);
         this.fire("listener", action, {
           component: "step-four"
         }, e);

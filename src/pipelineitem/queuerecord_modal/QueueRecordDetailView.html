@@ -1,0 +1,88 @@
+<div class="container-xl" style="padding: 0;">
+  <div class="row row-cards">
+    <div class="col-12">
+      <div class="card" style="border-radius: 0;border: none;">
+        <div class="table-responsive">
+          <table class="table table-vcenter table-mobile-md card-table">
+            <thead>
+              <tr>
+                <th>Queue Name</th>
+                <th>Process Mode</th>
+                <th>Status</th>
+                <th>Host</th>
+                <th class="w-1"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each queue_record_detail_datas:i}}
+              <tr>
+                <td data-label="Name">
+                  <div class="d-flex py-1 align-items-center">
+                    <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)">{{id}}</span>
+                    <div class="flex-fill">
+                      <div class="font-weight-medium">{{queue_name}}</div>
+                      <div class="text-muted"><a href="#" class="text-reset">10 Dec 2020 10:10:am</a></div>
+                    </div>
+                  </div>
+                </td>
+                <td data-label="Title">
+                  <div>{{exe_process_mode}}</div>
+                  <!-- <div class="text-muted">30 Tasks</div> -->
+                </td>
+                <td data-label="Title">
+                  {{#if status == 0}}
+                  <div>Stand By</div>
+                  {{elseif status == 1}}
+                  <div>Running</div>
+                  {{elseif status == 5}}
+                  <div>Completed</div>
+                  {{elseif status == 2}}
+                  <div>Failed</div>
+                  {{elseif status == 4}}
+                  <div>Delayed</div>
+                  {{elseif status == 3}}
+                  <div>Waiting</div>
+                  {{elseif status == 6}}
+                  <div>Stopped</div>
+                  {{/if}}
+                  <!-- <div class="text-muted">30 Tasks</div> -->
+                </td>
+                <td class="text-muted" data-label="Role">
+                  {{data.host_data.ip_address}}:{{data.host_data.port}}
+                </td>
+                <td>
+                  <div class="btn-list flex-nowrap">
+                    <a href="#" class="btn"
+                      on-click="@this.handleClick('DISPLAY_PROCESS',{ id : id, index : i },@event)">
+                      Display Process
+                    </a>
+                    <div class="dropdown">
+                      <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                        Actions
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        {{#if status == 0 || status == 5 || status == 3 || status == 6}}
+                        <a class="dropdown-item" href="#"
+                          on-click="@this.handleClick('RETRY',{ id : id, index : i },@event)">
+                          Retry
+                        </a>
+                        {{else}}
+                        <a class="dropdown-item" href="#"
+                          on-click="@this.handleClick('STOP',{ id : id, index : i },@event)">
+                          Stop
+                        </a>
+                        {{/if}}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<display-process-modal></display-process-modal>

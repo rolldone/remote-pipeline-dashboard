@@ -1,5 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import QueueRecordService from "services/QueueRecordService";
+import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
 import template from './QueueRecordsView.html';
 
 export interface QueueRecordInterface extends BaseRactiveInterface {
@@ -36,12 +36,12 @@ export default BaseRactive.extend<QueueRecordInterface>({
     switch (action) {
       case 'ADD_TO_QUEUE':
         e.preventDefault();
-        queue_record_datas[props.index].status = 1;
+        queue_record_datas[props.index].status = QueueRecordStatus.READY;
         this.submitUpdateQueueRecord(queue_record_datas[props.index]);
         break;
       case 'REMOVE_TO_QUEUE':
         e.preventDefault();
-        queue_record_datas[props.index].status = 0;
+        queue_record_datas[props.index].status = QueueRecordStatus.STAND_BY;
         this.submitUpdateQueueRecord(queue_record_datas[props.index]);
         break;
       case 'DELETE':

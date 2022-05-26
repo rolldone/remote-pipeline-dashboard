@@ -4,6 +4,14 @@ import QueueService from "./core/QueueService";
 import BaseService from "./BaseService";
 import axios from "axios";
 
+export const QueueRecordStatus = {
+  STAND_BY: 0,
+  READY: 1,
+  COMPLETED: 2,
+  FAILED: 3,
+  DELAYED: 4
+}
+
 export interface QueueRecordInterface {
   id?: number
   queue_key?: string
@@ -11,6 +19,14 @@ export interface QueueRecordInterface {
   status?: number
   data?: string
   type?: string
+}
+
+export interface QueueRecordServiceInterface extends QueueRecordInterface {
+  ids?: Array<number>
+  limit?: number
+  page?: number
+  order_by?: string
+  offset?: number
 }
 
 export default {
@@ -96,7 +112,7 @@ export default {
       for (var key in props) {
         switch (key) {
           case 'data':
-            console.log("props[key]",props[key]);
+            console.log("props[key]", props[key]);
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
@@ -104,7 +120,7 @@ export default {
             break;
         }
       }
-      let resData : any = await axios({
+      let resData: any = await axios({
         method: "post",
         url: BaseService.QUEUE_RECORD + '/update',
         data: formData,
@@ -229,9 +245,9 @@ export default {
     //   throw ex;
     // }
   },
-  async getQueueRecords(props) {
+  async getQueueRecords(props: QueueRecordServiceInterface) {
     try {
-      let query = new URLSearchParams(props);
+      let query = new URLSearchParams(props as any);
       let resData = await axios.get(BaseService.QUEUE_RECORD + '/queue-records?' + query, {});
       return resData.data;
       // SqlBricks.aliasExpansions({
@@ -275,11 +291,11 @@ export default {
       throw ex;
     }
   },
-  async getQueueRecord(props) {
+  async getQueueRecord(props: QueueRecordServiceInterface) {
     try {
       let id = props.id;
       delete props.id;
-      let queryString = new URLSearchParams(props).toString();
+      let queryString = new URLSearchParams(props as any).toString();
       let resData = await axios.get(BaseService.QUEUE_RECORD + '/' + id + "/view?" + queryString, {});
       return resData.data;
       // SqlBricks.aliasExpansions({

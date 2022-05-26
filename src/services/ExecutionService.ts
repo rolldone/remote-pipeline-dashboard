@@ -5,7 +5,7 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
-export interface Execution {
+export interface ExecutionInterface {
   id?: number
   name?: string
   process_mode?: string
@@ -13,20 +13,29 @@ export interface Execution {
   pipeline_id?: number
   project_id?: number
   user_id?: number
-  branch?: string
   variable_id?: number
   variable_option?: string
   pipeline_item_ids?: Array<number>
   host_ids?: Array<number>
   description?: string
+  branch?: string
+  mode?: string
+
+}
+
+export interface ExecutionServiceInterface extends ExecutionInterface {
+  index?: number
+  hosts?: Array<any>
+  pipeline_items?: Array<any>
 }
 
 export default {
-  async addExecution(props: Execution) {
+  async addExecution(props: ExecutionServiceInterface) {
     try {
       let formData = new FormData();
       for (var key in props) {
         switch (key) {
+          case 'host_ids':
           case 'pipeline_item_ids':
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
@@ -72,7 +81,7 @@ export default {
 
     // }
   },
-  async updateExecution(props: Execution) {
+  async updateExecution(props: ExecutionServiceInterface) {
     try {
       let formData = new FormData();
       for (var key in props) {
@@ -153,7 +162,7 @@ export default {
     //   throw ex;
     // }
   },
-  async getExecutions(props: any) {
+  async getExecutions(props: ExecutionServiceInterface) {
     try {
       let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.EXECUTION + '/executions?' + query, {});

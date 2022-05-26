@@ -1,7 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import PipelineItemService from "services/PipelineItemService";
 import PipelineService from "services/PipelineService";
-import ProjectService from "services/ProjectService";
 import RepositoryService from "services/RepositoryService";
 
 
@@ -14,7 +13,7 @@ export interface Step2Interface extends BaseRactiveInterface {
   setBranchs?: { (props: any): void }
 }
 
-export default BaseRactive.extend<Step2Interface>({
+const Step2 = BaseRactive.extend<Step2Interface>({
   template: /* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -99,7 +98,7 @@ export default BaseRactive.extend<Step2Interface>({
       </div>
       <div class="col">
         <div class="btn-list justify-content-end">
-          <a href="#" class="btn btn-link link-secondary">
+          <a href="#" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
             Back
           </a>
           <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">
@@ -224,3 +223,5 @@ export default BaseRactive.extend<Step2Interface>({
     this.set("branch_datas", props.return);
   }
 });
+
+export default Step2;
