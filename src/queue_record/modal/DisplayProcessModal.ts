@@ -62,10 +62,12 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
   async getDisplayProcess() {
     try {
       let _queue_record_detail = this.get("queue_record_detail");
+
       // console.log("_queue_record_detail :: ", _queue_record_detail);
       let res_pipeline_item = await PipelineTaskService.getPipelineTasks({
         pipeline_id: _queue_record_detail.exe_pipeline_id,
-        order_by: "pip_item.id ASC, pip_task.order_number ASC"
+        order_by: "pip_item.id ASC, pip_task.order_number ASC",
+        pipeline_item_ids: _queue_record_detail.exe_pipeline_item_ids || []
       })
 
       // Create a group
@@ -122,6 +124,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
               if (_data.action == _action) {
                 if (_data.data.includes("error-error") == true) {
                   _log_status[_action] = "FAILED";
+                  this.set("log_status", _log_status);
                   break;
                 }
                 if (_data.data != "--") {

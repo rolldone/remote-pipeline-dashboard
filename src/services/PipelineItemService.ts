@@ -1,4 +1,4 @@
-import { command_data } from "./PipelineTaskService";
+import { PipelineTaskInterface } from "./PipelineTaskService";
 import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
@@ -11,7 +11,7 @@ export interface pipeline_item {
   description?: string
   pipeline_id?: number
   project_id?: number
-  command_datas?: Array<command_data>
+  command_datas?: Array<PipelineTaskInterface>
   is_active?: boolean
   type?: string
   order_number?: number

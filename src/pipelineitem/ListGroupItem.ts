@@ -1,6 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive, { ParsedTemplate } from "ractive";
-import PipelineTaskService, { command_data } from "services/PipelineTaskService";
+import PipelineTaskService, { PipelineTaskInterface } from "services/PipelineTaskService";
 import CommandItem from "./CommandItem";
 import AddCommand from "./input/AddCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
