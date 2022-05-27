@@ -59,7 +59,7 @@ export default function () {
           })
         })
         .get('/project/(.*)?', async (req, context) => {
-          let Projects = (await import("./project/Projects")).default;
+          let Projects = (await import("./project")).default;
           new Projects({
             target: "#index-body",
           })
