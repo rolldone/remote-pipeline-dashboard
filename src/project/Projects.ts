@@ -8,6 +8,8 @@ interface ProjectsInterface extends BaseRactiveInterface {
   setProjects: { (props: any): void }
 }
 
+declare let window: Window;
+
 const Projects = BaseRactive.extend<ProjectsInterface>({
   template,
   data() {
@@ -28,12 +30,12 @@ const Projects = BaseRactive.extend<ProjectsInterface>({
     let url = null;
     switch (action) {
       case 'PAGE':
-        url = this.router.buildUrl(props.url);
-        this.router.navigate(url);
+        url = window.projectRouter.buildUrl(props.url);
+        window.projectRouter.navigate(url);
         break;
       case 'TO_PIPELINE':
-        url = this.router.buildUrl(props.url);
-        this.router.navigate(url);
+        url = window.projectRouter.buildUrl(props.url);
+        window.projectRouter.navigate(url);
         break;
     }
   },

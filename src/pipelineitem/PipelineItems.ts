@@ -7,6 +7,7 @@ import CommandItem from "./CommandItem";
 import ListGroupItem from "./ListGroupItem";
 import PipelineItemService, { pipeline_item } from "services/PipelineItemService";
 import PipelineTaskService from "services/PipelineTaskService";
+import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
 
 
 export interface PipelineItemsInterface extends BaseRactiveInterface {
@@ -22,7 +23,8 @@ export default BaseRactive.extend<PipelineItemsInterface>({
   components: {
     "command-group": CommandGroup,
     "add-pipeline-item": AddCommand,
-    "list-group-item": ListGroupItem
+    "list-group-item": ListGroupItem,
+    "test-pipeline-modal": TestPipelineItemModal
   },
   data() {
     return {
@@ -33,6 +35,9 @@ export default BaseRactive.extend<PipelineItemsInterface>({
   },
   onconstruct() {
     this.newOn = {
+      onTestPipelineModalListener: (c, action, text, object) => {
+
+      },
       onAddPipelineItemListener: async (c, action, text, object) => {
         switch (action) {
           case 'ADD_MORE':
@@ -53,6 +58,11 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       },
       onListGroupItemListener: async (c, action, text, object) => {
         switch (action) {
+          case 'TEST_PIPELINE_ITEM':
+            await this.submitPipelineItem(text.index);
+            let _testPipelineItemModal: TestPipelineItemModalInterface = this.findComponent("test-pipeline-modal");
+            _testPipelineItemModal.show(text);
+            break;
           case 'SAVE_PIPELINE_ITEM':
             this.submitPipelineItem(text.index);
             break;
@@ -149,14 +159,13 @@ export default BaseRactive.extend<PipelineItemsInterface>({
 
       // Store again to pipeline_items
       this.set("pipeline_items", pipeline_items);
-
       let command_datas = pipeline_item.command_datas;
       for (var a = 0; a < command_datas.length; a++) {
         command_datas[a].pipeline_item_id = pipeline_item.id;
         command_datas[a].project_id = pipeline_item.project_id;
         command_datas[a].pipeline_id = pipeline_item.pipeline_id;
       }
-      if(command_datas.length > 0){
+      if (command_datas.length > 0) {
         resData = await PipelineTaskService.addPipelineTasks(command_datas);
       }
     } catch (ex) {
@@ -168,7 +177,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       let pipeline = this.get("pipeline");
       let pipeline_items: Array<pipeline_item> = this.get("pipeline_items");
       let pipeline_item = pipeline_items[index];
-      let resData = await PipelineItemService.deletePipelineItem([pipeline_item.id||null]);
+      let resData = await PipelineItemService.deletePipelineItem([pipeline_item.id || null]);
     } catch (ex) {
       console.error("deletePipelineItem - ex :: ", ex);
     }

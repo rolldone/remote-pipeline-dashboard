@@ -79,8 +79,9 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
     let parent_conditon_partial = [];
     switch (action) {
       case 'parent_conditon_partial':
+        let _template = null;
         for (var a = 0; a < val.length; a++) {
-          let _template = Ractive.parse(/* html */`
+          _template = Ractive.parse(/* html */`
             <div class="row">
               <div class="col col-lg-1">
                 <div class="mb-3">
@@ -116,12 +117,12 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
               <div class="col col-lg-1">
                 <div class="mb-3">
                   <label class="form-label" style="visibility:hidden">T</label>
-                  <a href="#" class="btn btn-twitter w-100 btn-icon" aria-label="Twitter" on-click="@this.handleClick('ADD_MORE_CONDITIONAL_VALUE',{action : 'new' },@event)">
+                  <a href="#" class="btn btn-twitter w-100 btn-icon" aria-label="Twitter" on-click="@this.handleClick('ADD_MORE_CONDITIONAL_VALUE',{ action : 'delete', index : ${a} },@event)">
                     <!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                   </a>
                 </div>
@@ -133,6 +134,22 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
             ..._template.t[0]
           });
         }
+        _template = Ractive.parse(/* html */`
+          <a href="#" class="btn btn-twitter w-50 btn-icon" style="max-width: 50px;" aria-label="Twitter"
+            on-click="@this.handleClick('ADD_MORE_CONDITIONAL_VALUE',{action : 'new' },@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </a>
+        `)
+        parent_conditon_partial.push({
+          ..._template.t[0]
+        });
         this.resetPartial('parent_conditon_partial', parent_conditon_partial);
         break;
     }

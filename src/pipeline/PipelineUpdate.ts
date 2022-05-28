@@ -37,14 +37,17 @@ export default PipelineNew.extend<PipelineNewInterface>({
     switch (action) {
       case 'OPEN_REPOSITORY_AUTH':
         break;
-      case 'SUBMIT':
-        e.preventDefault();
-        let form_data = this.get("form_data");
-        let resData = await PipelineService.updatePipeline(form_data);
-        resData = resData.return;
-        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
-        return;
     }
     this._super(action, props, e);
+  },
+  async submit() {
+    try {
+      let form_data = this.get("form_data");
+      let resData = await PipelineService.updatePipeline(form_data);
+      resData = resData.return;
+      window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
+    } catch (ex) {
+      console.error("submit - ex :: ", ex);
+    }
   }
 });

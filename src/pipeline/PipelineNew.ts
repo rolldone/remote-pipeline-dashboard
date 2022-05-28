@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import SmartValidation from "base/SmartValidation";
 import PipelineItems from "pipelineitem/PipelineItems";
 import Ractive from "ractive";
 import { Router } from "routerjs";
@@ -18,6 +19,7 @@ export interface PipelineNewInterface extends BaseRactiveInterface {
   setProjectDatas?: { (props: any): void }
   getPipeline?: { (): Promise<any> }
   setPipeline?: { (props: any): void }
+  submit?: { (): void }
 }
 
 export default BaseRactive.extend<PipelineNewInterface>({
@@ -49,6 +51,7 @@ export default BaseRactive.extend<PipelineNewInterface>({
     return {
       select_source_from: null,
       form_data: {},
+      form_error: {},
       pipeline_items: [],
       project_datas: [],
       repo_collection_datas: [
@@ -76,6 +79,33 @@ export default BaseRactive.extend<PipelineNewInterface>({
       let parseQuery = this.parseQuery(window.location.search);
       this.set("form_data.oauth_user_id", parseQuery.oauth_user_id);
       this.set("select_source_from", parseQuery.from_provider);
+      let _smartValidation = SmartValidation("pipeline-form");
+      _smartValidation.inputTextValidation({
+        callback: (props, e) => {
+          console.log(props);
+          let target = $(e.target);
+          let _form_error = this.get("form_error");
+          switch (props.status) {
+            case "error":
+              _form_error = props.error;
+              this.set("form_error", {
+                ...this.get("form_error"),
+                ..._form_error
+              });
+              return target.addClass("is-invalid");
+            case "valid":
+            case "complete":
+              return target.removeClass("is-invalid");
+          }
+        },
+        form_data: this.get("form_data"),
+        element_target: "input[type=email],input[type=text],input[type=number],input[type=password]",
+        form_rules: {
+          name: "required"
+        },
+        form_attribute_name: {
+        }
+      })
       resolve();
     })
   },
@@ -100,11 +130,43 @@ export default BaseRactive.extend<PipelineNewInterface>({
         break;
       case 'SUBMIT':
         e.preventDefault();
-        let form_data = this.get("form_data");
-        let resData = await PipelineService.addPipeline(form_data);
-        resData = resData.return;
-        window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
+        let _smartValidation = SmartValidation("pipeline-form");
+        _smartValidation.submitValidation({
+          form_data: this.get("form_data"),
+          form_attribute_name: {
+            name: "Pipeline Name"
+          },
+          form_rules: {
+            name: "required",
+            project_id: "required"
+          },
+          callback: (props) => {
+            for (var key in props.error) {
+              $("#" + props.id).find(`input[name=${key}]`).addClass("is-invalid");
+              $("#" + props.id).find(`select[name=${key}]`).addClass("is-invalid");
+            }
+            this.set("form_error", props.error);
+            for (var key in props.form_data) {
+              $("#" + props.id).find(`input[name=${key}]`).removeClass("is-invalid");
+              $("#" + props.id).find(`select[name=${key}]`).removeClass("is-invalid");
+            }
+            if (props.status == "complete") {
+              this.submit();
+            }
+          }
+        })
+
         break;
     }
   },
+  async submit() {
+    try {
+      let form_data = this.get("form_data");
+      let resData = await PipelineService.addPipeline(form_data);
+      resData = resData.return;
+      window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
+    } catch (ex) {
+      console.error("submit - ex :: ", ex);
+    }
+  }
 });
