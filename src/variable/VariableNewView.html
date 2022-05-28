@@ -42,7 +42,7 @@
         <h3 class="card-title">New Variable Form</h3>
       </div>
       <div class="card-body">
-        <form>
+        <form id="variable-form">
           <input type="hidden" name="id" value="{{form_data.id}}">
           <input type="hidden" name="project_id" value="{{form_data.project_id}}">
           <div class="form-group mb-3 ">
@@ -50,7 +50,8 @@
             <div>
               <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Pipeline Name"
                 name="name" value="{{form_data.name}}">
-              <small class="form-hint">This is variable name.</small>
+              <!--  <small class="form-hint">This is variable name.</small> -->
+              <div class="invalid-feedback">{{form_error.name}}</div>
             </div>
           </div>
           <div class="mb-3">
@@ -67,6 +68,7 @@
               <option value="{{id}}">{{name}}</option>
               {{/project_datas}}
             </select>
+            <div class="invalid-feedback">{{form_error.project_id}}</div>
           </div>
           <div class="mb-3">
             <div class="form-label">Select Pipeline Name</div>
@@ -76,6 +78,7 @@
               <option value="{{id}}">{{name}}</option>
               {{/pipeline_datas}}
             </select>
+            <div class="invalid-feedback">{{form_error.pipeline_id}}</div>
           </div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"

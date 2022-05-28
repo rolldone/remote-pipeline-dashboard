@@ -37,7 +37,7 @@
         <h3 class="card-title">New Host Form</h3>
       </div>
       <div class="card-body">
-        <form>
+        <form id="host-form">
           <input type="hidden" name="id" value="{{form_data.id}}">
           <input type="hidden" name="project_id" value="{{form_data.project_id}}">
           <div class="form-group mb-3 ">
@@ -45,7 +45,8 @@
             <div>
               <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Pipeline Name"
                 name="name" value="{{form_data.name}}">
-              <small class="form-hint">This is host name.</small>
+              <!-- <small class="form-hint">This is host name.</small> -->
+              <div class="invalid-feedback">{{form_error.name}}</div>
             </div>
           </div>
           <div class="mb-3">
