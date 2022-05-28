@@ -42,7 +42,7 @@
         <h3 class="card-title">New Pipeline form</h3>
       </div>
       <div class="card-body">
-        <form>
+        <form id="pipeline-form">
           <input type="hidden" name="id" value="{{form_data.id}}">
           <input type="hidden" name="project_id" value="{{form_data.project_id}}">
           <div class="form-group mb-3 ">
@@ -50,7 +50,8 @@
             <div>
               <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Pipeline Name"
                 name="name" value="{{form_data.name}}">
-              <small class="form-hint">This is project name.</small>
+              <!-- <small class="form-hint">This is project name.</small> -->
+              <div class="invalid-feedback">{{form_error.name}}</div>
             </div>
           </div>
           <div class="mb-3">
@@ -66,6 +67,7 @@
               <option value="{{id}}">{{name}}</option>
               {{/project_datas}}
             </select>
+            <div class="invalid-feedback">{{form_error.project_id}}</div>
           </div>
           {{#if form_data.id != ""}}
           <div class="mb-3">

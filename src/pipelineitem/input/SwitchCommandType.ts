@@ -3,27 +3,50 @@ import Ractive from "ractive";
 
 export default BaseRactive.extend<BaseRactiveInterface>({
   template: /* html */`
-    <div class="dropdown">
-      <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        <svg class="icon icon-tabler icon-tabler-settings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path> <circle cx="12" cy="12" r="3"></circle></svg> 
-      </button> 
-      <div class="dropdown-menu">
-        {{#command_types:i}}
-          {{#if value == 'group'}}
-          <div class="dropend">
-            <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-              {{label}}
-            </a>
-            <div class="dropdown-menu" data-bs-popper="none">
-            {{#command_types:u}}
-              <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-components" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <desc>Download more icon variants from https://tabler-icons.io/i/components</desc>
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+              <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+              <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+              <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+            </svg>
+          </button> 
+          <div class="dropdown-menu">
+            {{#command_types:i}}
+              {{#if value == 'group'}}
+              <div class="dropend">
+                <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                  {{label}}
+                </a>
+                <div class="dropdown-menu" data-bs-popper="none">
+                {{#command_types:u}}
+                  <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+                {{/command_types}}
+                </div>
+              </div>
+              {{else}}
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
+              {{/if}}
             {{/command_types}}
-            </div>
           </div>
-          {{else}}
-            <a class="dropdown-item" href="#" on-click="@this.handleClick('SWITCH_COMMAND',{ value : value, index: index },@event)">{{label}}</a> 
-          {{/if}}
-        {{/command_types}}
+        </div>
+      </div>
+      <div class="col text-truncate"></div>
+      <div class="col-auto">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <svg class="icon icon-tabler icon-tabler-settings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path> <circle cx="12" cy="12" r="3"></circle></svg> 
+          </button> 
+          <div class="dropdown-menu" style="">
+            <a class="dropdown-item" href="#">Reset</a>
+            <a class="dropdown-item" href="#">Delete</a>
+          </div>
+        </div>
       </div>
     </div>
   `,

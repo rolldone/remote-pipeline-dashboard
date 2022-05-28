@@ -4,7 +4,6 @@ import PipelineTaskService, { PipelineTaskInterface } from "services/PipelineTas
 import CommandItem from "./CommandItem";
 import AddCommand from "./input/AddCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
-import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
 
 export interface ListGroupItemInterface extends BaseRactiveInterface {
   calibrateCommandItem: { (): void }
@@ -18,7 +17,6 @@ export default BaseRactive.extend<ListGroupItemInterface>({
     "add-command": AddCommand,
     "switch-command-type": SwitchCommandType,
     "command-item": CommandItem,
-    "test-pipeline-modal": TestPipelineItemModal
   },
   partials: {
     "pipeline_type_partial": []
@@ -100,7 +98,6 @@ export default BaseRactive.extend<ListGroupItemInterface>({
         </div>
       </div>
       {{/if}}
-      <test-pipeline-modal on-listener="onTestPipelineModalListener"></test-pipeline-modal>
     </div>
   `,
   onconstruct() {
@@ -168,12 +165,12 @@ export default BaseRactive.extend<ListGroupItemInterface>({
     switch (action) {
       case 'TEST_PIPELINE_ITEM':
         e.preventDefault();
-        let _testPipelineItemModal: TestPipelineItemModalInterface = this.findComponent("test-pipeline-modal");
-        _testPipelineItemModal.show({
+        this.set("pipeline_item.command_datas", this.get("command_datas"));
+        this.fire("listener", action, {
           pipeline_id: _pipeline_item.pipeline_id,
           project_id: _pipeline_item.project_id,
-
-        });
+          index: this.get("index")
+        }, e);
         break;
       case 'SAVE_PIPELINE_ITEM':
         e.preventDefault();
