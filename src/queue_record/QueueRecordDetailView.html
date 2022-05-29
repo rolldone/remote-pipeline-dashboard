@@ -73,7 +73,7 @@
       </div>
       <div class="col-12">
         <div class="card">
-          <div class="table-responsive">
+          <div class="table-responsive" id="queue-record-details-table">
             <table class="table table-vcenter table-mobile-md card-table">
               <thead>
                 <tr>
@@ -101,19 +101,19 @@
                     <!-- <div class="text-muted">30 Tasks</div> -->
                   </td>
                   <td data-label="Title">
-                    {{#if status == 0}}
+                    {{#if ids_status[id] == 0}}
                     <div>Stand By</div>
-                    {{elseif status == 1}}
+                    {{elseif ids_status[id] == 1}}
                     <div>Running</div>
-                    {{elseif status == 5}}
+                    {{elseif ids_status[id] == 5}}
                     <div>Completed</div>
-                    {{elseif status == 2}}
+                    {{elseif ids_status[id] == 2}}
                     <div>Failed</div>
-                    {{elseif status == 4}}
+                    {{elseif ids_status[id] == 4}}
                     <div>Delayed</div>
-                    {{elseif status == 3}}
+                    {{elseif ids_status[id] == 3}}
                     <div>Waiting</div>
-                    {{elseif status == 6}}
+                    {{elseif ids_status[id] == 6}}
                     <div>Stopped</div>
                     {{/if}}
                     <!-- <div class="text-muted">30 Tasks</div> -->

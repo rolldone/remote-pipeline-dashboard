@@ -4,19 +4,6 @@ import QueueRecordDetailService from "services/QueueRecordDetailService";
 declare let window: Window;
 
 export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
-  data() {
-    return {
-      queue_record_detail_datas: []
-    }
-  },
-  oncomplete() {
-    let _super = this._super.bind(this);
-    return new Promise(async (resolve: Function) => {
-      _super();
-      this.setQueueRecordDetails(await this.getQueueRecordDetails());
-      resolve();
-    })
-  },
   async handleClick(action, props, e) {
     let _queue_record_detail_datas = this.get("queue_record_detail_datas");
     switch (action) {
@@ -29,7 +16,7 @@ export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
         setTimeout(async () => {
           this.setQueueRecordDetails(await this.getQueueRecordDetails());
         }, 2000)
-        break;
+        return;
       case 'STOP':
         e.preventDefault();
         await QueueRecordDetailService.stopQueueDetail({
@@ -42,16 +29,9 @@ export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
         setTimeout(async () => {
           this.setQueueRecordDetails(await this.getQueueRecordDetails());
         }, 2000)
-        break;
-      case 'DISPLAY_PROCESS':
-        e.preventDefault();
-        var myModal = new window.bootstrap.Modal(document.getElementById('modal-display-process'), {
-          keyboard: false
-        })
-        myModal.show();
-        break;
-
+        return;
     }
+    this._super(action, props, e);
   },
   async getQueueRecordDetails() {
     try {
@@ -65,9 +45,15 @@ export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
       console.error("getQueueRecordDetails - ex :: ", ex);
     }
   },
-  setQueueRecordDetails(props) {
+  async setQueueRecordDetails(props) {
     if (props == null) return;
     let _datas = props.return;
     this.set("queue_record_detail_datas", _datas);
+    // By execute manual
+    let _idsStatObj = {};
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
   }
 });

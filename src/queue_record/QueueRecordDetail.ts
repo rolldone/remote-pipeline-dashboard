@@ -6,7 +6,8 @@ import template from './QueueRecordDetailView.html';
 export interface QueueRecordDetailInterface extends BaseRactiveInterface {
   getQueueRecordDetails?: { (): Promise<any> }
   setQueueRecordDetails?: { (props: any): void }
-  connectWebSocket?: { (): void }
+  getQueueIdsStatus?: { (): void }
+  setQueueIdsStatus?: { (props: any) }
 }
 
 declare let window: Window;
@@ -18,7 +19,8 @@ export default BaseRactive.extend<QueueRecordDetailInterface>({
   template,
   data() {
     return {
-      queue_record_detail_datas: []
+      queue_record_detail_datas: [],
+      ids_status: []
     }
   },
   oncomplete() {
@@ -26,7 +28,7 @@ export default BaseRactive.extend<QueueRecordDetailInterface>({
     return new Promise(async (resolve: Function) => {
       _super();
       this.setQueueRecordDetails(await this.getQueueRecordDetails());
-      this.connectWebSocket();
+      this.setQueueIdsStatus(await this.getQueueIdsStatus());
       resolve();
     })
   },
@@ -81,12 +83,42 @@ export default BaseRactive.extend<QueueRecordDetailInterface>({
       console.error("getQueueRecordDetails - ex :: ", ex);
     }
   },
-  setQueueRecordDetails(props) {
+  async setQueueRecordDetails(props) {
     if (props == null) return;
     let _datas = props.return;
     this.set("queue_record_detail_datas", _datas);
+    // By execute manual
+    let _idsStatObj = {};
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
   },
-  connectWebSocket() {
-
+  async getQueueIdsStatus() {
+    try {
+      let _datas = this.get("queue_record_detail_datas");
+      let _ids = [];
+      for (var a = 0; a < _datas.length; a++) {
+        _ids.push(_datas[a].id);
+      }
+      let resData = QueueRecordDetailService.getQueueIdsStatus(_ids);
+      return resData;
+    } catch (ex) {
+      console.error("getQueueIdsStatus - ex :: ", ex);
+    }
+  },
+  setQueueIdsStatus(props) {
+    if (props == null) return;
+    let existEl = document.getElementById('queue-record-details-table');
+    if (existEl == null) return;
+    let _datas = props.return;
+    let _idsStatObj = {};
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
+    setTimeout(async () => {
+      this.setQueueIdsStatus(await this.getQueueIdsStatus());
+    }, 15000);
   }
 });

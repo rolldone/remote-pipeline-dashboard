@@ -14,13 +14,16 @@ export interface QueueRecordInterface extends BaseRactiveInterface {
   submitDeleteQueueRecord?: {
     (id: number): Promise<any>
   }
+  getQueueIdsStatus?: { (): void }
+  setQueueIdsStatus?: { (props: any) }
 }
 
 export default BaseRactive.extend<QueueRecordInterface>({
   template,
   data() {
     return {
-      queue_record_datas: []
+      queue_record_datas: [],
+      ids_status: {}
     }
   },
   oncomplete() {
@@ -28,6 +31,7 @@ export default BaseRactive.extend<QueueRecordInterface>({
     return new Promise(async (resolve: Function) => {
       _super();
       this.setQueueRecords(await this.getQueueRecords());
+      this.setQueueIdsStatus(await this.getQueueIdsStatus());
       resolve();
     })
   },
@@ -63,9 +67,16 @@ export default BaseRactive.extend<QueueRecordInterface>({
       console.error("getQueueRecords - ex :: ", ex);
     }
   },
-  setQueueRecords(props) {
+  async setQueueRecords(props) {
     if (props == null) return;
     this.set("queue_record_datas", props.return);
+    // Manual first
+    let _idsStatObj = {};
+    let _datas = props.return;
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
   },
   async submitUpdateQueueRecord(props) {
     try {
@@ -83,9 +94,36 @@ export default BaseRactive.extend<QueueRecordInterface>({
   async submitDeleteQueueRecord(id) {
     try {
       let resData = await QueueRecordService.deleteQueueRecord([id]);
-      this.setQueueRecords(await this.getQueueRecords());
+      this.setQueueRecords(await this.getQueueRecords());      
     } catch (ex) {
       console.error("submitDeleteQueueRecord - ex :: ", ex);
     }
+  },
+  async getQueueIdsStatus() {
+    try {
+      let _datas = this.get("queue_record_datas");
+      let _ids = [];
+      for (var a = 0; a < _datas.length; a++) {
+        _ids.push(_datas[a].id);
+      }
+      let resData = QueueRecordService.getQueueIdsStatus(_ids);
+      return resData;
+    } catch (ex) {
+      console.error("getQueueIdsStatus - ex :: ", ex);
+    }
+  },
+  setQueueIdsStatus(props) {
+    if (props == null) return;
+    let existEl = document.getElementById('queue-record-table');
+    if (existEl == null) return;
+    let _datas = props.return;
+    let _idsStatObj = {};
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
+    setTimeout(async () => {
+      this.setQueueIdsStatus(await this.getQueueIdsStatus());
+    }, 15000);
   }
 });

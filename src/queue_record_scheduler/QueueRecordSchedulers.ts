@@ -1,12 +1,10 @@
-import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import QueueRecords, { QueueRecordInterface } from "queue_record/QueueRecords";
 import QueueRecordService from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
 import QueueScheduleModal, { QueueSchedulerInterface } from "./modal/QueueScheduleModal";
 import template from './QueueRecordSchedulersView.html';
 
-export interface QueueRecordSchedulerInterface extends BaseRactiveInterface {
-  getQueueRecords?: { (): Promise<any> }
-  setQueueRecords?: { (props: any): void }
+export interface QueueRecordSchedulerInterface extends Omit<QueueRecordInterface, 'submitUpdateQueueRecord'> {
   submitUpdateQueueSchedule?: { (props: QueueScheduleInterface): void }
   submitUpdateQueueRecord?: {
     (props: {
@@ -15,20 +13,12 @@ export interface QueueRecordSchedulerInterface extends BaseRactiveInterface {
       type: string
     }): Promise<any>
   }
-  submitDeleteQueueRecord?: {
-    (id: number): Promise<any>
-  }
 }
 
-export default BaseRactive.extend<QueueRecordSchedulerInterface>({
+export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   template,
   components: {
     "scheduler-modal": QueueScheduleModal
-  },
-  data() {
-    return {
-      queue_record_datas: []
-    }
   },
   onconstruct() {
     this.newOn = {
@@ -49,15 +39,6 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
       }
     }
     this._super();
-
-  },
-  oncomplete() {
-    let _super = this._super.bind(this);
-    return new Promise(async (resolve: Function) => {
-      _super();
-      this.setQueueRecords(await this.getQueueRecords());
-      resolve();
-    })
   },
   handleClick(action, props, e) {
     let queue_record_datas = this.get("queue_record_datas");
@@ -99,6 +80,13 @@ export default BaseRactive.extend<QueueRecordSchedulerInterface>({
   setQueueRecords(props) {
     if (props == null) return;
     this.set("queue_record_datas", props.return);
+    // Manual first
+    let _idsStatObj = {};
+    let _datas = props.return;
+    for (var a = 0; a < _datas.length; a++) {
+      _idsStatObj[_datas[a].id] = _datas[a].status;
+    }
+    this.set("ids_status", _idsStatObj);
   },
   async submitUpdateQueueSchedule(props) {
     try {

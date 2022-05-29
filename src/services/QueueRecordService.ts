@@ -3,6 +3,7 @@ import SqlService from "./core/SqlService";
 import QueueService from "./core/QueueService";
 import BaseService from "./BaseService";
 import axios from "axios";
+import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
 export const QueueRecordStatus = {
   STAND_BY: 0,
@@ -332,6 +333,17 @@ export default {
       //   status_code: 200,
       //   return: resData
       // }
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async getQueueIdsStatus(ids?: Array<number>) {
+    try {
+      let query = SmartUrlSearchParams({
+        ids: JSON.stringify(ids || [])
+      });
+      let resData = await axios.get(BaseService.QUEUE_RECORD + '/ids/status?' + query, {});
+      return resData.data;
     } catch (ex) {
       throw ex;
     }

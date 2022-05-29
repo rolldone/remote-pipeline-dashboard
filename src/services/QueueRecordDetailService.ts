@@ -316,5 +316,16 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async getQueueIdsStatus(ids: Array<number>) {
+    try {
+      let query = SmartUrlSearchParams({
+        ids: JSON.stringify(ids || [])
+      });
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/ids/status?' + query, {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }
