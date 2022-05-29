@@ -11,7 +11,8 @@
         <div class="form-selectgroup-boxes row mb-3">
           <div class="col-lg-12" style="margin-bottom: 12px;">
             <label class="form-selectgroup-item">
-              <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked="">
+              <input type="radio" name="{{form_data.delete_option}}" value={{false}} class="form-selectgroup-input"
+                checked="">
               <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                   <span class="form-selectgroup-check"></span>
@@ -19,14 +20,14 @@
                 <span class="form-selectgroup-label-content">
                   <span class="form-selectgroup-title strong mb-1">Soft Delete</span>
                   <span class="d-block text-muted">Keep data still on database, just change the status to be
-                    deleted</span>
+                    deleted. The impact is all relations will hide. </span>
                 </span>
               </span>
             </label>
           </div>
           <div class="col-lg-12">
             <label class="form-selectgroup-item">
-              <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
+              <input type="radio" name="{{form_data.delete_option}}" value={{true}} class="form-selectgroup-input">
               <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                   <span class="form-selectgroup-check"></span>

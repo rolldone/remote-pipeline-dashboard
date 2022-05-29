@@ -4,6 +4,11 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
+export interface ProjectServiceInterface {
+  force_deleted?: boolean
+  ids?: Array<number>
+}
+
 export default {
   async addProject(props): Promise<any> {
     try {
@@ -104,10 +109,11 @@ export default {
       throw ex;
     }
   },
-  deleteProjects: async function (ids: Array<number>) {
+  deleteProjects: async function (props: ProjectServiceInterface) {
     try {
       let formData = new FormData();
-      formData.append("ids", JSON.stringify(ids || '[]'));
+      formData.append("ids", JSON.stringify(props.ids || '[]'));
+      formData.append("force_deleted", props.force_deleted as any || false);
       let resData = await axios({
         method: "post",
         url: BaseService.PROJECT + '/delete',

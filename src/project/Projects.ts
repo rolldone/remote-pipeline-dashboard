@@ -21,6 +21,20 @@ const Projects = BaseRactive.extend<ProjectsInterface>({
       project_datas: []
     }
   },
+  onconstruct() {
+    this.newOn = {
+      onDeleteModalInfoListener: async (c, action, text, e) => {
+        switch (action) {
+          case 'DELETED':
+            this.setProjects(await this.getProjects());
+            let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+            _deleteModalInfo.hide();
+            break;
+        }
+      }
+    }
+    this._super();
+  },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
@@ -29,7 +43,6 @@ const Projects = BaseRactive.extend<ProjectsInterface>({
       resolve();
     });
   },
-
   handleClick(action, props, e) {
     let url = null;
     let _project_data = null;

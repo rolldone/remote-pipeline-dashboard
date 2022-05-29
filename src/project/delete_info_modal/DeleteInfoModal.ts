@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import ProjectService from "services/ProjectService";
 import template from './DeleteInfoModalView.html';
 
 export interface DeleteInfoModalInterface extends BaseRactiveInterface {
@@ -20,7 +21,7 @@ const DeleteInfoModal = BaseRactive.extend<DeleteInfoModalInterface>({
     switch (action) {
       case 'DELETE_PROJECT':
         e.preventDefault();
-        
+        this.submitDelete();
         break;
     }
   },
@@ -36,9 +37,14 @@ const DeleteInfoModal = BaseRactive.extend<DeleteInfoModalInterface>({
   hide() {
     myModal.hide();
   },
-  submitDelete() {
+  async submitDelete() {
     try {
-
+      let _form_data = this.get("form_data");
+      let resData = await ProjectService.deleteProjects({
+        ids: [_form_data.id],
+        force_deleted: _form_data.delete_option
+      })
+      this.fire("listener", "DELETED", {}, null);
     } catch (ex) {
       console.error("submitDelete - ex :: ", ex);
     }

@@ -22,7 +22,7 @@ export default {
   plugins: [notify(),
   inject({
     // '$': 'jQuery',
-    exclude: ['**/*.html', "**/*.ts"],
+    exclude: ['**/*.html', "**/*.ts","**/*.scss","**/*.css"],
   }),
   html(),
   multiInput(), json(),
@@ -30,17 +30,17 @@ export default {
     clean: false,
     typescript,
   }),
+  scss({
+    // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
+    output: path.join(baseOut, "/css/style.css"),
+    failOnError: false,
+    // Import library as global use all scss
+    // prefix: `@import "src/base/flexbox.scss";`
+  }),
   nodeResolve({
     browser: true
   }),
   urlResolve(),
-  scss({
-    // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
-    output: path.join(baseOut, "/css/style.css"),
-    failOnError: true,
-    // Import library as global use all scss
-    // prefix: `@import "src/base/flexbox.scss";`
-  }),
   commonjs({
     // non-CommonJS modules will be ignored, but you can also
     // specifically include/exclude files
