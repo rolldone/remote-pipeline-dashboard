@@ -1,0 +1,54 @@
+<div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <label class="form-label">Delete Option</label>
+        <div class="form-selectgroup-boxes row mb-3">
+          <div class="col-lg-12" style="margin-bottom: 12px;">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked="">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Soft Delete</span>
+                  <span class="d-block text-muted">Keep data still on database, just change the status to be
+                    deleted</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="col-lg-12">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Force Deleted</span>
+                  <span class="d-block text-muted">Delete all datas includes the relation</span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+          Cancel
+        </a>
+        <a href="#" class="btn btn-danger ms-auto" on-click="@this.handleClick('DELETE_PROJECT',{},@event)">
+          Delete the project
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
 import ProjectService from "services/ProjectService";
 import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
+import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 import template from './ProjectsView.html';
 
 interface ProjectsInterface extends BaseRactiveInterface {
@@ -11,6 +12,9 @@ interface ProjectsInterface extends BaseRactiveInterface {
 declare let window: Window;
 
 const Projects = BaseRactive.extend<ProjectsInterface>({
+  components: {
+    "delete-info-modal": DeleteInfoModal
+  },
   template,
   data() {
     return {
@@ -28,7 +32,15 @@ const Projects = BaseRactive.extend<ProjectsInterface>({
 
   handleClick(action, props, e) {
     let url = null;
+    let _project_data = null;
+    let _project_datas = this.get("project_datas");
     switch (action) {
+      case 'DELETE_PROJECT':
+        e.preventDefault();
+        _project_data = _project_datas[props.index];
+        let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+        _deleteModalInfo.show(_project_data);
+        break;
       case 'PAGE':
         url = window.projectRouter.buildUrl(props.url);
         window.projectRouter.navigate(url);

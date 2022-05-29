@@ -78,8 +78,13 @@
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" href="#" on-click="@this.handleClick('TO_PIPELINE',{ url : '/'+id+'/view' },@event)">
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('TO_PIPELINE',{ url : '/'+id+'/view' },@event)">
                             Edit
+                          </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('DELETE_PROJECT',{ id: id, index: i },@event)">
+                            Delete
                           </a>
                           <a class="dropdown-item" href="#">
                             Another action
@@ -98,6 +103,7 @@
     </div>
   </div>
 </div>
+<delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>
 <footer class="footer footer-transparent d-print-none">
   <div class="container-xl">
     <div class="row text-center align-items-center flex-row-reverse">
