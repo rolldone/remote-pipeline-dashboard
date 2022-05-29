@@ -19,16 +19,10 @@ import typescript from 'typescript';
 let baseOut = 'dist';
 export default {
   input: "src/app.ts",
-  plugins: [scss({
-    // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
-    output: path.join(baseOut, "/css/style.css"),
-    failOnError: true,
-    // Import library as global use all scss
-    // prefix: `@import "src/base/flexbox.scss";`
-  }), notify(),
+  plugins: [notify(),
   inject({
     // '$': 'jQuery',
-    exclude: ['**/*.html',"**/*.ts"],
+    exclude: ['**/*.html', "**/*.ts"],
   }),
   html(),
   multiInput(), json(),
@@ -40,6 +34,13 @@ export default {
     browser: true
   }),
   urlResolve(),
+  scss({
+    // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
+    output: path.join(baseOut, "/css/style.css"),
+    failOnError: true,
+    // Import library as global use all scss
+    // prefix: `@import "src/base/flexbox.scss";`
+  }),
   commonjs({
     // non-CommonJS modules will be ignored, but you can also
     // specifically include/exclude files
@@ -67,19 +68,19 @@ export default {
     // option if you know what you're doing!
     ignore: ['conditional-runtime-dependency']
   }),
-  // copy({
-  //   targets: [
-  //     { src: 'import-map.json', dest: path.join(baseOut) },
-  //     { src: ['system'], dest: path.join(baseOut) }
-  //   ],
-  //   hook: 'writeBundle',
-  //   flatten: false,
-  //   copyOnce: true
-  // }),
-  // baseUrl({
-  //   url: '/public/dashboard', // the base URL prefix; optional, defaults to /
-  //   staticImports: true, // also rebases static `import _ from "…"`; optional, defaults to false
-  // }),
+    // copy({
+    //   targets: [
+    //     { src: 'import-map.json', dest: path.join(baseOut) },
+    //     { src: ['system'], dest: path.join(baseOut) }
+    //   ],
+    //   hook: 'writeBundle',
+    //   flatten: false,
+    //   copyOnce: true
+    // }),
+    // baseUrl({
+    //   url: '/public/dashboard', // the base URL prefix; optional, defaults to /
+    //   staticImports: true, // also rebases static `import _ from "…"`; optional, defaults to false
+    // }),
   ],
   output: {
     dir: path.join(baseOut),

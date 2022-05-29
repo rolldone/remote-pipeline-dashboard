@@ -6,7 +6,7 @@ import template from './CommandGroupView.html';
 import ConditionalCommand from "./ConditionalCommand";
 import SwitchCommandType from "./SwitchCommandType";
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+const CommandGroup = BaseRactive.extend<BaseRactiveInterface>({
   template,
   isolated: false,
   components: {
@@ -98,3 +98,5 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     }
   }
 });
+
+export default CommandGroup;

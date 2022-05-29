@@ -1,9 +1,8 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './BasicCommandView.html'
 import Tags from "bootstrap5-tags"
-import PipelineItemService from "services/PipelineItemService";
 import Ractive from "ractive";
-import debounce from 'lodash/debounce';
+import SimpleScript from "./simple_script/SimpleScript";
 
 declare let $: JQueryStatic
 
@@ -15,7 +14,8 @@ interface form_data {
   description: string
   order_number: number
   data?: {
-    command: string
+    command: string,
+    use_script?: boolean
   }
 }
 
@@ -28,11 +28,17 @@ interface parent_order_temp_ids {
 export interface BasicCommandInterface extends BaseRactiveInterface {
   displayParentOrderNumberCommandPartial?: { (): void }
   _pendingTriggerFormDataName?: any
+  displayScriptCode?: { (val: boolean): void }
 }
+
 export default BaseRactive.extend<BasicCommandInterface>({
+  components: {
+    "simple-script": SimpleScript
+  },
   template,
   partials: {
-    parent_order_number_commands_partial: []
+    parent_order_number_commands_partial: [],
+    simple_script_partial: []
   },
   oncomplete() {
     this.displayParentOrderNumberCommandPartial();
@@ -46,6 +52,7 @@ export default BaseRactive.extend<BasicCommandInterface>({
           command: ''
         }
       },
+      input_use_script: null,
       command_datas: []
     }
   },
@@ -56,6 +63,11 @@ export default BaseRactive.extend<BasicCommandInterface>({
     let _index = this.get('index');
     let _command_datas: Array<form_data> = this.get("command_datas");
     let _form_data: form_data = this.get("form_data");
+
+    // Define checkbox use script
+    this.set("input_use_script", _form_data.data.use_script == true ? [null] : [])
+    this.displayScriptCode(_form_data.data.use_script || false);
+
     let _parent_order_temp_ids_selected = _form_data.parent_order_temp_ids || [];
     let parent_order_temp_ids: Array<parent_order_temp_ids> = [];
     for (var a = 0; a < _index; a++) {
@@ -92,14 +104,17 @@ export default BaseRactive.extend<BasicCommandInterface>({
     await this.resetPartial('parent_order_number_commands_partial', parent_order_number_commands_partial);
     Tags.init();
   },
-
   _pendingTriggerFormDataName: null,
-
   handleClick(action, props, e) {
     switch (action) { }
   },
   handleChange(action, props, e) {
+    let _simple_script_partial = [];
     switch (action) {
+      case 'USE_SCRIPT':
+        e.preventDefault();
+        this.displayScriptCode($(e.target).is(":checked"));
+        break;
       case 'SELECT_PARENT_ORDER_NUMBER':
         let _form_data: form_data = this.get("form_data");
         let _is_deleted = false;
@@ -112,5 +127,21 @@ export default BaseRactive.extend<BasicCommandInterface>({
         });
         break;
     }
+  },
+  displayScriptCode(val) {
+    let _simple_script_partial = [];
+    this.set("form_data.data.use_script", val);
+    let _template = null;
+    if (val == true) {
+      _template = Ractive.parse(/* html */`
+        <simple-script form_data={{form_data.data.script_data}}></simple-script>
+      `);
+      _simple_script_partial.push({
+        ..._template.t[0]
+      })
+    }
+    this.resetPartial("simple_script_partial", [
+      ..._simple_script_partial
+    ])
   }
 });

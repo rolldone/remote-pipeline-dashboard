@@ -12,7 +12,8 @@ export interface ListGroupItemInterface extends BaseRactiveInterface {
   returnDisplayCommandRactive: { (index: number): ParsedTemplate }
   addNewCommandItem: { (): void }
 }
-export default BaseRactive.extend<ListGroupItemInterface>({
+
+const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
   components: {
     "add-command": AddCommand,
     "switch-command-type": SwitchCommandType,
@@ -105,14 +106,22 @@ export default BaseRactive.extend<ListGroupItemInterface>({
       onTestPipelineModalListener: (c, action, text, object) => {
 
       },
-      onSwitchCommandTypeListener: (c, action, text, object) => {
+      onSwitchCommandTypeListener: async (c, action, text, object) => {
+        let command_datas = this.get("command_datas") as Array<any>;
         switch (action) {
+          case 'RESET':
+            this.setPipelineTasks(await this.getPipelineTasks());
+            break;
+          case 'DELETE':
+            command_datas.splice(text.index, 1);
+            this.set("command_datas", command_datas);
+            this.calibrateCommandItem();
+            break;
           case 'SWITCH_COMMAND':
             if (text.value == "calibrate") {
               this.calibrateCommandItem();
               return;
             }
-            let command_datas = this.get("command_datas") as Array<any>;
             if (text.value == "delete") {
               command_datas.splice(text.index, 1);
               this.set("command_datas", command_datas);
@@ -272,3 +281,5 @@ export default BaseRactive.extend<ListGroupItemInterface>({
     this.calibrateCommandItem();
   }
 })
+
+export default ListGroupItem;

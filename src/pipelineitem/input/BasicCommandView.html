@@ -7,7 +7,8 @@
     </div>
     <div class="mb-3">
       <label for="tags-input" class="form-label">Select Parent</label>
-      <select class="form-select" id="tags-input" name="parent_id" multiple on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
         <!-- <option disabled hidden value="">Choose a parent...</option> -->
         {{> parent_order_number_commands_partial}}
       </select>
@@ -15,11 +16,22 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Working Directory</label>
-      <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}" placeholder="Input Working Dir">
+      <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}"
+        placeholder="Input Working Dir">
     </div>
     <div class="mb-3">
       <label class="form-label">Command</label>
-      <input type="text" class="form-control" name="command" value="{{form_data.data.command}}" placeholder="Input command">
+      <input type="text" class="form-control" name="command" value="{{form_data.data.command}}"
+        placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="{{input_use_script}}" on-change="@this.handleChange('USE_SCRIPT',{},@event)">
+        <span class="form-check-label">Use script</span>
+      </label>
+    </div>
+    <div class="mb-3">
+      {{> simple_script_partial}}
     </div>
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>

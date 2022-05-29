@@ -1,13 +1,11 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './WriteScriptCodeModalView.html';
-import { basicSetup } from "@codemirror/basic-setup"
-import { EditorView, keymap } from "@codemirror/view"
-import { javascript } from "@codemirror/lang-javascript"
-import { indentWithTab } from "@codemirror/commands"
-import { EditorSelection, Compartment, EditorState, Text as TextState } from "@codemirror/state"
-import { dirname } from "path";
+// Ace Editor
+import * as ace from 'brace';
+import 'brace/theme/github';
 
-const languageConf = new Compartment
+import { debounce, DebouncedFunc } from "lodash";
+
 let myModal = null;
 
 export interface WriteScriptCodeModalInterface extends BaseRactiveInterface {
@@ -16,12 +14,13 @@ export interface WriteScriptCodeModalInterface extends BaseRactiveInterface {
   selectLanguage: { (whatLang: string): any }
 }
 
-var editor = null;
+var editor: ace.Editor = null;
 const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
   template,
   data() {
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+      id_code_mirror: "code-mirror-" + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
       form_data: {},
       allow_var_environment: null
     }
@@ -33,7 +32,7 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
       case 'SUBMIT':
         e.preventDefault();
         _form_data.allow_var_environment = _allow_var_environment.length > 0 ? true : false;
-        _form_data.content = editor.state.doc.toJSON();
+        _form_data.content = editor.getValue().split(/\r?\n/);
         this.set("form_data", _form_data);
         console.log(this.get("form_data"));
         this.fire("listener", action, this.get("form_data"), e);
@@ -53,83 +52,72 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
     });
     myModal.show();
 
-    let _ext = props.file_path.split('.').pop();
+    editor = ace.edit(this.get("id_code_mirror"));
+    editor.setTheme('ace/theme/github');
+    editor.setValue(props.content.join("\r\n"));
+    editor.clearSelection();
 
-    let _extentions = [
-      basicSetup,
-      keymap.of([indentWithTab]),
-    ]
-
-    let selectLanguage = await this.selectLanguage(_ext);
-    if (selectLanguage != null) {
-      _extentions.push(
-        languageConf.of(selectLanguage)
-      )
-    }
-
-    let mySelector = document.getElementById("my-selector");
-
-    mySelector.innerHTML = "";
-    editor = null;
-
-    if (props.content == null) {
-      props.content = [];
-    }
-
-    editor = new EditorView({
-      state: EditorState.create({
-        extensions: _extentions,
-        doc: props.content.join("\r\n")
-      }),
-      parent: mySelector
-    })
-    _trrr.addEventListener('hidden.bs.modal', (event) => {
-      // do something...
-    })
-    // editor.dispatch(editor.state.changeByRange(range => ({
-    //   changes: [{ from: range.from, insert: "_" }, { from: range.to, insert: "_" }],
-    //   range: EditorSelection.range(range.from + 2, range.to + 2)
-    // })))
+    let _pendingCheckTypeFile: DebouncedFunc<any> = null;
+    this.observe("form_data.file_path", (val: string) => {
+      if (_pendingCheckTypeFile != null) {
+        _pendingCheckTypeFile.cancel();
+      }
+      _pendingCheckTypeFile = debounce(async () => {
+        let _ext = val.split('.').pop();
+        let language = await this.selectLanguage(_ext);
+        if (language != null) {
+          editor.getSession().setMode(language);
+        }
+      }, 2000);
+      _pendingCheckTypeFile();
+    });
   },
   hide() {
     myModal.hide();
   },
   async selectLanguage(whatLang) {
-    let language: any = null;
+    (await import("brace/mode/plain_text"));
+    let language = "ace/mode/plain_text";
     switch (whatLang) {
       case 'js':
-        language = (await import("@codemirror/lang-javascript"));
-        language = language.javascript();
+        (await import("brace/mode/javascript"));
+        language = "ace/mode/javascript";
         break;
       case 'php':
-        language = (await import("@codemirror/lang-php"));
-        language = language.php();
+        (await import("brace/mode/php"));
+        language = "ace/mode/php";
         break;
       case 'html':
-        language = (await import("@codemirror/lang-html"));
-        language = language.html();
+        (await import("brace/mode/html"));
+        language = "ace/mode/html";
         break;
       case 'py':
-        language = (await import("@codemirror/lang-python"));
-        language = language.python();
+        (await import("brace/mode/python"));
+        language = "ace/mode/python";
         break;
       case 'cpp':
-        language = (await import("@codemirror/lang-cpp"));
-        language = language.cpp();
+        (await import("brace/mode/c_cpp"));
+        language = "ace/mode/c_cpp";
         break;
       case 'rs':
-        language = (await import("@codemirror/lang-rust"));
-        language = language.rust();
+        (await import("brace/mode/rust"));
+        language = "ace/mode/rust";
         break;
       case 'css':
-        language = (await import("@codemirror/lang-css"));
-        language = language.css();
+        (await import("brace/mode/css"));
+        language = "ace/mode/css";
         break;
       case 'json':
-        language = (await import("@codemirror/lang-json"));
-        language = language.json();
+        (await import("brace/mode/json"));
+        language = "ace/mode/json";
         break;
       case 'yaml':
+        (await import("brace/mode/yaml"));
+        language = "ace/mode/yaml";
+        break;
+      case 'sh':
+        (await import("brace/mode/sh"));
+        language = "ace/mode/sh";
         break;
     }
     return language;
