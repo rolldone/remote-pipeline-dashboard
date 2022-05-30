@@ -85,6 +85,10 @@
                           <a class="dropdown-item" href="#">
                             Action
                           </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('DELETE',{ id : id, index: i},@event)">
+                            Delete
+                          </a>
                           <a class="dropdown-item" href="#">
                             Another action
                           </a>
@@ -140,3 +144,4 @@
     </div>
   </div>
 </footer>
+<delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>

@@ -3,9 +3,15 @@ import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
+import { PipelinesInterface } from "pipeline/Pipelines";
 
 export interface PipelineInterface {
   id?: number
+}
+
+export interface PipelineServiceInterface extends PipelineInterface {
+  ids?: Array<number>
+  force_deleted?: boolean
 }
 
 export default {
@@ -128,5 +134,23 @@ export default {
     } catch (ex) {
       throw ex;
     }
-  }
+  },
+  deletePipelines: async function (props: PipelineServiceInterface) {
+    try {
+      let formData = new FormData();
+      formData.append("ids", JSON.stringify(props.ids || '[]'));
+      formData.append("force_deleted", props.force_deleted as any || false);
+      let resData = await axios({
+        method: "post",
+        url: BaseService.PIPELINE + '/delete',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
 }

@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete Project</h5>
+        <h5 class="modal-title">{{display.title}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -46,7 +46,7 @@
           Cancel
         </a>
         <a href="#" class="btn btn-danger ms-auto" on-click="@this.handleClick('DELETE_PROJECT',{},@event)">
-          Delete the project
+          {{display.button_submit}}
         </a>
 
       </div>

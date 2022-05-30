@@ -3,6 +3,7 @@ import template from './PipeLinesView.html';
 import { BrowserHistoryEngine, createRouter, Router } from "routerjs";
 import PipelineService from "services/PipelineService";
 import Ractive from "ractive";
+import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 
 declare let window: Window;
 
@@ -12,11 +13,28 @@ export interface PipelinesInterface extends BaseRactiveInterface {
 }
 
 export default BaseRactive.extend<PipelinesInterface>({
+  components: {
+    "delete-info-modal": DeleteInfoModal
+  },
   template,
   data() {
     return {
       pipeline_datas: []
     }
+  },
+  onconstruct() {
+    this.newOn = {
+      onDeleteModalInfoListener: async (c, action, text, e) => {
+        switch (action) {
+          case 'DELETED':
+            this.setPipelines(await this.getPipelines());
+            let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+            _deleteModalInfo.hide();
+            break;
+        }
+      }
+    }
+    this._super();
   },
   oncomplete() {
     let _super = this._super.bind(this);
@@ -24,6 +42,18 @@ export default BaseRactive.extend<PipelinesInterface>({
       this.setPipelines(await this.getPipelines())
       resolve();
     });
+  },
+  handleClick(action, props, e) {
+    let _pipeline_datas = this.get("pipeline_datas");
+    let _pipeline_data = null;
+    switch (action) {
+      case 'DELETE':
+        e.preventDefault();
+        _pipeline_data = _pipeline_datas[props.index];
+        let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+        _deleteModalInfo.show(_pipeline_data);
+        break;
+    }
   },
   async getPipelines() {
     try {
