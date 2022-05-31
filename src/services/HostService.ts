@@ -15,6 +15,11 @@ export interface Host {
   private_key?: string
 }
 
+export interface HostServiceInterface extends Host {
+  ids?: Array<number>
+  force_deleted?: boolean
+}
+
 export default {
   async getHosts(props: any): Promise<any> {
     try {
@@ -166,10 +171,11 @@ export default {
     //   return: resData
     // }
   },
-  async deleteHost(ids: Array<number>): Promise<any> {
+  async deleteHost(props: HostServiceInterface): Promise<any> {
     try {
       let formData = new FormData();
-      formData.append("ids", JSON.stringify(ids || '[]'));
+      formData.append("ids", JSON.stringify(props.ids || '[]'));
+      formData.append("force_deleted", props.force_deleted || false as any);
       let resData = await axios({
         method: "post",
         url: BaseService.HOST + '/delete',
