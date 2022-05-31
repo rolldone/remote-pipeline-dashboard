@@ -108,6 +108,10 @@ const SwitchCommandType = BaseRactive.extend<BaseRactiveInterface>({
           value: "download-request"
         },
         {
+          label: "Create new queue",
+          value: "new-queue"
+        },
+        {
           label: "Delete",
           value: "delete"
         },

@@ -2,6 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import BasicCommand from "./input/BasicCommand";
 import ConditionalCommand from "./input/ConditionalCommand";
+import CreateQueueCommand from "./input/CreateQueueCommand";
 import DownloadRequest from "./input/DownloadRequest";
 import FileTransferCommand from "./input/FileTransferCommand";
 import RepoInstallCommand from "./input/RepoInstallCommand";
@@ -28,7 +29,8 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     "write-script": WriteSCriptCode,
     "repo-install": RepoInstallCommand,
     "transfer-remote": TransferRemoteCommand,
-    "download-request": DownloadRequest
+    "download-request": DownloadRequest,
+    "new-queue": CreateQueueCommand
   },
   template:/* html */`
     {{#if command_data.type == "basic-command"}}
@@ -47,6 +49,8 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     <download-request index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></download-request>
     {{elseif command_data.type == "write-script"}}
     <write-script index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></write-script>
+    {{elseif command_data.type == "new-queue"}}
+    <new-queue index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></new-queue>
     {{/if}}
   `,
   onconfig() {

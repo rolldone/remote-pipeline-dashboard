@@ -137,7 +137,9 @@ export default {
     try {
       let formData = new FormData();
       for (var key in props) {
-        formData.append(key, props[key]);
+        if (props[key] != null) {
+          formData.append(key, props[key]);
+        }
       }
       let resData = await axios({
         method: "post",
@@ -190,7 +192,9 @@ export default {
     try {
       let formData = new FormData();
       for (var key in props) {
-        formData.append(key, props[key]);
+        if (props[key] != null) {
+          formData.append(key, props[key]);
+        }
       }
       let resData = await axios({
         method: "post",

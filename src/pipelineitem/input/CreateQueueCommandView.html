@@ -1,0 +1,43 @@
+<div class="col-md-6 col-xl-12">
+  <label class="form-label">New Call Queue Command</label>
+  <fieldset class="form-fieldset">
+    <div class="mb-3">
+      <label class="form-label">Command Name</label>
+      <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label for="tags-input" class="form-label">Select Parent</label>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
+      </select>
+      <div class="invalid-feedback">Please select a valid tag.</div>
+    </div>
+    <div class="mb-3">
+      <div class="form-label">Select queue</div>
+      <select class="form-select" value="{{select_index}}" on-change="@this.handleChange('SELECT_QUEUE',{},@event)">
+        {{#each queue_datas:i}}
+        <option value="{{i}}">{{exe_name}}</option>
+        {{/each}}
+      </select>
+      <a style="max-width: 50px; margin-top: 12px;" class="btn btn-twitter w-50 btn-icon" href="#" aria-label="Twitter"
+        on-click="@this.handleClick('ADD_QUEUE',{ index : select_index },@event)">
+        <svg class="icon icon-tabler icon-tabler-plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg></a>
+    </div>
+    <div class="mb-3">
+      {{> register_queue_partials}}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
+    </div>
+  </fieldset>
+</div>
