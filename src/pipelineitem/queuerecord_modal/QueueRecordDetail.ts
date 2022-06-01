@@ -1,4 +1,4 @@
-import QueueRecordDetailQueue, { QueueRecordDetailInterface as QueueRecordDetailQueueInterface } from "queue_record/QueueRecordDetail";
+import QueueRecordDetailQueue, { QueueRecordDetailsInterface as QueueRecordDetailQueueInterface } from "queue_record/QueueRecordDetail";
 import { ExecutionServiceInterface } from "services/ExecutionService";
 import QueueRecordDetailService from "services/QueueRecordDetailService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";

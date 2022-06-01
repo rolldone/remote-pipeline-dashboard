@@ -1,10 +1,10 @@
-import QueueRecords, { QueueRecordInterface } from "queue_record/QueueRecords";
+import QueueRecords, { QueueRecordsInterface } from "queue_record/QueueRecords";
 import QueueRecordService from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
 import QueueScheduleModal, { QueueSchedulerInterface } from "./modal/QueueScheduleModal";
 import template from './QueueRecordSchedulersView.html';
 
-export interface QueueRecordSchedulerInterface extends Omit<QueueRecordInterface, 'submitUpdateQueueRecord'> {
+export interface QueueRecordSchedulerInterface extends Omit<QueueRecordsInterface, 'submitUpdateQueueRecord'> {
   submitUpdateQueueSchedule?: { (props: QueueScheduleInterface): void }
   submitUpdateQueueRecord?: {
     (props: {

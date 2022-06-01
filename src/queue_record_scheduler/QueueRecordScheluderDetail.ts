@@ -1,9 +1,9 @@
-import QueueRecordDetail, { QueueRecordDetailInterface } from "queue_record/QueueRecordDetail";
+import QueueRecordDetail, { QueueRecordDetailsInterface } from "queue_record/QueueRecordDetail";
 import QueueRecordDetailService from "services/QueueRecordDetailService";
 
 declare let window: Window;
 
-export default QueueRecordDetail.extend<QueueRecordDetailInterface>({
+export default QueueRecordDetail.extend<QueueRecordDetailsInterface>({
   async handleClick(action, props, e) {
     let _queue_record_detail_datas = this.get("queue_record_detail_datas");
     switch (action) {

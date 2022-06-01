@@ -20,6 +20,8 @@ export interface QueueRecordInterface {
   status?: number
   data?: string
   type?: string
+  exe_process_mode?: string
+  exe_process_limit?: number
 }
 
 export interface QueueRecordServiceInterface extends QueueRecordInterface {
@@ -130,25 +132,7 @@ export default {
         }
       })
       resData = resData.data;
-      resData = resData.return;
-      // And register to the bullmq
-      formData = new FormData();
-      formData.append("id", resData.id);
-      formData.append("data", JSON.stringify(resData.data));
-      formData.append("process_mode", resData.exe_process_mode);
-      if (resData.exe_process_mode == "parallel") {
-        formData.append("process_limit", resData.exe_process_limit);
-      }
-      if (resData.status == 0) {
-        resData = await QueueService.delete(formData);
-      } else {
-        resData = await QueueService.create(formData);
-      }
-      return {
-        status: 'success',
-        status_code: 200,
-        return: resData
-      }
+      return resData;
     } catch (ex) {
       throw ex;
     }

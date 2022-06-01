@@ -1,9 +1,10 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import QueueRecordDetailService from "services/QueueRecordDetailService";
+import QueueRecordDetailService, { QueueRecordDetailInterface } from "services/QueueRecordDetailService";
+import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
 import DisplayProcessModal from "./modal/DisplayProcessModal";
 import template from './QueueRecordDetailView.html';
 
-export interface QueueRecordDetailInterface extends BaseRactiveInterface {
+export interface QueueRecordDetailsInterface extends BaseRactiveInterface {
   getQueueRecordDetails?: { (): Promise<any> }
   setQueueRecordDetails?: { (props: any): void }
   getQueueIdsStatus?: { (): void }
@@ -12,7 +13,7 @@ export interface QueueRecordDetailInterface extends BaseRactiveInterface {
 
 declare let window: Window;
 
-export default BaseRactive.extend<QueueRecordDetailInterface>({
+export default BaseRactive.extend<QueueRecordDetailsInterface>({
   components: {
     "display-process-modal": DisplayProcessModal
   },
@@ -37,8 +38,12 @@ export default BaseRactive.extend<QueueRecordDetailInterface>({
     switch (action) {
       case 'RETRY':
         e.preventDefault();
-        let item = _queue_record_detail_datas[props.index];
-        await QueueRecordDetailService.retryQueueDetail({
+        let item: QueueRecordDetailInterface = _queue_record_detail_datas[props.index];
+        let resData = await QueueRecordService.updateQueueRecord({
+          id: item.queue_record_id,
+          status: QueueRecordStatus.READY,
+        })
+        resData = await QueueRecordDetailService.retryQueueDetail({
           id: props.id
           // id: item.qrec_id,
           // data: item.qrec_data,

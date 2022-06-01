@@ -1,8 +1,9 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
+import QueueService from "services/core/QueueService";
+import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
 import template from './QueueRecordsView.html';
 
-export interface QueueRecordInterface extends BaseRactiveInterface {
+export interface QueueRecordsInterface extends BaseRactiveInterface {
   getQueueRecords?: { (): Promise<any> }
   setQueueRecords?: { (props: any): void }
   submitUpdateQueueRecord?: {
@@ -18,7 +19,7 @@ export interface QueueRecordInterface extends BaseRactiveInterface {
   setQueueIdsStatus?: { (props: any) }
 }
 
-export default BaseRactive.extend<QueueRecordInterface>({
+export default BaseRactive.extend<QueueRecordsInterface>({
   template,
   data() {
     return {
@@ -86,6 +87,21 @@ export default BaseRactive.extend<QueueRecordInterface>({
         status: props.status,
         type: 'instant'
       })
+      let queue_record: QueueRecordInterface = resData.return;
+      // And register to the bullmq
+      let formData = new FormData();
+      formData.append("id", queue_record.id as any);
+      formData.append("data", JSON.stringify(queue_record.data));
+      formData.append("process_mode", queue_record.exe_process_mode);
+      if (queue_record.exe_process_mode == "parallel") {
+        formData.append("process_limit", queue_record.exe_process_limit as any);
+      }
+      if (queue_record.status == 0) {
+        resData = await QueueService.delete(formData);
+      } else {
+        resData = await QueueService.create(formData);
+      }
+      
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitUpdateQueueRecord - ex :: ", ex);
@@ -94,7 +110,7 @@ export default BaseRactive.extend<QueueRecordInterface>({
   async submitDeleteQueueRecord(id) {
     try {
       let resData = await QueueRecordService.deleteQueueRecord([id]);
-      this.setQueueRecords(await this.getQueueRecords());      
+      this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitDeleteQueueRecord - ex :: ", ex);
     }
