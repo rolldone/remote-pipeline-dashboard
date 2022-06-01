@@ -10,16 +10,24 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       basePath: "/dashboard/queue-record"
     })
       .get("/", async (req, context) => {
-        let Excecution = (await import("./QueueRecords")).default;
-        new Excecution({
+        let app = (await import("./QueueRecords")).default;
+        new app({
           target: "#index-body",
           req: req
         })
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Excecution = (await import("./QueueRecordDetail")).default;
-        new Excecution({
+        let app = (await import("./QueueRecordDetail")).default;
+        new app({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get("/job/:job_id", async (req, context) => {
+        // Handle the route here...
+        let app = (await import("./QueueRecordDetailDisplayData")).default;
+        new app({
           target: "#index-body",
           req: req
         })
