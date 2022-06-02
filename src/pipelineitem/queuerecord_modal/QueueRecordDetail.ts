@@ -1,4 +1,6 @@
+import makeid from "base/MakeID";
 import QueueRecordDetailQueue, { QueueRecordDetailsInterface as QueueRecordDetailQueueInterface } from "queue_record/QueueRecordDetail";
+import QueueService from "services/core/QueueService";
 import { ExecutionServiceInterface } from "services/ExecutionService";
 import QueueRecordDetailService from "services/QueueRecordDetailService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
@@ -58,19 +60,37 @@ const QueueRecordDetail = QueueRecordDetailQueue.extend<QueueRecordDetailInterfa
         _form_data.queue_key = null;
         _form_data.execution_id = _execution_data.id;
         _form_data.status = QueueRecordStatus.STAND_BY;
+        _form_data.queue_key = makeid(12);
         _form_data.type = 'instant'
         resData = await QueueRecordService.addQueueRecord(_form_data);
         queue_record_data = resData.return;
+      } else {
+        queue_record_data.queue_key = queue_record_data.queue_key == "null" ? makeid(12) : queue_record_data.queue_key;
       }
       // Store it on queue_record_data
       await this.set("queue_record_data", queue_record_data);
       // Update and create new queue
-      resData = await QueueRecordService.updateQueueRecord({
+      let resQueueRecordData = await QueueRecordService.updateQueueRecord({
         ...queue_record_data,
         id: queue_record_data.id,
         status: QueueRecordStatus.READY,
         type: 'instant'
       })
+      
+      let queue_record: QueueRecordInterface = resQueueRecordData.return as any;
+      let formData = new FormData();
+
+      formData.append("id", queue_record.id as any);
+      formData.append("data", JSON.stringify(queue_record.data));
+      formData.append("process_mode", queue_record.exe_process_mode);
+      formData.append("delay", queue_record.exe_delay);
+
+      if (queue_record.exe_process_mode == "parallel") {
+        formData.append("process_limit", queue_record.exe_process_limit as any);
+      }
+
+      resData = await QueueService.create(formData);
+
     } catch (ex) {
       console.error("insertOrUpdateQueueRecord - ex :: ", ex);
     }

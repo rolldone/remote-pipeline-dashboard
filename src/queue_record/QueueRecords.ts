@@ -17,6 +17,7 @@ export interface QueueRecordsInterface extends BaseRactiveInterface {
   }
   getQueueIdsStatus?: { (): void }
   setQueueIdsStatus?: { (props: any) }
+  copyClipBoard?: { (props: any): void }
 }
 
 export default BaseRactive.extend<QueueRecordsInterface>({
@@ -39,6 +40,16 @@ export default BaseRactive.extend<QueueRecordsInterface>({
   handleClick(action, props, e) {
     let queue_record_datas = this.get("queue_record_datas");
     switch (action) {
+      case 'COPY_LINK':
+        e.preventDefault();
+        let _urlQueueKey = window.location.origin + "/xhr/outside/queue/" + queue_record_datas[props.index].queue_key;
+        if (typeof (navigator.clipboard) == 'undefined') {
+          alert("Copied this link: " + _urlQueueKey);
+          return;
+        }
+        navigator.clipboard.writeText(_urlQueueKey);
+        alert("Copied the text: " + _urlQueueKey);
+        break;
       case 'ADD_TO_QUEUE':
         e.preventDefault();
         queue_record_datas[props.index].status = QueueRecordStatus.READY;
@@ -81,27 +92,27 @@ export default BaseRactive.extend<QueueRecordsInterface>({
   },
   async submitUpdateQueueRecord(props) {
     try {
-      let resData = await QueueRecordService.updateQueueRecord({
-        ...props,
-        id: props.id,
-        status: props.status,
-        type: 'instant'
-      })
-      let queue_record: QueueRecordInterface = resData.return;
       // And register to the bullmq
+      let queue_record: QueueRecordInterface = props;
       let formData = new FormData();
+
       formData.append("id", queue_record.id as any);
       formData.append("data", JSON.stringify(queue_record.data));
       formData.append("process_mode", queue_record.exe_process_mode);
+      formData.append("delay", queue_record.exe_delay);
+
       if (queue_record.exe_process_mode == "parallel") {
         formData.append("process_limit", queue_record.exe_process_limit as any);
       }
+
+      let resData = null;
+
       if (queue_record.status == 0) {
         resData = await QueueService.delete(formData);
       } else {
         resData = await QueueService.create(formData);
       }
-      
+
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitUpdateQueueRecord - ex :: ", ex);

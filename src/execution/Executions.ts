@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import makeid from "base/MakeID";
 import ExecutionService from "services/ExecutionService";
 import QueueRecordService from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
@@ -102,7 +103,7 @@ export default BaseRactive.extend<ExecutionsInterface>({
       let resData = await QueueRecordService.addQueueRecord({
         execution_id: props.execution_id,
         status: props.status,
-        queue_key: null,
+        queue_key: makeid(12),
         type: 'instant'
       })
       debugger;
@@ -115,7 +116,7 @@ export default BaseRactive.extend<ExecutionsInterface>({
       let resData = await QueueRecordService.addQueueRecord({
         execution_id: props.execution_id,
         status: 0,
-        queue_key: null,
+        queue_key: makeid(12),
         type: "schedule"
       })
       resData = await QueueScheduleService.addQueueSchedule({

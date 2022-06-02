@@ -64,6 +64,13 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           </div>
         </div>
         {{/if}}
+        <div class="form-group mb-3 ">
+          <label class="form-label">Delay to start</label> 
+          <div>
+            <input class="form-control" type="number" aria-describedby="emailHelp" placeholder="Enter number of limit" value="{{form_data.delay}}" name="delay">
+            <small class="form-hint">You can set how much delay to start the queue default from system is 2000 ms</small>
+          </div>
+        </div>
         <div class="mb-3">
           <label class="form-label">Description <span class="form-label-description">56/100</span></label>
           <textarea class="form-control" name="description" value="{{form_data.description}}" rows="6" placeholder="Content..">Oh! Come and see the violence inherent in the system! Help, help, I'm being repressed! We shall say 'Ni' again to you, if you do not appease us. I'm not a witch. I'm not a witch. Camelot!</textarea>
@@ -91,6 +98,16 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       </div>
     </div>
   `,
+  oncomplete() {
+    let _super = this._super.bind(this);
+    return new Promise((resolve: Function) => {
+      if (this.get("form_data.delay") == null) {
+        this.set("form_data.delay", 2000);
+      }
+      _super();
+      resolve();
+    })
+  },
   handleChange(action, props, e) {
     switch (action) {
       case 'SELECT_PROCESS':
@@ -102,9 +119,9 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     switch (action) {
       case 'BACK':
         e.preventDefault();
-        this.fire("listener",action,{
+        this.fire("listener", action, {
           component: "step-three"
-        },e);
+        }, e);
         break;
       case 'CONTINUE':
         e.preventDefault();

@@ -22,6 +22,7 @@ export interface QueueRecordInterface {
   type?: string
   exe_process_mode?: string
   exe_process_limit?: number
+  exe_delay?: null
 }
 
 export interface QueueRecordServiceInterface extends QueueRecordInterface {

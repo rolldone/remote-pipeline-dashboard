@@ -20,6 +20,30 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           target: "#index-body",
         })
       })
+      .get('/personal-access-token', async (req, context) => {
+        // Handle the route here...
+        let User = (await import("./personal_access_token/PersonalAccessTokens")).default;
+        new User({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get('/personal-access-token/new', async (req, context) => {
+        // Handle the route here...
+        let User = (await import("./personal_access_token/PersonalAccessTokenNew")).default;
+        new User({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get('/personal-access-token/:id/view', async (req, context) => {
+        // Handle the route here...
+        let User = (await import("./personal_access_token/PersonalAccessTokenUpdate")).default;
+        new User({
+          target: "#index-body",
+          req: req
+        })
+      })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
         let User = (await import("./UserUpdate")).default;

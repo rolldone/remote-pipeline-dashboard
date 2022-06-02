@@ -34,6 +34,7 @@
     "kysely": "^0.17.1",
     "localstoragedb": "^2.3.2",
     "lodash": "^4.17.21",
+    "moment": "^2.29.3",
     "ractive": "^1.4.0",
     "rollup": "^2.35.1",
     "rollup-plugin-babel": "^4.4.0",

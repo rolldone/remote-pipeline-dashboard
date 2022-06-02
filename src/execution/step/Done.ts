@@ -78,6 +78,7 @@ export default BaseRactive.extend<DoneInterface>({
           host_ids: _form_data.host_ids,
           process_limit: _form_data.process_limit || 1,
           process_mode: _form_data.process_mode,
+          delay: _form_data.delay,
           variable_id: _form_data.variable_id,
           variable_option: _form_data.variable_option
         });
@@ -94,6 +95,7 @@ export default BaseRactive.extend<DoneInterface>({
         host_ids: _form_data.host_ids,
         process_limit: _form_data.process_limit || 1,
         process_mode: _form_data.process_mode,
+        delay: _form_data.delay,
         variable_id: _form_data.variable_id,
         variable_option: _form_data.variable_option
       });

@@ -20,6 +20,7 @@ export interface ExecutionInterface {
   description?: string
   branch?: string
   mode?: string
+  delay?: number
 
 }
 

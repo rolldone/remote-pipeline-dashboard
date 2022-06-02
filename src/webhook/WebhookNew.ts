@@ -2,22 +2,12 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './WebhookNewView.html';
 import WebHookDataCollections from "./WebHookDataCollections";
 import WebHookService from '../services/WebHookService';
+import makeid from "base/MakeID";
 
 declare let window: Window;
 
 export interface WebhookNewInterface extends BaseRactiveInterface {
   submitWebHook?: { (): void }
-}
-
-const makeid = (length: number) => {
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() *
-      charactersLength));
-  }
-  return result;
 }
 
 const WebhookNew = BaseRactive.extend<WebhookNewInterface>({

@@ -16,5 +16,6 @@ export default {
   EXECUTION: ENDPOINT + '/execution',
   VARIABLE: ENDPOINT + '/variable',
   REPOSITORY: ENDPOINT + '/repository',
-  WEBHOOK: ENDPOINT + '/webhook'
+  WEBHOOK: ENDPOINT + '/webhook',
+  TOKEN: ENDPOINT + '/personal-token'
 }
