@@ -10,6 +10,10 @@ export interface QueueRecordDetailDisplayDataInterface extends BaseRactiveInterf
   displayDirPartials?: { (): void }
 }
 
+const randomArray = [
+  '#cc0000','#00cc00', '#0000cc'
+];
+
 const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplayDataInterface>({
   template,
   partials: {
@@ -17,7 +21,8 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
   },
   data() {
     return {
-      directories: []
+      directories: [],
+      iframe_url: ""
     }
   },
   oncomplete() {
@@ -32,11 +37,11 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
     switch (action) {
       case 'OPEN_FILE':
         e.preventDefault();
-        
+        this.set("iframe_url", props.url);
         break;
       case 'OPEN_FOLDER':
         e.preventDefault();
-        
+
         break;
     }
   },
@@ -70,7 +75,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
       case 'file':
         return Ractive.parse(/* html */`
         <li class="nav-item">
-          <a class="nav-link" href="./index.html" on-click="@this.handleClick('OPEN_FILE',{ path : '${props.path}'},@event)">
+          <a class="nav-link" on-click="@this.handleClick('OPEN_FILE',{ url : '/xhr/queue-record-detail/display-data/${this.req.params.job_id}/file?path=${props.path}' },@event)">
             <span class="nav-link-icon d-md-none d-lg-inline-block">
               <!-- Download SVG icon from http://tabler-icons.io/i/home -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-code-2" width="24"
@@ -103,7 +108,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
           ..._children_partial
         ]);
         return Ractive.parse(/* html */`
-        <li class="nav-item active dropdown" style="border-left: 1px solid;">
+        <li class="nav-item active dropdown" style="border-left: 2px solid #2ecc71;">
           <a class="nav-link dropdown-toggle" href="#navbar-layout" data-bs-toggle="dropdown"
             data-bs-auto-close="false" role="button" aria-expanded="true" on-click="@this.handleClick('OPEN_FOLDER',{ path : '${props.path}'},@event)">
             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -120,7 +125,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
               ${props.name}
             </span>
           </a>
-          <div class="dropdown-menu show" style="padding-left: 12px;">
+          <div class="dropdown-menu show" style="padding-left: 0px;">
             <ul class="navbar-nav pt-lg-3" style="margin: 0 !important;margin-top: 0 !important;padding-top: 0 !important;padding: 0;">
             {{> children_partial_${index}}}
             </ul>

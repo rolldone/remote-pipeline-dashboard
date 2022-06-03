@@ -36,6 +36,9 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
   async handleClick(action, props, e) {
     let _queue_record_detail_datas = this.get("queue_record_detail_datas");
     switch (action) {
+      case 'DISPLAY_DATA':
+        
+        break;
       case 'RETRY':
         e.preventDefault();
         let item: QueueRecordDetailInterface = _queue_record_detail_datas[props.index];

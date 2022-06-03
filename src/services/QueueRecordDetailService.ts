@@ -333,7 +333,18 @@ export default {
       let query = SmartUrlSearchParams({
         job_id
       });
-      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/directories/' + job_id, {});
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/display-data/' + job_id + '/directories', {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async openFile(job_id: string, path: string) {
+    try {
+      let query = SmartUrlSearchParams({
+        path
+      });
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + "/display-data/" + job_id + '/file?' + query, {});
       return resData.data;
     } catch (ex) {
       throw ex;
