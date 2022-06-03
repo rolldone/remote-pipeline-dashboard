@@ -54,7 +54,9 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
 
     editor = ace.edit(this.get("id_code_mirror"));
     editor.setTheme('ace/theme/github');
-    editor.setValue(props.content.join("\r\n"));
+    editor.setOption("tabSize", 2);
+    let _content = props.content == null ? [] : props.content;
+    editor.setValue(_content.join("\r\n"));
     editor.clearSelection();
 
     let _pendingCheckTypeFile: DebouncedFunc<any> = null;

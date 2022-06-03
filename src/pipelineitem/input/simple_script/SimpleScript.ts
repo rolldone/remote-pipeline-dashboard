@@ -55,9 +55,10 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
 
       editor = ace.edit(this.get("id_code_mirror"));
       editor.setTheme('ace/theme/github');
-      editor.setValue(_form_data.content);
+      editor.setValue(_form_data.content || "");
+      editor.setOption("tabSize", 2);
       editor.clearSelection();
-      
+
       let _pendingSave: DebouncedFunc<any> = null;
       editor.on("change", (e) => {
         if (_pendingSave != null) {

@@ -64,6 +64,7 @@ const WriteSCriptCode = WriteTransferCommand.extend<WriteScriptCodeInterface>({
         e.preventDefault();
         _script_datas.splice(props.index, 1);
         this.set("script_datas", _script_datas);
+        this.displayScriptCollections();
         break;
       case 'ADD_NEW':
         e.preventDefault();
