@@ -327,5 +327,16 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async getDirectories(job_id: string) {
+    try {
+      let query = SmartUrlSearchParams({
+        job_id
+      });
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/directories/' + job_id, {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

@@ -1,6 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-
+import './Style.scss';
 declare let window: Window;
 
 export default BaseRactive.extend<BaseRactiveInterface>({
