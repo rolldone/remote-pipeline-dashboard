@@ -6,6 +6,7 @@ import template from './WebhooksView.html';
 export interface HostsInterface extends BaseRactiveInterface {
   getWebHooks: { (): Promise<any> }
   setWebHooks: { (props: any): void }
+  submitDelete: { (id: number): void }
 }
 
 const Webhooks = BaseRactive.extend<HostsInterface>({
@@ -23,6 +24,14 @@ const Webhooks = BaseRactive.extend<HostsInterface>({
       resolve();
     })
   },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'DELETE':
+        e.preventDefault();
+        this.submitDelete(props.id);
+        break;
+    }
+  },
   async getWebHooks() {
     try {
       let resData = await WebHookService.getWebHooks({});
@@ -34,6 +43,14 @@ const Webhooks = BaseRactive.extend<HostsInterface>({
   setWebHooks(props) {
     if (props == null) return;
     this.set("webhook_datas", props.return);
+  },
+  async submitDelete(id) {
+    try {
+      let resData = await WebHookService.deleteWebHooks([id]);
+      this.setWebHooks(await this.getWebHooks());
+    } catch (ex) {
+      console.error("submitDelete - ex :: ", ex);
+    }
   }
 });
 
