@@ -5,7 +5,7 @@ import CommandGroup from "./input/CommandGroup";
 import template from './PipelineItemsView.html';
 import CommandItem from "./CommandItem";
 import ListGroupItem from "./ListGroupItem";
-import PipelineItemService, { pipeline_item } from "services/PipelineItemService";
+import PipelineItemService, { PipelineItemInterface } from "services/PipelineItemService";
 import PipelineTaskService from "services/PipelineTaskService";
 import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
 
@@ -41,7 +41,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       onAddPipelineItemListener: async (c, action, text, object) => {
         switch (action) {
           case 'ADD_MORE':
-            let pipeline_items: Array<pipeline_item> = this.get("pipeline_items");
+            let pipeline_items: Array<PipelineItemInterface> = this.get("pipeline_items");
             let pipeline = this.get("pipeline");
             pipeline_items.push({
               name: 'Task ' + (pipeline_items.length + 1),
@@ -139,12 +139,12 @@ export default BaseRactive.extend<PipelineItemsInterface>({
   async submitPipelineItem(index: number) {
     try {
       let pipeline = this.get("pipeline");
-      let pipeline_items: Array<pipeline_item> = this.get("pipeline_items");
+      let pipeline_items: Array<PipelineItemInterface> = this.get("pipeline_items");
       let pipeline_item = pipeline_items[index];
       console.log(pipeline_item);
 
       // Save or update
-      let resData: pipeline_item | any = await PipelineItemService.addPipelineItem({
+      let resData: PipelineItemInterface | any = await PipelineItemService.addPipelineItem({
         id: pipeline_item.id,
         pipeline_id: pipeline_item.pipeline_id,
         project_id: pipeline_item.project_id,
@@ -175,7 +175,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
   async deletePipelineItem(index: number) {
     try {
       let pipeline = this.get("pipeline");
-      let pipeline_items: Array<pipeline_item> = this.get("pipeline_items");
+      let pipeline_items: Array<PipelineItemInterface> = this.get("pipeline_items");
       let pipeline_item = pipeline_items[index];
       let resData = await PipelineItemService.deletePipelineItem([pipeline_item.id || null]);
     } catch (ex) {

@@ -1,7 +1,8 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import PipelineItemService from "services/PipelineItemService";
+import PipelineItemService, { PipelineItemInterface } from "services/PipelineItemService";
 import PipelineService from "services/PipelineService";
 import RepositoryService from "services/RepositoryService";
+import Sortable from 'sortablejs';
 
 
 export interface Step2Interface extends BaseRactiveInterface {
@@ -11,6 +12,7 @@ export interface Step2Interface extends BaseRactiveInterface {
   setPipelineItems?: { (props: any): void }
   getBranchs?: { (): void }
   setBranchs?: { (props: any): void }
+  saveSortPipeline?: { (): void }
 }
 
 const Step2 = BaseRactive.extend<Step2Interface>({
@@ -64,9 +66,9 @@ const Step2 = BaseRactive.extend<Step2Interface>({
             <div class="card-header">
               <h3 class="card-title">Pipeline Items</h3>
             </div>
-            <div class="list-group list-group-flush">
+            <div class="list-group list-group-flush" id="list-group-sort-pipeline-item">
               {{#pipeline_item_datas:i}}
-              <div class="list-group-item">
+              <div class="list-group-item pipeline-item">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <input type="checkbox" class="form-check-input" name="{{form_data.pipeline_item_ids}}" value="{{id}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
@@ -81,7 +83,6 @@ const Step2 = BaseRactive.extend<Step2Interface>({
                 </div>
               </div>
               {{/pipeline_item_datas}}
-              
             </div>
           </div>
         </div>
@@ -121,6 +122,10 @@ const Step2 = BaseRactive.extend<Step2Interface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+
+      var el = document.getElementById('list-group-sort-pipeline-item');
+      var sortable = Sortable.create(el);
+
       let _form_data = this.get("form_data");
       this.setPipelines(await this.getPipelines());
       // Create skenario
@@ -167,17 +172,30 @@ const Step2 = BaseRactive.extend<Step2Interface>({
         break;
       case 'CONTINUE':
         e.preventDefault();
+        this.saveSortPipeline();
         this.fire("listener", action, {
           component: "step-three"
         }, e);
         break;
     }
   },
+  saveSortPipeline() {
+    let _pipeline_item_ids = [];
+    let _pipeline_items = document.getElementsByClassName("pipeline-item");
+    for (var a = 0; a < _pipeline_items.length; a++) {
+      let _formCheckInputs = _pipeline_items[a].getElementsByClassName("form-check-input");
+      let _formCheckInput: HTMLInputElement = _formCheckInputs[0] as any;
+      if (_formCheckInput && _formCheckInput.checked == true) {
+        _pipeline_item_ids.push(_formCheckInput.value);
+      }
+    }
+    this.set("form_data.pipeline_item_ids", _pipeline_item_ids);
+  },
   async getPipelines() {
     try {
       let _form_data = this.get("form_data");
       let resData = await PipelineService.getPipelines({
-        project_id: _form_data.project_id
+        project_id: _form_data.project_id,
       });
       return resData;
     } catch (ex) {
@@ -202,7 +220,31 @@ const Step2 = BaseRactive.extend<Step2Interface>({
   },
   setPipelineItems(props) {
     if (props == null) return;
-    this.set("pipeline_item_datas", props.return);
+    let _pipeline_datas: Array<PipelineItemInterface> = props.return;
+    let _pipeline_item_ids: Array<number> = this.get("form_data.pipeline_item_ids") || [];
+    let _new_input_datas = [];
+    for (var a = 0; a < _pipeline_item_ids.length; a++) {
+      for (var b = 0; b < _pipeline_datas.length; b++) {
+        if (_pipeline_datas[b].id == _pipeline_item_ids[a]) {
+          _new_input_datas.push(_pipeline_datas[b]);
+          break;
+        }
+      }
+    }
+    // For remaining data insert unslected
+    for (var b = 0; b < _pipeline_datas.length; b++) {
+      let isSame = false;
+      for (var a = 0; a < _pipeline_item_ids.length; a++) {
+        if (_pipeline_datas[b].id == _pipeline_item_ids[a]) {
+          isSame = true;
+          break;
+        }
+      }
+      if (isSame == false) {
+        _new_input_datas.push(_pipeline_datas[b]);
+      }
+    }
+    this.set("pipeline_item_datas", _new_input_datas);
   },
   async getBranchs() {
     try {

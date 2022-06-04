@@ -18,8 +18,12 @@
               <div class="col text-truncate">
                 <label class="text-reset d-block">{{name}}</label>
                 <div class="d-block text-muted text-truncate mt-n1" style="margin-top: 6px;">
-                  {{#each pipeline_items:u}}
-                  <span class="badge ms-2" style="margin-left: 0 !important; margin-right: 6px;">{{name}}</span>
+                  {{#each pipeline_item_ids:j}}
+                    {{#each pipeline_items:u}}
+                      {{#if pipeline_item_ids[j]==pipeline_items[u].id}}
+                        <span class="badge ms-2" style="margin-left: 0 !important; margin-right: 6px;">{{name}}</span>
+                      {{/if}}
+                    {{/each}}
                   {{/each}}
                 </div>
                 <div class="d-block text-muted text-truncate mt-n1" style="margin-top: 6px;">

@@ -1,5 +1,6 @@
 import Step2Execution, { Step2Interface } from "execution/step/Step2";
 import PipelineService from "services/PipelineService";
+import Sortable from 'sortablejs';
 
 
 export interface Step1Interface extends Step2Interface {
@@ -53,9 +54,9 @@ const Step1 = Step2Execution.extend<Step1Interface>({
           <div class="card-header">
             <h3 class="card-title">Pipeline Items</h3>
           </div>
-          <div class="list-group list-group-flush">
+          <div class="list-group list-group-flush" id="list-group-sort-pipeline-item">
             {{#pipeline_item_datas:i}}
-            <div class="list-group-item">
+            <div class="list-group-item pipeline-item">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <input type="checkbox" class="form-check-input" name="{{form_data.pipeline_item_ids}}" value="{{id}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
@@ -70,7 +71,6 @@ const Step1 = Step2Execution.extend<Step1Interface>({
               </div>
             </div>
             {{/pipeline_item_datas}}
-            
           </div>
         </div>
       </div>
@@ -100,6 +100,10 @@ const Step1 = Step2Execution.extend<Step1Interface>({
       let _form_data = this.get("form_data");
       console.log("form_data ::: ", _form_data);
       // Create skenario
+
+      var el = document.getElementById('list-group-sort-pipeline-item');
+      var sortable = Sortable.create(el);
+
       if (_form_data.pipeline_id != null) {
         this.setPipeline(await this.getPipeline());
         this.setBranchs(await this.getBranchs());
@@ -120,6 +124,7 @@ const Step1 = Step2Execution.extend<Step1Interface>({
         return;
       case 'CONTINUE':
         e.preventDefault();
+        this.saveSortPipeline();
         this.fire("listener", action, {
           component: "step-two"
         }, e);
@@ -140,7 +145,7 @@ const Step1 = Step2Execution.extend<Step1Interface>({
   },
   setPipeline(props) {
     if (props == null) return;
-    this.set("pipeline_data", props.return)
+    this._super(props);
   },
 })
 

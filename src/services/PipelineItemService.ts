@@ -5,7 +5,7 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
-export interface pipeline_item {
+export interface PipelineItemInterface {
   id?: number
   name?: string
   description?: string
@@ -17,6 +17,10 @@ export interface pipeline_item {
   order_number?: number
   order_by_name?: string
   order_by_value?: any
+}
+
+export interface PipelineItemServiceInterface extends PipelineItemInterface {
+  ids?: Array<number>
 }
 
 export default {
@@ -40,7 +44,7 @@ export default {
       throw ex;
     }
   },
-  async getPipelineItem(props: pipeline_item) {
+  async getPipelineItem(props: PipelineItemServiceInterface) {
     try {
       let id = props.id;
       delete props.id;
@@ -87,8 +91,18 @@ export default {
       throw ex;
     }
   },
-  async getPipelineItems(props: pipeline_item) {
+  async getPipelineItems(props: PipelineItemServiceInterface) {
     try {
+      for (var key in props) {
+        switch (key) {
+          case 'ids':
+            props[key] = JSON.stringify(props[key]) as any;
+            break;
+        }
+        if (props[key] == null) {
+          delete props[key];
+        }
+      }
       let query = SmartUrlSearchParams(props);
       let resData = await axios.get(BaseService.PIPELINE_ITEM + '/pipeline-items?' + query, {});
       return resData.data;
@@ -133,7 +147,7 @@ export default {
       throw ex;
     }
   },
-  async addPipelineItem(props: pipeline_item) {
+  async addPipelineItem(props: PipelineItemInterface) {
     try {
       let formData = new FormData();
       for (var key in props) {
@@ -188,7 +202,7 @@ export default {
       throw ex;
     }
   },
-  async updatePipelineItem(props: pipeline_item) {
+  async updatePipelineItem(props: PipelineItemInterface) {
     try {
       let formData = new FormData();
       for (var key in props) {

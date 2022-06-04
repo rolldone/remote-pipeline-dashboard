@@ -65,7 +65,6 @@ export default BaseRactive.extend<DoneInterface>({
     try {
       let resData = null;
       let _form_data: ExecutionServiceInterface = this.get("form_data") as any;
-      _form_data.pipeline_item_ids = _form_data.pipeline_item_ids.sort();
       if (_form_data.id != null) {
         resData = await ExecutionService.updateExecution({
           id: _form_data.id,
