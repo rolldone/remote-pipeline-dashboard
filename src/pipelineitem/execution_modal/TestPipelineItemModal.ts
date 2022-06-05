@@ -120,7 +120,10 @@ const TestPipelineItemModal = BaseRactive.extend<TestPipelineItemModalInterface>
   },
   async submitDelete(execution_id) {
     try {
-      let resData = await ExecutionService.deleteExecutions([execution_id]);
+      let resData = await ExecutionService.deleteExecution({
+        ids: [execution_id],
+        force_deleted: false
+      });
       this.setExecutions(await this.getExecutions());
     } catch (ex) {
       console.error("submitDelete - ex :: ", ex);

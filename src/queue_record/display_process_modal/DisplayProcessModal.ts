@@ -88,6 +88,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
           let gg = _tasks[a];
           let _action = "job_id_" + _queue_record_detail.job_id + "_pipeline_id_" + gg.pip_item_id + "_task_id_" + gg.id;
           gg.action = _action;
+          console.log("gg.action :: ", gg.action);
         }
       }
 
@@ -107,6 +108,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
           for (var a = 0; a < _tasks.length; a++) {
             let gg = _tasks[a];
             let _action = gg.action;
+            console.log("tttttttttttttttttt ", _action);
             if (_log_status[_action] == null) {
               _log_status[_action] = "WAITING";
               this.set("log_status", _log_status);
@@ -136,10 +138,11 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
                 // var element = document.getElementById("modal-theboyd");
                 //  var element2 = document.getElementById("modal-theboyd2");
                 // element.scrollTo(0, element2.offsetHeight);
-                console.log(_data.action + " :: ", _data.data);
+                console.log(_action + " :: " + _data.action + " :: ", _data.data);
                 _log_socket_messages[_action].push(_data.data);
                 this.set("log_socket_messages." + _action, _log_socket_messages[_action]);
                 this.set("log_status", _log_status);
+
                 // console.log(_data.action + " :: ", _data.data);
               }
             } catch (ex) {
@@ -148,6 +151,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
             }
           }
         }
+        console.log("log_socket_messages :: ", this.get("log_socket_messages"));
       }
       _ws.webSocket.onmessage = fff;
       let resData = await QueueRecordDetailService.getQueueRecordDetailDisplayProcess({

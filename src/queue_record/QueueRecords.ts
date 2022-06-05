@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
+import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 import template from './QueueRecordsView.html';
 
 export interface QueueRecordsInterface extends BaseRactiveInterface {
@@ -22,11 +23,32 @@ export interface QueueRecordsInterface extends BaseRactiveInterface {
 
 export default BaseRactive.extend<QueueRecordsInterface>({
   template,
+  components: {
+    "delete-info-modal": DeleteInfoModal
+  },
   data() {
     return {
       queue_record_datas: [],
       ids_status: {}
     }
+  },
+  onconstruct() {
+    let _super = this._super.bind(this);
+    return new Promise((resolve: Function) => {
+      this.newOn = {
+        onDeleteModalInfoListener: async (c, action, text, e) => {
+          switch (action) {
+            case 'DELETED':
+              this.setQueueRecords(await this.getQueueRecords());
+              let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+              _deleteModalInfo.hide();
+              break;
+          }
+        }
+      }
+      _super();
+      resolve();
+    });
   },
   oncomplete() {
     let _super = this._super.bind(this);
@@ -39,6 +61,7 @@ export default BaseRactive.extend<QueueRecordsInterface>({
   },
   handleClick(action, props, e) {
     let queue_record_datas = this.get("queue_record_datas");
+    let queue_record_data = null;
     switch (action) {
       case 'COPY_LINK':
         e.preventDefault();
@@ -62,7 +85,10 @@ export default BaseRactive.extend<QueueRecordsInterface>({
         break;
       case 'DELETE':
         e.preventDefault();
-        this.submitDeleteQueueRecord(props.id);
+        queue_record_data = queue_record_datas[props.index];
+        let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+        _deleteModalInfo.show(queue_record_data);
+        // this.submitDeleteQueueRecord(props.id);
         break;
     }
   },
@@ -120,7 +146,10 @@ export default BaseRactive.extend<QueueRecordsInterface>({
   },
   async submitDeleteQueueRecord(id) {
     try {
-      let resData = await QueueRecordService.deleteQueueRecord([id]);
+      let resData = await QueueRecordService.deleteQueueRecord({
+        ids: [id],
+        force_deleted: true
+      });
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitDeleteQueueRecord - ex :: ", ex);

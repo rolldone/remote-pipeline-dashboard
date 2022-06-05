@@ -141,6 +141,10 @@
                             on-click="@this.handleClick('ADD_TO_QUEUE_SCHEDULER',{ id : id },@event)">
                             Add to queue scheduler
                           </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('DELETE',{ id : id, index: i},@event)">
+                            Delete
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -194,3 +198,4 @@
   </div>
 </footer>
 <scheduler-modal on-listener="onSchedulerModalListener"></scheduler-modal>
+<delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>

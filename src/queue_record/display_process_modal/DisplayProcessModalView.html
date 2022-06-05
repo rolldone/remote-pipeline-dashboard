@@ -50,10 +50,16 @@
               <div>
                 <div style="background: black;color: white; padding: 12px;">
                   {{#log_socket_messages:p}}
-                  {{#if action == p}}
-                  {{#log_socket_messages[p]:ui}}
-                  <p>{{log_socket_messages[p][ui]}}</p>
-                  {{/log_socket_messages}}
+                  {{#if action == null}}
+                    {{#log_socket_messages[p]:ui}}
+                      <p>{{log_socket_messages[p][ui]}}</p>
+                    {{/log_socket_messages}}
+                  {{else}}
+                    {{#if action == p}}
+                    {{#log_socket_messages[p]:ui}}
+                      <p>{{log_socket_messages[p][ui]}}</p>
+                    {{/log_socket_messages}}
+                    {{/if}}
                   {{/if}}
                   {{/log_socket_messages}}
                 </div>

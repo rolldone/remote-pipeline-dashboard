@@ -31,9 +31,12 @@ export interface QueueRecordServiceInterface extends QueueRecordInterface {
   page?: number
   order_by?: string
   offset?: number
+
+  force_deleted?: boolean
 }
 
 export default {
+  status: QueueRecordStatus,
   async addQueueRecord(props: QueueRecordInterface) {
     try {
       let formData = new FormData();
@@ -200,10 +203,11 @@ export default {
     //   throw ex;
     // }
   },
-  async deleteQueueRecord(ids: Array<number>) {
+  async deleteQueueRecord(props: QueueRecordServiceInterface) {
     try {
       let formData = new FormData();
-      formData.append("ids", JSON.stringify(ids || '[]'));
+      formData.append("ids", JSON.stringify(props.ids || '[]'));
+      formData.append("force_deleted", props.force_deleted as any || false);
       let resData = await axios({
         method: "post",
         url: BaseService.QUEUE_RECORD + '/delete',

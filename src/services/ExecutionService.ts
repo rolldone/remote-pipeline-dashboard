@@ -28,6 +28,8 @@ export interface ExecutionServiceInterface extends ExecutionInterface {
   index?: number
   hosts?: Array<any>
   pipeline_items?: Array<any>
+  ids?: Array<number>
+  force_deleted?: boolean
 }
 
 export default {
@@ -132,10 +134,11 @@ export default {
 
     // }
   },
-  async deleteExecutions(ids: Array<number>) {
+  deleteExecution: async function (props: ExecutionServiceInterface) {
     try {
       let formData = new FormData();
-      formData.append("ids", JSON.stringify(ids || '[]'));
+      formData.append("ids", JSON.stringify(props.ids || '[]'));
+      formData.append("force_deleted", props.force_deleted as any || false);
       let resData = await axios({
         method: "post",
         url: BaseService.EXECUTION + '/delete',
@@ -148,20 +151,6 @@ export default {
     } catch (ex) {
       throw ex;
     }
-    // try {
-    //   let _in: Array<any> | string = [
-    //     ...ids
-    //   ];
-    //   _in = _in.join(',');
-    //   let resData = await SqlService.delete(SqlBricks.delete('executions').where(SqlBricks.in("id", _in)).toString());
-    //   return {
-    //     status: 'success',
-    //     status_code: 200,
-    //     return: resData
-    //   }
-    // } catch (ex) {
-    //   throw ex;
-    // }
   },
   async getExecutions(props: ExecutionServiceInterface) {
     try {

@@ -43,7 +43,7 @@ const SwitchCommandType = BaseRactive.extend<BaseRactiveInterface>({
           </button> 
           <div class="dropdown-menu" style="">
             <a class="dropdown-item" href="#" on-click="@this.handleClick('RESET',{},@event)">Reset</a>
-            <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE',{},@event)">Delete</a>
+            <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE',{ index: index },@event)">Delete</a>
           </div>
         </div>
       </div>

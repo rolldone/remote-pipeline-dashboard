@@ -1,5 +1,6 @@
 import QueueRecords, { QueueRecordsInterface } from "queue_record/QueueRecords";
-import QueueRecordService from "services/QueueRecordService";
+import QueueService from "services/core/QueueService";
+import QueueRecordService, { QueueRecordInterface } from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
 import QueueScheduleModal, { QueueSchedulerInterface } from "./modal/QueueScheduleModal";
 import template from './QueueRecordSchedulersView.html';
@@ -47,16 +48,12 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
         e.preventDefault();
         queue_record_datas[props.index].status = 1;
         this.submitUpdateQueueRecord(queue_record_datas[props.index]);
-        break;
+        return;
       case 'REMOVE_TO_QUEUE':
         e.preventDefault();
         queue_record_datas[props.index].status = 0;
         this.submitUpdateQueueRecord(queue_record_datas[props.index]);
-        break;
-      case 'DELETE':
-        e.preventDefault();
-        this.submitDeleteQueueRecord(props.id);
-        break;
+        return;
       case 'EDIT':
         e.preventDefault();
         let _modalQueueSchedule: QueueSchedulerInterface = this.findComponent("scheduler-modal");
@@ -64,8 +61,9 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
           queue_record_id: props.id,
           execution_id: queue_record_datas[props.index].execution_id
         });
-        break;
+        return;
     }
+    this._super(action, props, e);
   },
   async getQueueRecords() {
     try {
@@ -98,13 +96,34 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   },
   async submitUpdateQueueRecord(props) {
     try {
-      debugger;
-      let resData = await QueueRecordService.updateQueueRecord({
-        ...props,
-        id: props.id,
-        status: props.status,
-        type: props.type || 'schedule'
-      })
+      // debugger;
+      // let resData = await QueueRecordService.updateQueueRecord({
+      //   ...props,
+      //   id: props.id,
+      //   status: props.status,
+      //   type: props.type || 'schedule'
+      // })
+      // this.setQueueRecords(await this.getQueueRecords());
+      let queue_record: QueueRecordInterface = props;
+      let formData = new FormData();
+
+      formData.append("id", queue_record.id as any);
+      formData.append("data", JSON.stringify(queue_record.data));
+      formData.append("process_mode", queue_record.exe_process_mode);
+      formData.append("delay", queue_record.exe_delay);
+
+      if (queue_record.exe_process_mode == "parallel") {
+        formData.append("process_limit", queue_record.exe_process_limit as any);
+      }
+
+      let resData = null;
+
+      if (queue_record.status == 0) {
+        resData = await QueueService.delete(formData);
+      } else {
+        resData = await QueueService.create(formData);
+      }
+
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitUpdateQueueRecord - ex :: ", ex);
@@ -112,7 +131,10 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   },
   async submitDeleteQueueRecord(id) {
     try {
-      let resData = await QueueRecordService.deleteQueueRecord([id]);
+      let resData = await QueueRecordService.deleteQueueRecord({
+        ids: [id],
+        force_deleted: true
+      });
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
       console.error("submitDeleteQueueRecord - ex :: ", ex);

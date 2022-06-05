@@ -1,7 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueRecordDetailService, { QueueRecordDetailInterface } from "services/QueueRecordDetailService";
 import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
-import DisplayProcessModal from "./modal/DisplayProcessModal";
+import DisplayProcessModal from "./display_process_modal/DisplayProcessModal";
 import template from './QueueRecordDetailView.html';
 
 export interface QueueRecordDetailsInterface extends BaseRactiveInterface {

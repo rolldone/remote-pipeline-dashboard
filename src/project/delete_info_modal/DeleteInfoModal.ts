@@ -17,7 +17,7 @@ const DeleteInfoModal = BaseRactive.extend<DeleteInfoModalInterface>({
         title: "Delete Project",
         button_submit: "Delete the Project"
       },
-      id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+      id_element: "modal"+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
       form_data: {}
     }
   },
