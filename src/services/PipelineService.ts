@@ -24,7 +24,9 @@ export default {
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
-            formData.append(key, props[key]);
+            if(props[key] != null){
+              formData.append(key, props[key]);
+            }
             break;
         }
       }
@@ -62,7 +64,9 @@ export default {
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
-            formData.append(key, props[key]);
+            if(props[key] != null){
+              formData.append(key, props[key]);
+            }
             break;
         }
       }

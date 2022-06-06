@@ -128,6 +128,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
   async getRepo() {
     try {
       let form_data = this.get("form_data");
+      if (form_data.repo_name == null) return;
       let resData = await RepositoryService.getRepository({
         from_provider: form_data.from_provider,
         repo_name: form_data.repo_name,
@@ -145,6 +146,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
   async getOwner() {
     try {
       let form_data = this.get("form_data");
+      if (form_data.from_provider == null && form_data.oauth_user_id == null) return;
       let resData = await RepositoryService.getOwnerRepo({
         from_provider: form_data.from_provider,
         oauth_user_id: form_data.oauth_user_id
@@ -186,7 +188,7 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
             name: element.commit.author.name,
             link: element.html_url,
             sha: element.sha,
-            default_branch: element.default_branch 
+            default_branch: element.default_branch
           });
           break;
       }

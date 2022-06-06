@@ -77,7 +77,7 @@ export default BaseRactive.extend<PipelineNewInterface>({
       _super();
       this.setProjectDatas(await this.getProjectDatas());
       let parseQuery = this.parseQuery(window.location.search);
-      this.set("form_data.oauth_user_id", parseQuery.oauth_user_id);
+      this.set("form_data.oauth_user_id", parseQuery.oauth_user_id || null);
       this.set("select_source_from", parseQuery.from_provider);
       let _smartValidation = SmartValidation("pipeline-form");
       _smartValidation.inputTextValidation({

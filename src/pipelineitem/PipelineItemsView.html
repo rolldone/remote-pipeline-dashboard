@@ -4,8 +4,10 @@
       <div class="card-header">
         <h3 class="card-title">Pipeline Items</h3>
       </div>
-      <div class="list-group list-group-flush list-group-hoverable">
+      <div class="list-group list-group-flush list-group-hoverable" id="sort-list-pip-item">
         {{>command_group_calc}}
+      </div>
+      <div class="list-group list-group-flush list-group-hoverable">
         <div class="list-group-item">
           <add-pipeline-item on-listener="onAddPipelineItemListener" button_text="Add Pipeline Item"></add-pipeline-item>
         </div>

@@ -55,6 +55,7 @@
     "sql-ts": "^6.1.0",
     "systemjs": "^6.11.0",
     "typescript": "^4.6.3",
+    "url-change-event": "^0.1.3",
     "validatorjs": "^3.22.1",
     "websocket": "^1.0.34"
   },

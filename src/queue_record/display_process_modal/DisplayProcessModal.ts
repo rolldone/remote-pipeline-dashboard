@@ -66,7 +66,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
       // console.log("_queue_record_detail :: ", _queue_record_detail);
       let res_pipeline_item = await PipelineTaskService.getPipelineTasks({
         pipeline_id: _queue_record_detail.exe_pipeline_id,
-        order_by: "pip_item.id ASC, pip_task.order_number ASC",
+        order_by: "pip_item.order_number ASC",
         pipeline_item_ids: _queue_record_detail.exe_pipeline_item_ids || []
       })
 
@@ -74,9 +74,15 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
       let resGroupPipeline = _(res_pipeline_item.return).groupBy("pip_item_id").map((g) => {
         return {
           name: g[0].pip_item_name,
-          data: g
+          data: g,
+          order_number: g[0].pip_item_order_number
         }
       }).value();
+      console.log("resGroupPipeline : ", resGroupPipeline);
+      let _reSortArr = [];
+
+      // Sort again
+      resGroupPipeline = _.sortBy(resGroupPipeline, 'order_number');
 
       // And save it
       await this.set("log_array", resGroupPipeline);
@@ -91,6 +97,7 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
           console.log("gg.action :: ", gg.action);
         }
       }
+
 
       // And save again
       await this.set("log_array", [

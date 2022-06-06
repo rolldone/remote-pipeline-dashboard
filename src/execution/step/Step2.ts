@@ -124,7 +124,13 @@ const Step2 = BaseRactive.extend<Step2Interface>({
       _super();
 
       var el = document.getElementById('list-group-sort-pipeline-item');
-      var sortable = Sortable.create(el);
+      var sortable = Sortable.create(el, {
+        onChange: function (/**Event*/evt) {
+          
+          // most likely why this event is used is to get the dragging element's current index
+          // same properties as onEnd
+        }
+      });
 
       let _form_data = this.get("form_data");
       this.setPipelines(await this.getPipelines());
@@ -211,7 +217,9 @@ const Step2 = BaseRactive.extend<Step2Interface>({
       let _form_data = this.get("form_data");
       let resData = await PipelineItemService.getPipelineItems({
         project_id: _form_data.project_id,
-        pipeline_id: _form_data.pipeline_id
+        pipeline_id: _form_data.pipeline_id,
+        order_by_name: 'order_number',
+        order_by_value: 'ASC'
       });
       return resData;
     } catch (ex) {

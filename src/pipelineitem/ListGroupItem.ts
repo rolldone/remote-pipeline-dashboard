@@ -4,6 +4,7 @@ import PipelineTaskService, { PipelineTaskInterface } from "services/PipelineTas
 import CommandItem from "./CommandItem";
 import AddCommand from "./input/AddCommand";
 import SwitchCommandType from "./input/SwitchCommandType";
+import ArrayMove from "base/ArrayMove";
 
 export interface ListGroupItemInterface extends BaseRactiveInterface {
   calibrateCommandItem: { (): void }
@@ -88,12 +89,12 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
         <div class="col-md-6 col-xl-12">
           <div class="row row-cards">
             <div class="col-12">
-              <div class="list-group list-group-flush list-group-hoverable" style="border: 1px solid #e6e7e9;">
-              {{>pipeline_type_partial}}
-              <div class='list-group-item'>
-                <add-command on-listener="onCommandGroupListener" button_text="Add Command"></add-command>
+              <div class="list-group list-group-flush list-group-hoverable" style="border: 1px solid #e6e7e9;" id="sort-pipeline-type-partial">
+                {{>pipeline_type_partial}}
+                <div class='list-group-item'>
+                  <add-command on-listener="onCommandGroupListener" button_text="Add Command"></add-command>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
@@ -109,6 +110,14 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
       onSwitchCommandTypeListener: async (c, action, text, object) => {
         let command_datas = this.get("command_datas") as Array<any>;
         switch (action) {
+          case 'MOVE_UP':
+          case 'MOVE_DOWN':
+            command_datas = ArrayMove(command_datas, text.oldIndex, text.newIndex);
+            for (let a = 0; a < command_datas.length; a++) {
+              command_datas[a].order_number = a;
+            }
+            this.set("command_datas", command_datas);
+            break;
           case 'RESET':
             this.setPipelineTasks(await this.getPipelineTasks());
             break;
@@ -203,7 +212,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
   returnDisplayCommandRactive(index: number) {
     return Ractive.parse(/* html */`
       <div class='list-group-item' index='${index}'>
-        <switch-command-type on-listener="onSwitchCommandTypeListener" index='{{${index}}}'></switch-command-type>
+        <switch-command-type on-listener="onSwitchCommandTypeListener" index='{{${index}}}' length={{command_datas.length}}></switch-command-type>
         <br>
         <command-item on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${index}]}}' index='${index}'></command-item>
       </div>
@@ -257,8 +266,8 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
      * If have edit before and hide and show again
      * dont let insert from server if data from is empty 
     */
+    let _commands = [];
     if (props.return.length > 0) {
-      let _commands = [];
       let _tasks: Array<any> = props.return as any;
       for (var a = 0; a < _tasks.length; a++) {
         _commands.push({
@@ -277,6 +286,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
         })
       }
       this.set("command_datas", _commands);
+      this.set("pipeline_item.command_datas", this.get("command_datas"));
     }
     this.calibrateCommandItem();
   }

@@ -7,6 +7,7 @@ import template from './indexView.html';
 import $ from 'jquery';
 import MasterData, { MasterDataInterface } from "base/MasterData";
 import PubSub from "base/PubSub";
+import 'url-change-event';
 
 declare global {
   interface Window {
@@ -28,6 +29,15 @@ declare global {
     $: JQueryStatic
   }
 }
+
+addEventListener('urlchangeevent', function (e) {
+  // your code here
+  // debugger;
+  setTimeout(() => {
+    console.log("Back detected use urlchangeevent for reload the location")
+    window.location.reload();
+  }, 100);
+})
 
 export default function () {
   window.pubsub = PubSub;

@@ -3,12 +3,12 @@ import Ractive from "ractive";
 import AddCommand from "./input/AddCommand";
 import CommandGroup from "./input/CommandGroup";
 import template from './PipelineItemsView.html';
-import CommandItem from "./CommandItem";
 import ListGroupItem from "./ListGroupItem";
 import PipelineItemService, { PipelineItemInterface } from "services/PipelineItemService";
 import PipelineTaskService from "services/PipelineTaskService";
 import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
-
+import Sortable from 'sortablejs';
+import ArrayMove from "base/ArrayMove";
 
 export interface PipelineItemsInterface extends BaseRactiveInterface {
   setPipelineItems: { (props: any): void }
@@ -42,6 +42,9 @@ export default BaseRactive.extend<PipelineItemsInterface>({
         switch (action) {
           case 'ADD_MORE':
             let pipeline_items: Array<PipelineItemInterface> = this.get("pipeline_items");
+            for (var a = 0; a < pipeline_items.length; a++) {
+              await this.submitPipelineItem(a);
+            }
             let pipeline = this.get("pipeline");
             pipeline_items.push({
               name: 'Task ' + (pipeline_items.length + 1),
@@ -135,13 +138,29 @@ export default BaseRactive.extend<PipelineItemsInterface>({
     }
     this.set("pipeline_items", pipeline_items);
     this.calibrateListGroup();
+
+    var el = document.getElementById('sort-list-pip-item');
+    var sortable = Sortable.create(el, {
+      onEnd: async (/**Event*/evt) => {
+        // most likely why this event is used is to get the dragging element's current index
+        // same properties as onEnd
+        pipeline_items = ArrayMove(pipeline_items, evt.oldIndex, evt.newIndex);
+        for (let a = 0; a < pipeline_items.length; a++) {
+          pipeline_items[a].order_number = a;
+        }
+        this.set("pipeline_items", pipeline_items);
+        this.calibrateListGroup();
+        for (let a = 0; a < pipeline_items.length; a++) {
+          this.submitPipelineItem(a)
+        }
+      }
+    });
   },
   async submitPipelineItem(index: number) {
     try {
       let pipeline = this.get("pipeline");
       let pipeline_items: Array<PipelineItemInterface> = this.get("pipeline_items");
       let pipeline_item = pipeline_items[index];
-      console.log(pipeline_item);
 
       // Save or update
       let resData: PipelineItemInterface | any = await PipelineItemService.addPipelineItem({
@@ -158,8 +177,9 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       pipeline_item.id = resData.id;
 
       // Store again to pipeline_items
-      this.set("pipeline_items", pipeline_items);
       let command_datas = pipeline_item.command_datas;
+      console.log("command_datas :: ", command_datas);
+      if (command_datas == null) return;
       for (var a = 0; a < command_datas.length; a++) {
         command_datas[a].pipeline_item_id = pipeline_item.id;
         command_datas[a].project_id = pipeline_item.project_id;
