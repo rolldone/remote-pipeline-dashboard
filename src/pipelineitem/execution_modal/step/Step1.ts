@@ -1,5 +1,6 @@
 import Step2Execution, { Step2Interface } from "execution/step/Step2";
 import PipelineService from "services/PipelineService";
+import RepositoryService from "services/RepositoryService";
 import Sortable from 'sortablejs';
 
 
@@ -132,6 +133,25 @@ const Step1 = Step2Execution.extend<Step1Interface>({
     }
     this._super(action, props, e);
   },
+  async getBranchs() {
+    try {
+      let _form_data = this.get("form_data");
+      let pipeLineData = this.get("pipeline_data");
+      console.log("mvkdfvmkvm", pipeLineData);
+      let resData = await RepositoryService.getBranchs({
+        oauth_user_id: pipeLineData.oauth_user_id,
+        from_provider: pipeLineData.from_provider,
+        repo_name: pipeLineData.repo_name
+      });
+      return resData;
+    } catch (ex) {
+      console.error("getBranchs - ex :: ", ex);
+    }
+  },
+  setBranchs(props) {
+    if (props == null) return;
+    this.set("branch_datas", props.return);
+  },
   async getPipeline() {
     try {
       let _form_data = this.get("form_data");
@@ -145,7 +165,7 @@ const Step1 = Step2Execution.extend<Step1Interface>({
   },
   setPipeline(props) {
     if (props == null) return;
-    this._super(props);
+    this.set("pipeline_data", props.return);
   },
 })
 

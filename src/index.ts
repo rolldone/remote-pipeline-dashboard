@@ -35,7 +35,7 @@ addEventListener('urlchangeevent', function (e) {
   // debugger;
   setTimeout(() => {
     console.log("Back detected use urlchangeevent for reload the location")
-    window.location.reload();
+    // window.location.reload();
   }, 100);
 })
 
