@@ -206,6 +206,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
         if (this.get("is_edit_task") == true) {
           this.setPipelineTasks(await this.getPipelineTasks());
         }
+        this.fire("listener", action, this.get("is_edit_task"), e);
         break;
     }
   },

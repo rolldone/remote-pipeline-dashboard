@@ -1,4 +1,5 @@
 import PipelineService from "services/PipelineService";
+import Notify from "simple-notify";
 import PipelineNew, { PipelineNewInterface } from "./PipelineNew";
 
 export default PipelineNew.extend<PipelineNewInterface>({
@@ -46,8 +47,42 @@ export default PipelineNew.extend<PipelineNewInterface>({
       let resData = await PipelineService.updatePipeline(form_data);
       resData = resData.return;
       window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'Update Pipeline',
+        text: 'Update successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submit - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Update Pipeline',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

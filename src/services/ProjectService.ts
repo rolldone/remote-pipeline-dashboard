@@ -1,8 +1,8 @@
 import SqlBricks from "./SqlBricks";
 import SqlService from "./core/SqlService";
 import BaseService from "./BaseService";
-import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
+import axios from "axios";
 
 export interface ProjectServiceInterface {
   force_deleted?: boolean

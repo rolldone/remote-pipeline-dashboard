@@ -4,6 +4,7 @@ import QueueService from "services/core/QueueService";
 import ExecutionService from "services/ExecutionService";
 import QueueRecordService, { QueueRecordInterface } from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
+import Notify from "simple-notify";
 import DeleteInfoModalExecution, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 import template from './ExecutionsView.html';
 import QueueSchedulerModal, { QueueSchedulerInterface } from "./modal/QueueSchedulerModal";
@@ -19,6 +20,8 @@ export interface ExecutionsInterface extends BaseRactiveInterface {
   }
   submitAddQueueSchedule?: { (props: QueueScheduleInterface): void }
 }
+
+declare let window: Window;
 
 export default BaseRactive.extend<ExecutionsInterface>({
   template,
@@ -66,6 +69,9 @@ export default BaseRactive.extend<ExecutionsInterface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+      window.masterData.setOnListener("backstateevent", async (props) => {
+        this.setExecutions(await this.getExecutions());
+      });
       this.setExecutions(await this.getExecutions());
       resolve();
     });
@@ -153,8 +159,42 @@ export default BaseRactive.extend<ExecutionsInterface>({
           }
           break;
       }
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Queue',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submitAddQueueRecord - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Queue Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   },
   async submitAddQueueSchedule(props) {

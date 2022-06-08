@@ -137,7 +137,6 @@ const Step1 = Step2Execution.extend<Step1Interface>({
     try {
       let _form_data = this.get("form_data");
       let pipeLineData = this.get("pipeline_data");
-      console.log("mvkdfvmkvm", pipeLineData);
       let resData = await RepositoryService.getBranchs({
         oauth_user_id: pipeLineData.oauth_user_id,
         from_provider: pipeLineData.from_provider,

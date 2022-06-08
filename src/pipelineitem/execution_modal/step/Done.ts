@@ -1,5 +1,6 @@
 import DoneExecution, { DoneInterface } from "execution/step/Done";
 import ExecutionService, { ExecutionServiceInterface } from "services/ExecutionService";
+import Notify from "simple-notify";
 
 const Done = DoneExecution.extend<DoneInterface>({
   handleClick(action, props, e) {
@@ -36,6 +37,23 @@ const Done = DoneExecution.extend<DoneInterface>({
           mode: "test"
         });
         this.fire("listener", 'SUBMIT', {}, null);
+        new Notify({
+          status: 'success',
+          title: 'Update Execution',
+          text: 'Update successfully :)',
+          effect: 'fade',
+          speed: 300,
+          customClass: null,
+          customIcon: null,
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
         return;
       }
       resData = await ExecutionService.addExecution({
@@ -53,9 +71,43 @@ const Done = DoneExecution.extend<DoneInterface>({
         variable_option: _form_data.variable_option,
         mode: "test"
       });
+      new Notify({
+        status: 'success',
+        title: 'New Execution',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
       this.fire("listener", 'SUBMIT', {}, null);
-    } catch (ex) {
+    } catch (ex: any) {
       console.error("submitExecution - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Execution Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

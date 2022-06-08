@@ -36,6 +36,14 @@ export default {
       throw ex;
     }
   },
+  getSelfUser: async function () {
+    try {
+      let resData = await axios.get(BaseService.USER + '/self', {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
   addUser: async function (props: UserServiceInterface) {
     try {
       let formData = new FormData();
@@ -96,7 +104,9 @@ export default {
     try {
       let formData = new FormData();
       for (var key in props) {
-        formData.append(key, props[key]);
+        if (props[key] != null) {
+          formData.append(key, props[key]);
+        }
       }
       let resData = await axios({
         method: "post",

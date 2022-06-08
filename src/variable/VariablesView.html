@@ -44,7 +44,7 @@
               <thead>
                 <tr>
                   <th>Variable Name</th>
-                  <th>Total Groups / Total Value</th>
+                  <th>Total Mode / Total Value</th>
                   <th>Pipeline / Project</th>
                   <th class="w-1"></th>
                 </tr>
@@ -62,12 +62,20 @@
                     </div>
                   </td>
                   <td data-label="Title">
-                    <div>3 Pipelines</div>
-                    <div class="text-muted">10 Pipelines Items</div>
+                    <div>{{data.length}} Mode</div>
+                    <div class="text-muted">{{schema.length}} Value[s]</div>
                   </td>
-                  <td class="text-muted" data-label="Role">
-                    User
+                  <td data-label="Title">
+                    {{#if pip_name != null}}
+                    <div>{{pip_name}}</div>
+                    <div class="text-muted">{{pro_name}}</div>
+                    {{else}}
+                    --
+                    {{/if}}
                   </td>
+                  <!--  <td class="text-muted" data-label="Role">
+                   
+                  </td> -->
                   <td>
                     <div class="btn-list flex-nowrap">
                       <div class="dropdown">

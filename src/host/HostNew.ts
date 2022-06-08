@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import SmartValidation from "base/SmartValidation";
 import HostService from "services/HostService";
+import Notify from "simple-notify";
 import HostCollections from "./HostCollections";
 import template from './HostNewView.html';
 
@@ -132,8 +133,42 @@ export default BaseRactive.extend<HostNewInterface>({
       });
       resData = resData.return;
       window.hostRouter.navigate(window.hostRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Host',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submitHost - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Host Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

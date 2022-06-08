@@ -1,6 +1,8 @@
 import ProjectService from "services/ProjectService";
 import ProjectNew, { ProjectNewInterface } from "./ProjectNew";
 import template from './ProjectNewView.html';
+import Notify from 'simple-notify'
+
 declare var window: Window;
 
 export default ProjectNew.extend<ProjectNewInterface>({
@@ -33,8 +35,42 @@ export default ProjectNew.extend<ProjectNewInterface>({
       let resData = await ProjectService.updateProject(form_data);
       resData = resData.return as any;
       window.projectRouter.navigate(window.projectRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'Update Project',
+        text: 'Update successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error('submit - ex :: ', ex);
+      new Notify({
+        status: 'error',
+        title: 'Update Project',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 })

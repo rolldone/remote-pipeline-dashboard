@@ -6,6 +6,7 @@ import { Router } from "routerjs";
 import PipelineService from "services/PipelineService";
 import ProjectService from "services/ProjectService";
 import RepositoryService from "services/RepositoryService";
+import Notify from "simple-notify";
 import { GitProps } from "./list";
 import GithubList from "./list/GithubList";
 import template from './PipelineNewView.html';
@@ -165,8 +166,42 @@ export default BaseRactive.extend<PipelineNewInterface>({
       let resData = await PipelineService.addPipeline(form_data);
       resData = resData.return;
       window.pipelineRouter.navigate(window.pipelineRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Pipeline',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submit - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'New Pipeline',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import ExecutionService, { ExecutionServiceInterface } from "services/ExecutionService";
+import Notify from "simple-notify";
 
 export interface DoneInterface extends BaseRactiveInterface {
   submitExecution?: { (): Promise<any> }
@@ -81,7 +82,26 @@ export default BaseRactive.extend<DoneInterface>({
           variable_id: _form_data.variable_id,
           variable_option: _form_data.variable_option
         });
-        window.executionRouter.back();
+        new Notify({
+          status: 'success',
+          title: 'Update Execution',
+          text: 'Update successfully :)',
+          effect: 'fade',
+          speed: 300,
+          customClass: null,
+          customIcon: null,
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
+        setTimeout(() => {
+          window.executionRouter.back();
+        }, 2000);
         return;
       }
       resData = await ExecutionService.addExecution({
@@ -98,9 +118,45 @@ export default BaseRactive.extend<DoneInterface>({
         variable_id: _form_data.variable_id,
         variable_option: _form_data.variable_option
       });
-      window.executionRouter.back();
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Execution',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+      setTimeout(() => {
+        window.executionRouter.back();
+      }, 2000);
+    } catch (ex: any) {
       console.error("submitExecution - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Execution Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

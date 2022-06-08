@@ -3,6 +3,7 @@ import SmartValidation from "base/SmartValidation";
 import PipelineService from "services/PipelineService";
 import ProjectService from "services/ProjectService";
 import VariableService from "services/VariableService";
+import Notify from "simple-notify";
 import VariableGroup from "./VariableGroup";
 import template from './VariableNewView.html';
 
@@ -147,11 +148,44 @@ export default BaseRactive.extend<VariableNewInterface>({
         project_id: form_data.project_id,
         pipeline_id: form_data.pipeline_id
       });
-      debugger;
       resData = resData.return;
       window.variableRouter.navigate(window.variableRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Variable',
+        text: 'Create new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submitVariable - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Variable Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 });

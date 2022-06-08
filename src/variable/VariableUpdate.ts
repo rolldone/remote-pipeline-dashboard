@@ -1,4 +1,5 @@
 import VariableService, { variable } from "services/VariableService";
+import Notify from "simple-notify";
 import VariableNew, { VariableNewInterface } from "./VariableNew";
 
 export interface VariableUpdateInterface extends VariableNewInterface {
@@ -29,8 +30,42 @@ export default VariableNew.extend<VariableUpdateInterface>({
         schema: _form_schemes,
         data: _variable_groups
       });
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'Update Variable',
+        text: 'Update successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submitVariable - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Variable Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   },
   async getVariable() {
@@ -57,7 +92,7 @@ export default VariableNew.extend<VariableUpdateInterface>({
     });
     this.set("variable_groups", props.data);
     this.set("form_schemes", props.schema);
-    
+
     this.setPipelines(await this.getPipelines(props.project_id));
   },
 });

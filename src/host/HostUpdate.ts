@@ -1,4 +1,5 @@
 import HostService from "services/HostService";
+import Notify from "simple-notify";
 import HostNew, { HostNewInterface } from "./HostNew";
 
 export interface HostUpdateInterface extends HostNewInterface {
@@ -48,9 +49,42 @@ export default HostNew.extend<HostUpdateInterface>({
         // Override the value on top
         ...this.get("set_auth_value")
       });
-      debugger;
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'Update Host',
+        text: 'Update new successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
       console.error("submitHost - ex :: ", ex);
+      new Notify({
+        status: 'error',
+        title: 'Host Error',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
     }
   }
 })

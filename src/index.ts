@@ -3,6 +3,7 @@ import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
 import "./indexStyle.scss";
+import 'simple-notify/dist/simple-notify.min.css'
 import template from './indexView.html';
 import $ from 'jquery';
 import MasterData, { MasterDataInterface } from "base/MasterData";
@@ -30,12 +31,39 @@ declare global {
   }
 }
 
-addEventListener('urlchangeevent', function (e) {
+const sideMenuSelected = () => {
+  setTimeout(() => {
+    var els = document.querySelectorAll(`a[href='${window.location.pathname}']`);
+    for (var a = 0; a < els.length; a++) {
+      els[a].classList.add("active");
+      let _parentNode = els[a].parentElement;
+      let stop = false;
+      while (stop == false) {
+        _parentNode = _parentNode.parentElement;
+        if (_parentNode.className.includes("navbar-nav") == true) {
+          stop = true;
+        } else {
+          _parentNode.classList.add("active");
+          stop = false
+        }
+      }
+      // _parentNode.classList.add("active");
+      // _parentNode.parentElement.parentElement.parentElement.classList.add("active");
+    }
+  }, 1000);
+}
+
+addEventListener('urlchangeevent', function (e: any) {
   // your code here
   // debugger;
   setTimeout(() => {
     console.log("Back detected use urlchangeevent for reload the location")
     // window.location.reload();
+    console.log(e);
+    if (e.newURL == null) {
+      window.masterData.saveData("backstateevent", e.oldURL);
+    }
+    sideMenuSelected();
   }, 100);
 })
 
@@ -43,7 +71,7 @@ export default function () {
   window.pubsub = PubSub;
   window.masterData = MasterData;
   window.$ = $;
-
+  sideMenuSelected();
   const App = BaseRactive.extend<BaseRactiveInterface>({
     template,
     target: "#app",

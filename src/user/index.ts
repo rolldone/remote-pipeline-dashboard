@@ -52,6 +52,14 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           req: req
         })
       })
+      .get("/self", async (req, context) => {
+        // Handle the route here...
+        let User = (await import("./UserSelf")).default;
+        new User({
+          target: "#index-body",
+          req: req
+        })
+      })
       .run();
     window.userRouter = this.router
   }

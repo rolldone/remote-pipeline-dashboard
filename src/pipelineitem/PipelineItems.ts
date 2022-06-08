@@ -18,6 +18,7 @@ export interface PipelineItemsInterface extends BaseRactiveInterface {
   calibrateListGroup: { (): void }
 }
 
+let pipeLineItemSortable = null;
 export default BaseRactive.extend<PipelineItemsInterface>({
   template,
   components: {
@@ -60,7 +61,11 @@ export default BaseRactive.extend<PipelineItemsInterface>({
         }
       },
       onListGroupItemListener: async (c, action, text, object) => {
+        pipeLineItemSortable.option("disabled", false);
         switch (action) {
+          case 'EDIT_TASKS':
+            pipeLineItemSortable.option("disabled", text);
+            break;
           case 'TEST_PIPELINE_ITEM':
             await this.submitPipelineItem(text.index);
             let _testPipelineItemModal: TestPipelineItemModalInterface = this.findComponent("test-pipeline-modal");
@@ -140,7 +145,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
     this.calibrateListGroup();
 
     var el = document.getElementById('sort-list-pip-item');
-    var sortable = Sortable.create(el, {
+    pipeLineItemSortable = Sortable.create(el, {
       onEnd: async (/**Event*/evt) => {
         // most likely why this event is used is to get the dragging element's current index
         // same properties as onEnd

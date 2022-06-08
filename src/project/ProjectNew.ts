@@ -1,5 +1,6 @@
 import SmartValidation from "base/SmartValidation";
 import ProjectService from "services/ProjectService";
+import Notify from "simple-notify";
 import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import template from './ProjectNewView.html';
 
@@ -88,7 +89,41 @@ export default BaseRactive.extend<ProjectNewInterface>({
       let resData = await ProjectService.addProject(form_data);
       resData = resData.return as any;
       window.projectRouter.navigate(window.projectRouter.buildUrl(`/${resData.id}/view`));
-    } catch (ex) {
+      new Notify({
+        status: 'success',
+        title: 'New Project',
+        text: 'Create data successfully :)',
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
+    } catch (ex: any) {
+      new Notify({
+        status: 'error',
+        title: 'Update Project',
+        text: ex.message,
+        effect: 'fade',
+        speed: 300,
+        customClass: null,
+        customIcon: null,
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: false,
+        autotimeout: 3000,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right top'
+      })
       console.error('submit - ex :: ', ex);
     }
   }
