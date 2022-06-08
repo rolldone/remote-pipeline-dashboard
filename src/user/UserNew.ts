@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import SmartValidation from "base/SmartValidation";
 import UserService from "services/UserService";
+import Notify from "simple-notify";
 import template from './UserNewView.html';
 
 export interface UserNewInterface extends BaseRactiveInterface {
@@ -17,7 +18,8 @@ export default BaseRactive.extend<UserNewInterface>({
         2: "Deactivate"
       },
       form_data: {},
-      form_error: {}
+      form_error: {},
+      title: "Add New User"
     }
   },
   oncomplete() {
@@ -94,6 +96,13 @@ export default BaseRactive.extend<UserNewInterface>({
       let _form_data = this.get("form_data");
       let resData = await UserService.addUser(_form_data);
       resData = resData.return;
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "User " + _form_data.first_name,
+        text: "Created!",
+      });
       window.userRouter.navigate(window.userRouter.buildUrl(`/${resData.id}/view`));
     } catch (ex) {
       console.error("submit - ex :: ", ex);

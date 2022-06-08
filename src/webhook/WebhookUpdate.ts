@@ -1,4 +1,5 @@
 import WebHookService from "services/WebHookService";
+import Notify from "simple-notify";
 import WebhookNew, { WebhookNewInterface } from "./WebhookNew";
 
 export interface WebhookUpdateInterface extends WebhookNewInterface {
@@ -50,7 +51,13 @@ const WebhookUpdate = WebhookNew.extend<WebhookUpdateInterface>({
         webhook_datas: _form_data.webhook_datas || [],
         status: _form_data.status
       });
-      debugger;
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Webhook " + _form_data.name,
+        text: "Updated!",
+      });
     } catch (ex) {
       console.error("submitHost - ex :: ", ex);
     }

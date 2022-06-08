@@ -1,7 +1,8 @@
 import QueueRecords, { QueueRecordsInterface } from "queue_record/QueueRecords";
 import QueueService from "services/core/QueueService";
-import QueueRecordService, { QueueRecordInterface } from "services/QueueRecordService";
+import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
+import Notify from "simple-notify";
 import QueueScheduleModal, { QueueSchedulerInterface } from "./modal/QueueScheduleModal";
 import template from './QueueRecordSchedulersView.html';
 
@@ -123,21 +124,16 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
       } else {
         resData = await QueueService.create(formData);
       }
-
-      this.setQueueRecords(await this.getQueueRecords());
-    } catch (ex) {
-      console.error("submitUpdateQueueRecord - ex :: ", ex);
-    }
-  },
-  async submitDeleteQueueRecord(id) {
-    try {
-      let resData = await QueueRecordService.deleteQueueRecord({
-        ids: [id],
-        force_deleted: true
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Queue " + queue_record.queue_key,
+        text: queue_record.status == QueueRecordStatus.READY ? "Queue Added" : "Queue Stopped",
       });
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
-      console.error("submitDeleteQueueRecord - ex :: ", ex);
+      console.error("submitUpdateQueueRecord - ex :: ", ex);
     }
   }
 });

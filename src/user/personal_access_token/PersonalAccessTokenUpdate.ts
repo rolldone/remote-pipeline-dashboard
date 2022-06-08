@@ -1,4 +1,5 @@
 import TokenService, { TokenInterface } from "services/TokenService";
+import Notify from "simple-notify";
 import PersonalAccessTokenNew, { PersonalAccessTokenNewInterface } from "./PersonalAccessTokenNew";
 
 export interface PersonalAccessTokenUpdateInterface extends PersonalAccessTokenNewInterface {
@@ -12,6 +13,7 @@ const PersonalAccessTokenUpdate = PersonalAccessTokenNew.extend<PersonalAccessTo
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+      this.set("title", "Update Personal Access Token")
       this.setPersonalAccessToken(await this.getPersonalAccessToken());
       resolve();
     });
@@ -28,7 +30,13 @@ const PersonalAccessTokenUpdate = PersonalAccessTokenNew.extend<PersonalAccessTo
         expired_date: _form_data.expired_date,
         status: _form_data.status
       })
-      alert("Updated!");
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Personal Access Token " + _form_data.name,
+        text: "Updated!",
+      });
     } catch (ex) {
       console.error("submitData - ex :: ", ex);
     }

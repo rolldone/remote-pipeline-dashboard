@@ -3,6 +3,7 @@ import template from './WebhookNewView.html';
 import WebHookDataCollections from "./WebHookDataCollections";
 import WebHookService from '../services/WebHookService';
 import makeid from "base/MakeID";
+import Notify from "simple-notify";
 
 declare let window: Window;
 
@@ -47,7 +48,16 @@ const WebhookNew = BaseRactive.extend<WebhookNewInterface>({
         data: {}
       });
       resData = resData.return;
-      window.webhookRouter.navigate(window.webhookRouter.buildUrl(`/${resData.id}/view`));
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Webhook " + _form_data.name,
+        text: "Created!",
+      });
+      setTimeout(()=>{
+        window.webhookRouter.navigate(window.webhookRouter.buildUrl(`/${resData.id}/view`));
+      },1000);
     } catch (ex) {
       console.error("submitWebHook - ex :: ", ex);
     }

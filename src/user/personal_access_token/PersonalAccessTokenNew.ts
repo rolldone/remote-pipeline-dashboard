@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import TokenService, { TokenInterface } from "services/TokenService";
+import Notify from "simple-notify";
 import template from './PersonalAccessTokenNewView.html';
 
 export interface PersonalAccessTokenNewInterface extends BaseRactiveInterface {
@@ -21,7 +22,8 @@ const PersonalAccessTokenNew = BaseRactive.extend<PersonalAccessTokenNewInterfac
   template,
   data() {
     return {
-      form_data: {}
+      form_data: {},
+      title: "Add New Personal Access Token"
     }
   },
   handleClick(action, props, e) {
@@ -52,6 +54,14 @@ const PersonalAccessTokenNew = BaseRactive.extend<PersonalAccessTokenNewInterfac
         status: _form_data.status
       })
       resData = resData.return;
+
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Personal Access Token " + _form_data.name,
+        text: "Created!",
+      });
       window.userRouter.navigate(window.userRouter.buildUrl(`/personal-access-token/${resData.id}/view`));
     } catch (ex) {
       console.error("submitData - ex :: ", ex);

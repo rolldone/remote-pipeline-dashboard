@@ -1,5 +1,6 @@
 import SmartValidation from "base/SmartValidation";
 import UserService from "services/UserService";
+import Notify from "simple-notify";
 import UserNew, { UserNewInterface } from "./UserNew";
 
 export interface UserUpdateInterface extends UserNewInterface {
@@ -12,6 +13,7 @@ export default UserNew.extend<UserUpdateInterface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       _super();
+      this.set("title", "Update User");
       this.setUser(await this.getUser());
       resolve();
     });
@@ -89,6 +91,13 @@ export default UserNew.extend<UserUpdateInterface>({
       let _form_data = this.get("form_data");
       _form_data.data = JSON.stringify(_form_data.data || {});
       let resData = await UserService.updateUser(_form_data);
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "User " + _form_data.first_name,
+        text: "Updated!",
+      });
     } catch (ex) {
       console.error("submit - ex :: ", ex);
     }

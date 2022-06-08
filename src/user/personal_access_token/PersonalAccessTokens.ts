@@ -2,12 +2,13 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import TokenService from "services/TokenService";
 import template from './PersonalAccessTokensView.html';
 import moment from 'moment';
+import Notify from "simple-notify";
 
 export interface PersonalAccessTokensInterface extends BaseRactiveInterface {
   getTokens: { (): void }
   setTokens: { (props: any): void }
   getMoment: typeof moment
-  submitDelete: { (id: number): Promise<boolean> }
+  submitDelete: { (index: number): Promise<boolean> }
 }
 
 const PersonalAccessTokens = BaseRactive.extend<PersonalAccessTokensInterface>({
@@ -29,16 +30,24 @@ const PersonalAccessTokens = BaseRactive.extend<PersonalAccessTokensInterface>({
     switch (action) {
       case 'DELETE':
         e.preventDefault();
-        let resDelete = await this.submitDelete(props.id);
+        let resDelete = await this.submitDelete(props.index);
         if (resDelete == false) return;
         this.setTokens(await this.getTokens());
         break;
     }
   },
   getMoment: moment,
-  async submitDelete(id) {
+  async submitDelete(index) {
     try {
-      let resDelete = await TokenService.deleteTokens([id]);
+      let _token_data = this.get("token_datas")[index];
+      let resDelete = await TokenService.deleteTokens([_token_data.id]);
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Personal Access Token " + _token_data.name,
+        text: "Deleted!",
+      });
       return true;
     } catch (ex) {
       console.error("submitDelete - ex :: ", ex);

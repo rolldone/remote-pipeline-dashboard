@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
+import Notify from "simple-notify";
 import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 import template from './QueueRecordsView.html';
 
@@ -12,9 +13,6 @@ export interface QueueRecordsInterface extends BaseRactiveInterface {
       id: number,
       status: number,
     }): Promise<any>
-  }
-  submitDeleteQueueRecord?: {
-    (id: number): Promise<any>
   }
   getQueueIdsStatus?: { (): void }
   setQueueIdsStatus?: { (props: any) }
@@ -138,21 +136,16 @@ export default BaseRactive.extend<QueueRecordsInterface>({
       } else {
         resData = await QueueService.create(formData);
       }
-
-      this.setQueueRecords(await this.getQueueRecords());
-    } catch (ex) {
-      console.error("submitUpdateQueueRecord - ex :: ", ex);
-    }
-  },
-  async submitDeleteQueueRecord(id) {
-    try {
-      let resData = await QueueRecordService.deleteQueueRecord({
-        ids: [id],
-        force_deleted: true
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Queue " + queue_record.queue_key,
+        text: queue_record.status == QueueRecordStatus.READY ? "Queue Added" : "Queue Stopped",
       });
       this.setQueueRecords(await this.getQueueRecords());
     } catch (ex) {
-      console.error("submitDeleteQueueRecord - ex :: ", ex);
+      console.error("submitUpdateQueueRecord - ex :: ", ex);
     }
   },
   async getQueueIdsStatus() {

@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import SmartValidation from "base/SmartValidation";
 import UserService, { UserServiceInterface } from "services/UserService";
+import Notify from "simple-notify";
 import template from './UserSelfView.html';
 
 export interface UserSelfInterface extends BaseRactiveInterface {
@@ -161,7 +162,14 @@ const UserSelf = BaseRactive.extend<UserSelfInterface>({
         password: _form_data.password,
         status: _form_data.status
       })
-      debugger;
+
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "User " + _form_data.first_name,
+        text: "Updated!",
+      });
     } catch (ex) {
       console.error("submitUpdate - ex :: ", ex);
     }
