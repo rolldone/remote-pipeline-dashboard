@@ -34,11 +34,18 @@ const QueueRecordDetailModal = BaseRactive.extend<QueueRecordDetailModalInterfac
       backdrop: 'static',
       keyboard: false
     });
+    _trrr.addEventListener('hidden.bs.modal', (event: any) => {
+      // do something...
+      if (event.target.id == _id_element) {
+        this.hide();
+      }
+    });
     myModal.show();
     this.displayQueueRecordDetailPartial();
   },
   hide() {
     myModal.hide();
+    this.resetPartial("queue_record_detail_partial", []);
   },
   displayQueueRecordDetailPartial() {
     let _execution_data: ExecutionServiceInterface = this.get("execution_data");

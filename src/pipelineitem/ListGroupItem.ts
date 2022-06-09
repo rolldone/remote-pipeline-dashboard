@@ -189,6 +189,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
           project_id: _pipeline_item.project_id,
           index: this.get("index")
         }, e);
+        this.set("is_edit_task", false);
         break;
       case 'SAVE_PIPELINE_ITEM':
         e.preventDefault();
