@@ -1,14 +1,14 @@
 <div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" aria-modal="true" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Import an existing project from a Git repository</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      {{#if select_repository != null}}
+      {{> personal_access_token_partial }}
+      {{else}}
       <div class="modal-body">
-        {{#if select_repository == "github"}}
-        <github></github>
-        {{else}}
         <div class="task-body tw-mt-5 md:tw-mt-6">
           <h2>Connect to Git provider</h2>
           <p>Choose the Git provider where your site’s source code is hosted. When you push to Git, we run your build
@@ -36,7 +36,7 @@
                   </a>
                 </div>
                 <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-                  <a href="#" class="btn btn-bitbucket w-100 disabled"
+                  <a href="#" class="btn btn-bitbucket w-100"
                     on-click="@this.handleClick('OAUTH_CLICK',{ action : 'bitbucket' }, @event)">
                     <!-- Download SVG icon from http://tabler-icons.io/i/brand-bitbucket -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -70,13 +70,9 @@
               class="tw-text-inherit tw-underline tw-text-decoration-color-gray tw-font-weight-inherit hover:tw-text-black hover:tw-text-decoration-color-inherit dark:hover:tw-text-white dark:tw-text-inherit dark:tw-text-decoration-color-inherit"
               href="/start-with-template?entryPoint=from%20Sites%20page">Start from a template instead.</a></p>
         </div>
-        {{/if}}
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-          on-click="@this.handleClick('SUBMIT',{},@event)">Save changes</button>
-      </div>
+      {{/if}}
+      
     </div>
   </div>
 </div>

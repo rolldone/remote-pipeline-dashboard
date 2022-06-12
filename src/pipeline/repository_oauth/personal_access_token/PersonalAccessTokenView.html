@@ -1,0 +1,114 @@
+<div class="modal-body" style="min-height: 200px;">
+  <div class="card">
+    <div class="card-header" style="padding-right: 0;">
+      <div class="row" style="width: 100%;">
+        <div class="col" style="display: flex;">
+          <h3 class="card-title" style="align-self: center;">Personal Access Token and Oauth Tokens -
+            {{repo_from}}</h3>
+        </div>
+        <div class="col-md-auto">
+
+          {{#if action=="pat"}}
+          <button type="button" class="btn btn-primary btn-medium"
+            on-click="@this.handleClick('BACK',{},@event)">Back</button>
+          {{else}}
+          <div class="dropdown">
+            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-key" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <desc>Download more icon variants from https://tabler-icons.io/i/key</desc>
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <circle cx="8" cy="15" r="4"></circle>
+                <line x1="10.85" y1="12.15" x2="19" y2="4"></line>
+                <line x1="18" y1="5" x2="20" y2="7"></line>
+                <line x1="15" y1="8" x2="17" y2="10"></line>
+              </svg>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="javascript:void(0)"
+                on-click="@this.handleClick('NEW_TOKEN',{ type: 'pat' },@event)">
+                New Personal Access Token
+              </a>
+              <a class="dropdown-item" href="javascript:void(0)"
+                on-click="@this.handleClick('NEW_TOKEN',{ type: 'oauth' },@event)">
+                New Oauth Token
+              </a>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{#if action=="pat"}}
+    <div class="modal-body">
+      <form id="pat-form">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Auth name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Personal Access Token</label>
+          <input type="text" class="form-control" name="access_token" value="{{form_data.access_token}}"
+            placeholder="Your access token">
+        </div>
+      </form>
+    </div>
+    {{else}}
+    <div class="table-responsive">
+      <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
+        {{#each oauth_user_datas:i}}
+        <div class="list-group-item">
+          <div class="row">
+            <div class="col-auto">
+              <input type="radio" class="form-check-input" name="{{select_token}}" value="{{i}}">
+            </div>
+            <div class="col text-truncate">
+              <span href="#" class="text-body d-block">
+                <b>{{oauth_id == null?"[PAT]":"[OAUTH]"}}</b>&nbsp;
+                {{name==null?oauth_id:name}} - {{token_type}}</span>
+              <div class="text-muted text-truncate mt-n1">{{access_token}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-align-right" width="24"
+                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <desc>Download more icon variants from https://tabler-icons.io/i/align-right</desc>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="10" y1="12" x2="20" y2="12"></line>
+                    <line x1="6" y1="18" x2="20" y2="18"></line>
+                  </svg>
+                </button>
+                <div class="dropdown-menu">
+                  {{#if oauth_id == null}}
+                  <a class="dropdown-item" href="javascript:void(0)"
+                    on-click="@this.handleClick('EDIT',{ index : i },@event)">Edit</a>
+                  {{else}}
+
+                  {{/if}}
+                  <a class="dropdown-item" href="javascript:void(0)"
+                    on-click="@this.handleClick('DELETE',{ index : i },@event)">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+  {{#if action=="pat"}}
+  <button type="button" class="btn btn-primary" on-click="@this.handleClick('SUBMIT',{},@event)">Add</button>
+  {{else}}
+  <button type="button" class="btn btn-primary" on-click="@this.handleClick('SELECT',{},@event)">Select</button>
+  {{/if}}
+</div>

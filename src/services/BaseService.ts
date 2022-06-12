@@ -43,5 +43,6 @@ export default {
   VARIABLE: ENDPOINT + '/variable',
   REPOSITORY: ENDPOINT + '/repository',
   WEBHOOK: ENDPOINT + '/webhook',
-  TOKEN: ENDPOINT + '/personal-token'
+  TOKEN: ENDPOINT + '/personal-token',
+  OAUTH_USER: ENDPOINT + '/oauth-user'
 }

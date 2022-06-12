@@ -7,11 +7,10 @@ import PipelineService from "services/PipelineService";
 import ProjectService from "services/ProjectService";
 import RepositoryService from "services/RepositoryService";
 import Notify from "simple-notify";
-import { GitProps } from "./list";
-import GithubList from "./list/GithubList";
+import RepositoryList, { GitProps } from "./repository_list";
 import template from './PipelineNewView.html';
 import RepoSelected from "./RepoSelected";
-import RepositoryPopup from "./repository";
+import RepositoryPopup, { RepositoryPopupInterface } from "./repository_oauth";
 
 declare var window: Window;
 
@@ -25,15 +24,18 @@ export interface PipelineNewInterface extends BaseRactiveInterface {
 
 export default BaseRactive.extend<PipelineNewInterface>({
   template,
+  partials: {
+    "repo_list_partial": []
+  },
   components: {
     "pipeline-items": PipelineItems,
     "repository-popup": RepositoryPopup,
-    "github-list": GithubList,
-    "repo-selected": RepoSelected
+    "repo-selected": RepoSelected,
+    "repo-list": RepositoryList
   },
   onconstruct() {
     this.newOn = {
-      onGithubListListener: (c, action, text, object) => {
+      onRepoListListener: (c, action, text, object) => {
         switch (action) {
           case 'SUBMIT':
             let props: GitProps = text;
@@ -42,6 +44,19 @@ export default BaseRactive.extend<PipelineNewInterface>({
               ...this.get("form_data"),
               ...props
             })
+            break;
+        }
+      },
+      onRepositoryPopupListener: async (c, action, text, object) => {
+        switch (action) {
+          case 'SELECT':
+            this.set("form_data.oauth_user_id", text.id);
+            this.set("form_data.from_provider", text.repo_from);
+            this.set("select_source_from", text.repo_from);
+            let _repository_popup: RepositoryPopupInterface = this.findComponent("repository-popup");
+            _repository_popup.hide();
+            await this.submit();
+            this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data}}></repo-list>`)
             break;
         }
       }
