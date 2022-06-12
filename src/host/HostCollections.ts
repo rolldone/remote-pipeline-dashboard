@@ -21,7 +21,7 @@ export default BaseRactive.extend<HostCollectionInterface>({
                 <tr>
                   <th>Ip Address</th>
                   <th>Name</th>
-                  <th>Location</th>
+                  <th>Auth Type</th>
                   <th>Status</th>
                   <th class="w-1"></th>
                 </tr>
@@ -30,15 +30,15 @@ export default BaseRactive.extend<HostCollectionInterface>({
               {{#each datas:i}}
                 <tr>
                   <td data-label="Name">
-                    <div>Address</div>
-                    <div class="text-muted">{{ip_address}}</div>
+                    <div>Host</div>
+                    <div class="text-muted">{{host}}</div>
                   </td>
                   <td data-label="Title">
                     <div>Server Name</div>
                     <div class="text-muted">{{host_name}}</div>
                   </td>
                   <td class="text-muted" data-label="Role">
-                    {{from}}
+                    {{auth_type}}
                   </td>
                   <td class="text-muted" data-label="Role">
                     {{status==true?"Active":"Deactivated"}}
