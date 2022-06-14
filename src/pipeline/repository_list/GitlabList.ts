@@ -2,16 +2,16 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import RepositoryService from "services/RepositoryService";
 import GithubSelectBranch, { GithubSelectBranchInterface } from "./GithubSelectBranch";
 
-export interface GitlabListInterface extends BaseRactiveInterface {
+export interface GithubListInterface extends BaseRactiveInterface {
   getRepositories?: { (): void }
   setRepositories?: { (props: any): void }
   getCurrentUser?: { (): void }
   setCurrentUser?: { (props: any): void }
 }
 
-const FROM = 'github';
+const FROM = 'gitlab';
 
-const GitlabList = BaseRactive.extend<GitlabListInterface>({
+const GithubList = BaseRactive.extend<GithubListInterface>({
   components: {
     "github-select-branch": GithubSelectBranch
   },
@@ -81,6 +81,7 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
         e.preventDefault();
         let repository = _repos[props.index];
         this.fire("listener", 'SUBMIT', {
+          repo_id: repository.id,
           repo_name: repository.name,
           source_type: 'git',
           from_provider: FROM
@@ -113,4 +114,4 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
   }
 });
 
-export default GitlabList;
+export default GithubList;

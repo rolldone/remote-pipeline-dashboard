@@ -16,7 +16,7 @@ const RepositoryList = BaseRactive.extend<RepositoryListInterface>({
     "repo-list-selected": null
   },
   template:/* html */`
-    {{> repository_list_selected }}
+  {{> repository_list_selected }}
   `,
   partials: {
     "repository_list_selected": []
@@ -31,11 +31,7 @@ const RepositoryList = BaseRactive.extend<RepositoryListInterface>({
       onRepoListSelectedListener: (c, action, text, e) => {
         switch (action) {
           case 'SUBMIT':
-            this.set("form_data", {
-              ...this.get("form_data"),
-              ...text
-            })
-            this.fire("listener", action, this.get("form_data"), e);
+            this.fire("listener", action, text, e);
             break;
         }
       }
@@ -54,7 +50,7 @@ const RepositoryList = BaseRactive.extend<RepositoryListInterface>({
           this.components["repo-list-selected"] = null;
           break;
         case 'gitlab':
-          this.components["repo-list-selected"] = null;
+          this.components["repo-list-selected"] = (await import("./GitlabList")).default;
           break;
       }
       let _template = Ractive.parse(/* html */`

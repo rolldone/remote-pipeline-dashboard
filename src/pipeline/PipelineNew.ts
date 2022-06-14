@@ -9,8 +9,8 @@ import RepositoryService from "services/RepositoryService";
 import Notify from "simple-notify";
 import RepositoryList, { GitProps } from "./repository_list";
 import template from './PipelineNewView.html';
-import RepoSelected from "./RepoSelected";
 import RepositoryPopup, { RepositoryPopupInterface } from "./repository_oauth";
+import RepoSelected from "./repo_selected";
 
 declare var window: Window;
 

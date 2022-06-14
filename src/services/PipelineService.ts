@@ -7,6 +7,15 @@ import { PipelinesInterface } from "pipeline/Pipelines";
 
 export interface PipelineInterface {
   id?: number
+  name?: string
+  description?: string
+  project_id?: number
+  oauth_user_id?: number
+  repo_data?: any
+  repo_name?: string
+  repo_id?: number
+  source_type?: string
+  from_provider?: string
 }
 
 export interface PipelineServiceInterface extends PipelineInterface {
@@ -15,7 +24,7 @@ export interface PipelineServiceInterface extends PipelineInterface {
 }
 
 export default {
-  async addPipeline(props): Promise<any> {
+  async addPipeline(props: PipelineInterface): Promise<any> {
     try {
       let formData = new FormData();
       for (var key in props) {
@@ -24,7 +33,7 @@ export default {
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
-            if(props[key] != null){
+            if (props[key] != null) {
               formData.append(key, props[key]);
             }
             break;
@@ -55,7 +64,7 @@ export default {
       throw ex;
     }
   },
-  async updatePipeline(props): Promise<any> {
+  async updatePipeline(props: PipelineInterface): Promise<any> {
     try {
       let formData = new FormData();
       for (var key in props) {
@@ -64,7 +73,7 @@ export default {
             formData.append(key, JSON.stringify(props[key] || {}));
             break;
           default:
-            if(props[key] != null){
+            if (props[key] != null) {
               formData.append(key, props[key]);
             }
             break;

@@ -140,7 +140,8 @@ const Step1 = Step2Execution.extend<Step1Interface>({
       let resData = await RepositoryService.getBranchs({
         oauth_user_id: pipeLineData.oauth_user_id,
         from_provider: pipeLineData.from_provider,
-        repo_name: pipeLineData.repo_name
+        repo_name: pipeLineData.repo_name,
+        id: pipeLineData.repo_id
       });
       return resData;
     } catch (ex) {

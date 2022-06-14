@@ -60,9 +60,11 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
         {{elseif tab_select == "USER_INFO"}}
         <dl class="row">
           <dt class="col-5">Login:</dt>
-          <dd class="col-7">{{owner_data.login}}</dd>
+          <dd class="col-7">{{owner_data.username}}</dd>
+          <dt class="col-5">Name:</dt>
+          <dd class="col-7">{{owner_data.name}}</dd>
           <dt class="col-5">Repo home page:</dt>
-          <dd class="col-7">{{owner_data.html_url}}</dd>
+          <dd class="col-7">{{owner_data.web_url}}</dd>
           <dt class="col-5">Join at:</dt>
           <dd class="col-7">{{owner_data.created_at}}</dd>
         </dl>
@@ -129,11 +131,23 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     try {
       let form_data = this.get("form_data");
       if (form_data.repo_name == null) return;
-      let resData = await RepositoryService.getRepository({
-        from_provider: form_data.from_provider,
-        repo_name: form_data.repo_name,
-        oauth_user_id: form_data.oauth_user_id
-      });
+      let resData = null;
+      switch (form_data.from_provider) {
+        case 'github':
+          resData = await RepositoryService.getRepository({
+            from_provider: form_data.from_provider,
+            repo_name: form_data.repo_name,
+            oauth_user_id: form_data.oauth_user_id
+          });
+          break;
+        case 'gitlab':
+          resData = await RepositoryService.getRepository({
+            from_provider: form_data.from_provider,
+            id: form_data.repo_id,
+            oauth_user_id: form_data.oauth_user_id
+          });
+          break;
+      }
       return resData;
     } catch (ex) {
       console.error("getRepo - ex :: ", ex);
@@ -147,10 +161,16 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     try {
       let form_data = this.get("form_data");
       if (form_data.from_provider == null && form_data.oauth_user_id == null) return;
-      let resData = await RepositoryService.getOwnerRepo({
-        from_provider: form_data.from_provider,
-        oauth_user_id: form_data.oauth_user_id
-      });
+      let resData = null;
+      switch (form_data.from_provider) {
+        case 'gitlab':
+        case 'github':
+          resData = await RepositoryService.getOwnerRepo({
+            from_provider: form_data.from_provider,
+            oauth_user_id: form_data.oauth_user_id
+          });
+          break;
+      }
       return resData;
     } catch (ex) {
       console.error("getOwner - ex :: ", ex);
@@ -163,11 +183,23 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
   async getCommits() {
     try {
       let form_data = this.get("form_data");
-      let resData = await RepositoryService.getCommits({
-        from_provider: form_data.from_provider,
-        repo_name: form_data.repo_name,
-        oauth_user_id: form_data.oauth_user_id
-      })
+      let resData = null;
+      switch (form_data.from_provider) {
+        case 'github':
+          resData = await RepositoryService.getCommits({
+            from_provider: form_data.from_provider,
+            repo_name: form_data.repo_name,
+            oauth_user_id: form_data.oauth_user_id
+          })
+          break;
+        case 'gitlab':
+          resData = await RepositoryService.getCommits({
+            id: form_data.repo_id,
+            from_provider: form_data.from_provider,
+            oauth_user_id: form_data.oauth_user_id,
+          })
+          break;
+      }
       return resData;
     } catch (ex) {
       console.error("getCommits - ex :: ", ex);
@@ -181,11 +213,12 @@ const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
     resDats.forEach(element => {
       switch (form_data.from_provider) {
         case 'github':
+        case 'gitlab':
           commit_datas.push({
-            message: element.commit.message,
-            date: element.commit.author.date,
-            email: element.commit.author.email,
-            name: element.commit.author.name,
+            message: element.message,
+            date: element.date,
+            email: element.email,
+            name: element.name,
             link: element.html_url,
             sha: element.sha,
             default_branch: element.default_branch
