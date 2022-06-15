@@ -10,7 +10,7 @@ import TransferRemoteCommand from "./input/TransferRemoteCommand";
 import WriteSCriptCode from "./input/WriteScriptCode";
 import WriteTransferCommand from "./input/WriteTransferCommand";
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
   data() {
     return {
       command_data: {
@@ -71,3 +71,5 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     }
   }
 })
+
+export default CommandItem;

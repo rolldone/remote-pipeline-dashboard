@@ -243,6 +243,29 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
     let command_datas = this.get("command_datas");
     let partial_input = [];
     for (var a = 0; a < command_datas.length; a++) {
+      let command_item = command_datas[a];
+      if (a == 0) {
+        if (command_item.parent_order_temp_ids.length > 0) {
+          command_item.parent_order_temp_ids.splice(0, 1);
+        }
+      } else {
+        for (var b = 0; b < a; b++) {
+          let _foundParent = false
+          let _catchIndex = null;
+          let _command_parent_item = command_datas[b];
+          for (var c = 0; c < command_item.parent_order_temp_ids.length; c++) {
+            _catchIndex = c;
+            console.log("_command_parent_item.temp_id :: ", _command_parent_item.temp_id);
+            if (_command_parent_item.temp_id == command_item.parent_order_temp_ids[c]) {
+              _foundParent = true;
+              break;
+            }
+          }
+          if (_foundParent == false) {
+            command_item.parent_order_temp_ids.splice(_catchIndex, 1);
+          }
+        }
+      }
       let _ii = this.returnDisplayCommandRactive(a);
       partial_input.push({
         ..._ii.t[0],
