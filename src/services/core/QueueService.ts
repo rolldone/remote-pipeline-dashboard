@@ -77,6 +77,21 @@ export default {
       throw ex;
     }
   },
+  deleteQueueScheduler: async (props: FormData): Promise<any> => {
+    try {
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE + '/delete-scheduler',
+        data: props,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
   queues: async (props: string): Promise<any> => {
     try {
       let resData = await axios.get(BaseService.QUEUE + '/queues?' + props, {});

@@ -120,7 +120,7 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
       let resData = null;
 
       if (queue_record.status == 0) {
-        resData = await QueueService.delete(formData);
+        resData = await QueueService.deleteQueueScheduler(formData);
       } else {
         resData = await QueueService.create(formData);
       }
