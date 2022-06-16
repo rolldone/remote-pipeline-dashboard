@@ -24,7 +24,7 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   },
   onconstruct() {
     this.newOn = {
-      onSChedulerModalListener: (object, action, text, c) => {
+      onSchedulerModalListener: async (object, action, text, c) => {
         switch (action) {
           case 'SUBMIT':
             this.submitUpdateQueueSchedule({
@@ -34,13 +34,22 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
               id: text.id,
               queue_record_id: text.queue_record_id
             })
-            break;
+            let _modalQueueSchedule: QueueSchedulerInterface = this.findComponent("scheduler-modal");
+            _modalQueueSchedule.hide();
+            new Notify({
+              status: "success",
+              autoclose: true,
+              autotimeout: 3000,
+              title: "Queue " + text.queue_record_id,
+              text: "Queue scheduler updated",
+            });
+            this.setQueueRecords(await this.getQueueRecords());
           case 'DISPOSE':
             break;
         }
       }
     }
-    this._super();
+    this.reInitializeObserve();
   },
   handleClick(action, props, e) {
     let queue_record_datas = this.get("queue_record_datas");

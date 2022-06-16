@@ -6,6 +6,8 @@ export interface QueueSchedulerInterface extends BaseRactiveInterface {
   submitNewQueueSchedule?: { (): Promise<any> }
 }
 
+let myModal = null;
+
 export default BaseRactive.extend<QueueSchedulerInterface>({
   template: /* html */`
   <div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" aria-modal="true" role="dialog">
@@ -209,7 +211,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
           <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
             Cancel
           </a>
-          <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" on-click="@this.handleClick('SUBMIT',{},@event)">
+          <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('SUBMIT',{},@event)">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Create new schedule
@@ -241,16 +243,12 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
       status: props.status
     });
     let _id_element = this.get("id_element");
-    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
+    myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
       keyboard: false
     });
     myModal.show();
   },
   hide() {
-    let _id_element = this.get("id_element");
-    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
-      keyboard: false
-    });
     myModal.hide();
   },
   async submitNewQueueSchedule() {

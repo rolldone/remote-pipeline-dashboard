@@ -1,4 +1,4 @@
-import QueueSchedulerModal, { QueueSchedulerInterface as QueueSchedulerInterfaceExecution } from "execution/modal/QueueSchedulerModal";
+import QueueSchedulerModalExectution, { QueueSchedulerInterface as QueueSchedulerInterfaceExecution } from "execution/modal/QueueSchedulerModal";
 import QueueScheduleService from "services/QueueScheduleService";
 
 export interface QueueSchedulerInterface extends QueueSchedulerInterfaceExecution {
@@ -11,7 +11,7 @@ export interface QueueSchedulerInterface extends QueueSchedulerInterfaceExecutio
   setQueueSchedule?: { (props: any): void }
 }
 
-export default QueueSchedulerModal.extend<QueueSchedulerInterface>({
+const QueueSchedulerModal = QueueSchedulerModalExectution.extend<QueueSchedulerInterface>({
   show(props) {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
@@ -19,6 +19,15 @@ export default QueueSchedulerModal.extend<QueueSchedulerInterface>({
       this.setQueueSchedule(await this.getQueueSchedule(props));
       resolve();
     });
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        let form_data = this.get("form_data");
+        this.fire("listener", action, form_data, e);
+        break;
+    }
   },
   async getQueueSchedule(props) {
     try {
@@ -34,7 +43,6 @@ export default QueueSchedulerModal.extend<QueueSchedulerInterface>({
   setQueueSchedule(props) {
     if (props == null) return;
     let resData = props.return;
-    resData.data = JSON.parse(resData.data);
     this.set("form_data", {
       ...this.get("form_data"),
       ...resData.data,
@@ -42,3 +50,5 @@ export default QueueSchedulerModal.extend<QueueSchedulerInterface>({
     });
   }
 });
+
+export default QueueSchedulerModal;
