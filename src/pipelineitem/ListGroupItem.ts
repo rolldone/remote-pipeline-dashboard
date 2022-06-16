@@ -249,22 +249,22 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
           command_item.parent_order_temp_ids.splice(0, 1);
         }
       } else {
-        for (var b = 0; b < a; b++) {
-          let _foundParent = false
-          let _catchIndex = null;
-          let _command_parent_item = command_datas[b];
-          for (var c = 0; c < command_item.parent_order_temp_ids.length; c++) {
-            _catchIndex = c;
-            console.log("_command_parent_item.temp_id :: ", _command_parent_item.temp_id);
-            if (_command_parent_item.temp_id == command_item.parent_order_temp_ids[c]) {
-              _foundParent = true;
-              break;
-            }
-          }
-          if (_foundParent == false) {
-            command_item.parent_order_temp_ids.splice(_catchIndex, 1);
-          }
-        }
+        // for (var b = 0; b < a; b++) {
+        //   let _foundParent = false
+        //   let _catchIndex = null;
+        //   let _command_parent_item = command_datas[b];
+        //   for (var c = 0; c < command_item.parent_order_temp_ids.length; c++) {
+        //     _catchIndex = c;
+        //     console.log("_command_parent_item.temp_id :: ", _command_parent_item.temp_id);
+        //     if (_command_parent_item.temp_id == command_item.parent_order_temp_ids[c]) {
+        //       _foundParent = true;
+        //       c = command_item.parent_order_temp_ids.length;
+        //     }
+        //   }
+        //   if (_foundParent == false) {
+        //     // command_item.parent_order_temp_ids.splice(_catchIndex, 1);
+        //   }
+        // }
       }
       let _ii = this.returnDisplayCommandRactive(a);
       partial_input.push({
