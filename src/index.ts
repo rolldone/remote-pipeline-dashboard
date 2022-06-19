@@ -27,6 +27,7 @@ declare global {
     websocket: WebSocket
     masterData: MasterDataInterface
     pubsub: any
+    CKEDITOR: any
     $: JQueryStatic
   }
 }

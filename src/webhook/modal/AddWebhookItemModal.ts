@@ -9,6 +9,8 @@ export interface AddWebHookItemModalInterface extends BaseRactiveInterface {
   displayPartial?: { (_selectHook: string): void }
 }
 
+let _comp = null;
+let myModal = null;
 const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
   template,
   partials: {
@@ -53,13 +55,20 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
       await this.displayPartial(props.webhook_type as string);
     }
     let _id_element = this.get("id_element");
-    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
+    let the_element = document.getElementById(_id_element);
+    myModal = new window.bootstrap.Modal(the_element, {
       keyboard: false
+    });
+    the_element.addEventListener("hidden.bs.modal", (event: any) => {
+      // do something...
+      if (event.target.id == _id_element) {
+        this.hide();
+      }
     });
     myModal.show();
   },
   hide() {
-
+    _comp().destroy();
   },
   async displayPartial(_selectHook: string) {
     let _webhook_type_partials = [
@@ -76,7 +85,7 @@ const AddWebHookItemModal = BaseRactive.extend<AddWebHookItemModalInterface>({
     this.resetPartial('webhook_type_partials', _webhook_type_partials);
   },
   async importWebHookItem(whatHooItem) {
-    let _comp = null;
+    _comp = null;
     switch (whatHooItem) {
       case 'smtp':
         _comp = (await import("./webhook_item/SmtpHook")).default;
