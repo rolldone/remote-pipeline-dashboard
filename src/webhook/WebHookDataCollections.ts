@@ -29,7 +29,6 @@ const WebHookDataCollections = BaseRactive.extend<BaseRactiveInterface>({
               _webhook_datas.push(text);
             }
             this.set("webhook_datas", _webhook_datas);
-            debugger;
             break;
         }
       }

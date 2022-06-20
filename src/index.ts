@@ -28,6 +28,7 @@ declare global {
     masterData: MasterDataInterface
     pubsub: any
     CKEDITOR: any
+    ace: any
     $: JQueryStatic
   }
 }

@@ -1,16 +1,14 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { debounce, DebouncedFunc } from "lodash";
-import scriptjs from 'scriptjs';
 import loadjs from 'loadjs';
 
 export interface SmtpHookInterface extends BaseRactiveInterface {
   listenNameToBeKeySlug?: { (): void }
   loadCkEditor?: { (): any }
+  loadAceEditor?: { (): any }
   destroy?: { (): void }
 }
 
-declare let ClassicEditor: any;
-declare let SourceEditing: any;
 declare let window: Window;
 
 const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
@@ -159,11 +157,11 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
                 </div>
                 <div class="mb-3">
                   {{#if form_data.message_type == "text"}}
-                    <textarea id="message-body" style="visibility:hidden;">
-
-                    </textarea>
+                    <textarea id="message-body" style="visibility:hidden;"></textarea>
                   {{else}}
-
+                    <div style="position:relative; height:500px;">
+                      <div id="editor" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"></div>
+                    </div>
                   {{/if}}
                 </div>
               </div>
@@ -189,7 +187,9 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
       input_to: "",
       form_data: {
         to_datas: [],
-        message_type: "text"
+        message_type: "text",
+        message_text: "",
+        message_html: ""
       }
     }
   },
@@ -198,7 +198,18 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
     return new Promise((resolve: Function) => {
       this.listenNameToBeKeySlug();
       _super();
-
+      let _form_data = this.get("form_data");
+      switch (_form_data.message_type) {
+        default:
+          this.set("form_data.message_type", "text");
+        // without break;
+        case 'text':
+          this.loadCkEditor();
+          break;
+        case 'html':
+          this.loadAceEditor();
+          break;
+      }
       resolve();
     })
   },
@@ -209,6 +220,41 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
       }
       window.CKEDITOR.removeAllListeners();
     }
+  },
+  loadAceEditor() {
+    let self = this;
+    return new Promise((resolve) => {
+      let loadAceEditorFunc = () => {
+        let pendingSave: DebouncedFunc<any> = null;
+        var editor = window.ace.edit("editor");
+        editor.setTheme("ace/theme/github");
+        editor.session.setMode("ace/mode/html");
+        editor.setValue(self.get("form_data.message_html") || "");
+        editor.getSession().on('change', debounce(function () {
+          self.set("form_data.message_html", editor.getValue());
+        }, 1000))
+        return window.ace;
+      }
+      if (window.ace == null) {
+        loadjs([
+          'https://cdnjs.cloudflare.com/ajax/libs/ace/1.6.0/ace.js',
+        ], 'ace_editor', {
+          before: function (path, scriptEl) { /* execute code before fetch */ },
+          async: true,  // load files synchronously or asynchronously (default: true)
+          numRetries: 3, // see caveats about using numRetries with async:false (default: 0),
+          returnPromise: false  // return Promise object (default: false)
+        })
+        loadjs.ready('ace_editor', {
+          success: function () {
+            resolve(loadAceEditorFunc());
+          },
+          error: function (err) {
+          }
+        })
+      } else {
+        resolve(loadAceEditorFunc());
+      }
+    })
   },
   loadCkEditor() {
     let self = this;
@@ -222,13 +268,12 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
               pendingSave.cancel();
             }
             pendingSave = debounce((event) => {
-              console.log(event.editor.getData());
-              self.set("form_data.message", event.editor.getData());
+              self.set("form_data.message_text", event.editor.getData());
             }, 1000);
             pendingSave(event);
           });
           for (let name in window.CKEDITOR.instances) {
-            window.CKEDITOR.instances[name].setData(self.get("form_data.message"))
+            window.CKEDITOR.instances[name].setData(self.get("form_data.message_text"))
           }
         })
         return window.CKEDITOR;
@@ -278,6 +323,9 @@ const SmtpHook = BaseRactive.extend<SmtpHookInterface>({
                 window.CKEDITOR.instances[name].destroy()
               }
             }
+            setTimeout(() => {
+              this.loadAceEditor();
+            }, 1000)
             break;
         }
         break;
