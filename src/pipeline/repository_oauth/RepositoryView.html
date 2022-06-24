@@ -6,7 +6,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       {{#if select_repository != null}}
+      {{#if select_repository == "git"}}
+      <git form_data={{form_data.repo_data}} on-listener="onGitListener"></git>
+      {{else}}
       {{> personal_access_token_partial }}
+      {{/if}}
       {{else}}
       <div class="modal-body">
         <div class="task-body tw-mt-5 md:tw-mt-6">
@@ -68,11 +72,11 @@
           </div>
           <p class="tw-pt-3">Don’t have a project yet? <a
               class="tw-text-inherit tw-underline tw-text-decoration-color-gray tw-font-weight-inherit hover:tw-text-black hover:tw-text-decoration-color-inherit dark:hover:tw-text-white dark:tw-text-inherit dark:tw-text-decoration-color-inherit"
-              href="/start-with-template?entryPoint=from%20Sites%20page">Start from a template instead.</a></p>
+              href="#" on-click="@this.handleClick('SELECT_OWN_GIT',{},@event)">Start from a template instead.</a></p>
         </div>
       </div>
       {{/if}}
-      
+
     </div>
   </div>
 </div>

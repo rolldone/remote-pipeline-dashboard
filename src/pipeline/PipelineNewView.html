@@ -80,8 +80,8 @@
             </div>
           </div>
           <div class="mb-3">
-            {{#if form_data.repo_name != null}}
-              <repo-selected on-listener="onRepoSelectedListener" form_data={{form_data}}></repo-selected>
+            {{#if form_data.repo_data.repo_name != null}}
+              <repo-selected on-listener="onRepoSelectedListener" form_data={{form_data.repo_data}}></repo-selected>
             {{else}}
               {{#if select_source_from != ""}}
                 {{ > repo_list_partial }}

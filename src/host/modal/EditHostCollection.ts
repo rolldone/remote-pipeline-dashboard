@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import CredentialService from "services/CredentialService";
 import template from './EditHostCollectionView.html';
 
 declare let window: Window
@@ -6,6 +7,8 @@ declare let window: Window
 export interface EditHostCollectionInterface extends BaseRactiveInterface {
   show: { (): void }
   hide: { (): void }
+  getCredentials?: { (): void }
+  setCredentials?: { (props: any): void }
 
 }
 
@@ -18,12 +21,12 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
         auth_type: "parent"
       },
       set_auth_value: {},
-      index: null
+      index: null,
+      credential_datas: []
     }
   },
   oncomplete() {
-    this.observe("form_data.auth_type", (val: string, val2: string) => {
-      if (val2 == null) return;
+    this.observe("form_data.auth_type", async (val: string, val2: string) => {
       if (val != val2) {
         let form_data = this.get("form_data");
         switch (val) {
@@ -48,7 +51,18 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
               username: null,
               private_key: null,
               passphrase: null,
-              password: null
+              password: null,
+              credential_id: null
+            });
+            break;
+          case 'credential':
+            this.setCredentials(await this.getCredentials());
+            this.set("set_auth_value", {
+              private_key: null,
+              passphrase: null,
+              password: null,
+              username: form_data.username,
+              credential_id: form_data.credential_id
             });
             break;
         }
@@ -63,7 +77,7 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
       init: false
     })
   },
-  show() {
+  async show() {
     let _id_element = this.get("id_element");
     var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
       keyboard: false
@@ -86,8 +100,31 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
   handleClick(action, props, e) {
     switch (action) {
       case 'SUBMIT':
-        this.fire("listener", action, props, e);
+        this.set("form_data", {
+          ...this.get("form_data"),
+          // Override the value on top
+          ...this.get("set_auth_value")
+        })
+        let index = this.get("index");
+        this.fire("listener", action, {
+          index: index,
+          form_data: this.get("form_data")
+        }, e);
         break;
     }
+  },
+  async getCredentials() {
+    try {
+      let resDatas = await CredentialService.getCredentials({
+        types: ["certificate", "password"]
+      });
+      return resDatas;
+    } catch (ex) {
+      console.error("getCredential - ex :: ", ex);
+    }
+  },
+  setCredentials(props: any) {
+    if (props == null) return;
+    this.set("credential_datas", props.return);
   }
 });

@@ -42,7 +42,7 @@ const RepositoryList = BaseRactive.extend<RepositoryListInterface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       let _form_data = this.get("form_data");
-      switch (_form_data.from_provider) {
+      switch (_form_data.repo_from) {
         case 'github':
           this.components["repo-list-selected"] = (await import("./GithubList")).default;
           break;

@@ -20,6 +20,7 @@ declare global {
     executionRouter: Router
     queueRecordRouter: Router
     webhookRouter: Router
+    credentialRouter: Router
     queueRecordSchedulerRouter: Router
     userRouter: Router
     authRouter: Router
@@ -149,6 +150,12 @@ export default function () {
         .get("/webhook/(.*)?", async (req, context) => {
           let webhook = (await import("./webhook")).default;
           new webhook({
+            target: "#index-body"
+          })
+        })
+        .get("/credential/(.*)?", async (req, context) => {
+          let credential = (await import("./credential")).default;
+          new credential({
             target: "#index-body"
           })
         })

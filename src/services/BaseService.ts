@@ -44,5 +44,6 @@ export default {
   REPOSITORY: ENDPOINT + '/repository',
   WEBHOOK: ENDPOINT + '/webhook',
   TOKEN: ENDPOINT + '/personal-token',
-  OAUTH_USER: ENDPOINT + '/oauth-user'
+  OAUTH_USER: ENDPOINT + '/oauth-user',
+  CREDENTIAL: ENDPOINT + '/credential'
 }

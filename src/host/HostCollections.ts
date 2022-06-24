@@ -91,7 +91,7 @@ export default BaseRactive.extend<HostCollectionInterface>({
         let _datas = this.get("datas");
         switch (action) {
           case 'SUBMIT':
-            _datas[text.index] = this.get("edit_form_data");
+            _datas[text.index] = text.form_data;
             this.set("datas", _datas);
             break;
         }

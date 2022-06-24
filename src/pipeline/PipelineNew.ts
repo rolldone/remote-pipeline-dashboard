@@ -11,6 +11,7 @@ import RepositoryList, { GitProps } from "./repository_list";
 import template from './PipelineNewView.html';
 import RepositoryPopup, { RepositoryPopupInterface } from "./repository_oauth";
 import RepoSelected from "./repo_selected";
+import StaticType from "base/StaticType";
 
 declare var window: Window;
 
@@ -39,9 +40,8 @@ export default BaseRactive.extend<PipelineNewInterface>({
         switch (action) {
           case 'SUBMIT':
             let props: GitProps = text;
-            console.log("props :: ", props);
-            this.set('form_data', {
-              ...this.get("form_data"),
+            this.set('form_data.repo_data', {
+              ...this.get("form_data.repo_data"),
               ...props
             })
             break;
@@ -50,13 +50,20 @@ export default BaseRactive.extend<PipelineNewInterface>({
       onRepositoryPopupListener: async (c, action, text, object) => {
         switch (action) {
           case 'SELECT':
-            this.set("form_data.oauth_user_id", text.id);
-            this.set("form_data.from_provider", text.repo_from);
-            this.set("select_source_from", text.repo_from);
+            StaticType(text.repo_from, [String]);
+            this.set("form_data.repo_data", text);
             let _repository_popup: RepositoryPopupInterface = this.findComponent("repository-popup");
             _repository_popup.hide();
             await this.submit();
-            this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data}}></repo-list>`)
+            this.set("select_source_from", text.repo_from);
+            this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data.repo_data}}></repo-list>`)
+            // this.set("form_data.oauth_user_id", text.id);
+            // this.set("form_data.from_provider", text.repo_from);
+            // this.set("select_source_from", text.repo_from);
+            // let _repository_popup: RepositoryPopupInterface = this.findComponent("repository-popup");
+            // _repository_popup.hide();
+            // await this.submit();
+            // this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data}}></repo-list>`)
             break;
         }
       }

@@ -34,32 +34,45 @@ const Step2 = BaseRactive.extend<Step2Interface>({
             {{/pipeline_datas}}
           </select>
         </div>
-        {{#if pipeline_data.from_provider != null}}
-        <div class="mb-3">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Repository {{pipeline_data.repo_name}} From {{pipeline_data.from_provider}}</h3>
-            </div>
-            <div class="list-group list-group-flush">
-              {{#branch_datas:i}}
-              <div class="list-group-item">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <input type="radio" class="form-check-input" name="{{form_data.branch}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
-                  </div>
-                  <div class="col-auto">
-                    <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
-                  </div>
-                  <div class="col text-truncate">
-                    <span class="text-reset d-block">{{name}}</span>
-                    <div class="d-block text-muted text-truncate mt-n1">--</div>
-                  </div>
+        {{#if pipeline_data.repo_data.repo_from != null}}
+          {{#if pipeline_data.repo_data.repo_from == "git"}}
+            <div class="mb-3">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Repository {{pipeline_data.repo_data.repo_name}} From {{pipeline_data.repo_data.repo_from}}</h3>
+                </div>
+                <div class="list-group-item">
+                  <input class="form-control" type="text" aria-describedby="emailHelp" placeholder="Branch Name" name="branch" value="{{form_data.branch}}"> 
                 </div>
               </div>
-              {{/branch_datas}}
             </div>
-          </div>
-        </div>
+          {{else}}
+            <div class="mb-3">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Repository {{pipeline_data.repo_data.repo_name}} From {{pipeline_data.repo_data.repo_from}}</h3>
+                </div>
+                <div class="list-group list-group-flush">
+                  {{#branch_datas:i}}
+                  <div class="list-group-item">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <input type="radio" class="form-check-input" name="{{form_data.branch}}" value="{{name}}" checked on-change="@this.handleChange('CHECK_PIPELINE_ITEM',{ id : id, index : i },@event)">
+                      </div>
+                      <div class="col-auto">
+                        <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
+                      </div>
+                      <div class="col text-truncate">
+                        <span class="text-reset d-block">{{name}}</span>
+                        <div class="d-block text-muted text-truncate mt-n1">--</div>
+                      </div>
+                    </div>
+                  </div>
+                  {{/branch_datas}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
         {{/if}}
         <div class="mb-3">
           <div class="card">
@@ -126,7 +139,7 @@ const Step2 = BaseRactive.extend<Step2Interface>({
       var el = document.getElementById('list-group-sort-pipeline-item');
       var sortable = Sortable.create(el, {
         onChange: function (/**Event*/evt) {
-          
+
           // most likely why this event is used is to get the dragging element's current index
           // same properties as onEnd
         }
@@ -258,11 +271,13 @@ const Step2 = BaseRactive.extend<Step2Interface>({
     try {
       let _form_data = this.get("form_data");
       let pipeLineData = this.get("pipeline_data");
+      let repo_data = pipeLineData.repo_data;
+      if (repo_data == null) return;
       let resData = await RepositoryService.getBranchs({
-        oauth_user_id: pipeLineData.oauth_user_id,
-        from_provider: pipeLineData.from_provider,
-        repo_name: pipeLineData.repo_name,
-        id: pipeLineData.repo_id
+        oauth_user_id: repo_data.oauth_user_id,
+        from_provider: repo_data.repo_from,
+        repo_name: repo_data.repo_name,
+        id: repo_data.repo_id
       });
       return resData;
     } catch (ex) {

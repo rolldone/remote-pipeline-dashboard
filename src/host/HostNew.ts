@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import SmartValidation from "base/SmartValidation";
+import CredentialService from "services/CredentialService";
 import HostService from "services/HostService";
 import Notify from "simple-notify";
 import HostCollections from "./HostCollections";
@@ -9,6 +10,8 @@ declare let window: Window;
 
 export interface HostNewInterface extends BaseRactiveInterface {
   submitHost?: { (): void }
+  getCredentials?: { (): void }
+  setCredentials?: { (props: any): void }
 }
 
 export default BaseRactive.extend<HostNewInterface>({
@@ -21,14 +24,14 @@ export default BaseRactive.extend<HostNewInterface>({
       form_data: {},
       form_error: {},
       datas: [],
-      set_auth_value: {}
+      set_auth_value: {},
+      credential_datas: []
     }
   },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise((resolve: Function) => {
-      this.observe("form_data.auth_type", (val: string, val2: string) => {
-        if (val2 == null) return;
+      this.observe("form_data.auth_type", async (val: string, val2: string) => {
         if (val != val2) {
           let form_data = this.get("form_data");
           switch (val) {
@@ -38,6 +41,7 @@ export default BaseRactive.extend<HostNewInterface>({
                 password: form_data.password,
                 private_key: null,
                 passphrase: null,
+                credential_id: null
               });
               break;
             case 'private_key':
@@ -45,7 +49,18 @@ export default BaseRactive.extend<HostNewInterface>({
                 username: form_data.username,
                 private_key: form_data.private_key,
                 passphrase: form_data.passphrase,
-                password: null
+                password: null,
+                credential_id: null
+              });
+              break;
+            case 'credential':
+              this.setCredentials(await this.getCredentials());
+              this.set("set_auth_value", {
+                username: form_data.username,
+                private_key: null,
+                passphrase: null,
+                password: null,
+                credential_id: form_data.credential_id
               });
               break;
           }
@@ -128,6 +143,7 @@ export default BaseRactive.extend<HostNewInterface>({
         private_key: _form_data.private_key,
         username: _form_data.username,
         password: _form_data.password,
+        credential_id: _form_data.credential_id,
         // Override the value on top
         ...this.get("set_auth_value")
       });
@@ -170,5 +186,19 @@ export default BaseRactive.extend<HostNewInterface>({
         position: 'right top'
       })
     }
+  },
+  async getCredentials() {
+    try {
+      let resDatas = await CredentialService.getCredentials({
+        types: ["certificate", "password"]
+      });
+      return resDatas;
+    } catch (ex) {
+      console.error("getCredential - ex :: ", ex);
+    }
+  },
+  setCredentials(props: any) {
+    if (props == null) return;
+    this.set("credential_datas", props.return);
   }
 });

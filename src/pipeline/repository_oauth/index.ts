@@ -2,6 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import Ractive from "ractive";
 import AuthService from "services/AuthService";
 import Bitbucket from "./Bitbucket";
+import Git from "./Git";
 import Github from "./Github";
 import Gitlab from "./Gitlab";
 import PersonalAccessToken from "./personal_access_token";
@@ -19,6 +20,7 @@ const RepositoryPopup = BaseRactive.extend<RepositoryPopupInterface>({
     "personal_access_token_partial": []
   },
   components: {
+    "git": Git,
     "github": Github,
     "gitlab": Gitlab,
     "bitbucket": Bitbucket,
@@ -56,12 +58,25 @@ const RepositoryPopup = BaseRactive.extend<RepositoryPopupInterface>({
             this.fire("listener", action, text, e);
             break;
         }
+      },
+      onGitListener: (c, action, text, e) => {
+        switch (action) {
+          case 'SELECT':
+            this.set("form_data.repo_data", text);
+            this.fire("listener", action, text, e);
+            break;
+        }
       }
     }
     this._super();
   },
   async handleClick(action, props, e) {
     switch (action) {
+      case 'SELECT_OWN_GIT':
+        e.preventDefault();
+        await this.set("select_repository", "git");
+        await this.set("form_data.from_provider", "git");
+        break;
       case 'OAUTH_CLICK':
         e.preventDefault();
         await this.set("select_repository", props.action);

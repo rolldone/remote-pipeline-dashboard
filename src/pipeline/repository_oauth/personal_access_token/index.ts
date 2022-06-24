@@ -41,7 +41,12 @@ const PersonalAccessToken = BaseRactive.extend<PersonalAccessTokenInterface>({
         e.preventDefault();
         let _select_token = this.get("select_token");
         _oauth_user_data = this.get("oauth_user_datas")[_select_token];
-        this.fire("listener", action, _oauth_user_data, e);
+        delete _oauth_user_data.access_token;
+        this.fire("listener", action, {
+          oauth_user_id: _oauth_user_data.id,
+          repo_from: _oauth_user_data.repo_from,
+          token_type: _oauth_user_data.token_type
+        }, e);
         break;
       case 'EDIT':
         e.preventDefault();
