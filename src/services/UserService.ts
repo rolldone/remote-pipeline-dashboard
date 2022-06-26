@@ -1,7 +1,7 @@
 import axios from "axios"
 import SmartUrlSearchParams from "base/SmartUrlSearchParams"
 import BaseService from "./BaseService"
-
+import Timezone from './Timezone.json';
 
 export interface UserServiceInterface {
   id?: number
@@ -10,6 +10,7 @@ export interface UserServiceInterface {
   email?: string
   password?: string
   status?: number
+  timezone?: string
   data?: any
   orderBy?: string
   groupBy?: string
@@ -117,6 +118,28 @@ export default {
         }
       })
       return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  getTimezones: async function () {
+    try {
+      return {
+        status: 'success',
+        status_code: 200,
+        return: (() => {
+          let _tt = [];
+          for (var a = 0; a < Timezone.length; a++) {
+            for (var b = 0; b < Timezone[a].utc.length; b++) {
+              _tt.push({
+                label: Timezone[a].utc[b] + " - " + Timezone[a].value,
+                value: Timezone[a].utc[b]
+              })
+            }
+          }
+          return _tt;
+        })()
+      }
     } catch (ex) {
       throw ex;
     }

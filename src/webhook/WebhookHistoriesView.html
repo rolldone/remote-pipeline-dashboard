@@ -73,79 +73,61 @@
       </div>
       <div class="col-12">
         <div class="card">
-          <div class="table-responsive" id="queue-record-table">
+          <div class="table-responsive" id="queue-record-details-table">
             <table class="table table-vcenter table-mobile-md card-table">
               <thead>
                 <tr>
-                  <th>Execution Name</th>
-                  <th>Queue Mode</th>
+                  <th>Key</th>
+                  <th>Job ID</th>
+                  <th>Type</th>
                   <th>Status</th>
-                  <th>--</th>
                   <th class="w-1"></th>
                 </tr>
               </thead>
               <tbody>
-                {{#each queue_record_datas:i}}
+                {{#each history_datas:i}}
                 <tr>
                   <td data-label="Name">
                     <div class="d-flex py-1 align-items-center">
                       <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)"></span>
                       <div class="flex-fill">
-                        <div class="font-weight-medium">{{exe_name}}</div>
-                        <div class="text-muted"><a href="#" class="text-reset">{{@this.getDate(updated_at)}}</a></div>
+                        <div class="font-weight-medium">{{webhook_item_key}}</div>
+                        <div class="text-muted"><a href="#" class="text-reset">{{@this.getDate(created_at)}}</a></div>
                       </div>
                     </div>
                   </td>
                   <td data-label="Title">
-                    <div>{{exe_process_mode}}</div>
+                    <div>{{job_id}}</div>
                     <!-- <div class="text-muted">30 Tasks</div> -->
                   </td>
                   <td data-label="Title">
-                    {{#if ids_status[id] == 0}}
-                    <div>Stand By</div>
-                    {{elseif ids_status[id] == 1}}
-                    <div>Running</div>
-                    {{elseif ids_status[id] == 2}}
-                    <div>Completed</div>
-                    {{elseif ids_status[id] == 3}}
+                    <div>{{webhook_type}}</div>
+                    <!-- <div class="text-muted">30 Tasks</div> -->
+                  </td>
+                  <td data-label="Title">
+                    {{#if status == 1}}
+                    <div>On Process</div>
+                    {{elseif status == 2}}
+                    <div>Success</div>
+                    {{elseif status == 3}}
                     <div>Failed</div>
-                    {{elseif ids_status[id] == 4}}
-                    <div>Delayed</div>
                     {{/if}}
                     <!-- <div class="text-muted">30 Tasks</div> -->
                   </td>
-                  <td class="text-muted" data-label="Role">
-                    User
-                  </td>
+
                   <td>
                     <div class="btn-list flex-nowrap">
-                      <a href="/dashboard/queue-record/{{id}}/view" class="btn">
-                        Detail Process
+                      {{#if status == 3}}
+                      <a href="#" class="btn"
+                        on-click="@this.handleClick('DISPLAY_ERROR',{ id : id, index : i },@event)">
+                        Display Error
                       </a>
-                      <div class="dropdown">
+                      {{/if}}
+                      <div class="dropdown" style="display: none;">
                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          {{#if status == 0 || status == 2}}
-                          <a class="dropdown-item" href="#"
-                            on-click="@this.handleClick('ADD_TO_QUEUE',{ id : id, index : i },@event)">
-                            Add to queue
-                          </a>
-                          {{else}}
-                          <a class="dropdown-item" href="#"
-                            on-click="@this.handleClick('REMOVE_TO_QUEUE',{ id : id, index : i },@event)">
-                            Stop
-                          </a>
-                          {{/if}}
-                          <a class="dropdown-item" href="#"
-                            on-click="@this.handleClick('DELETE',{ id : id, index : i },@event)">
-                            Delete
-                          </a>
-                          <a class="dropdown-item" href="#"
-                            on-click="@this.handleClick('COPY_LINK',{ id : id, index : i },@event)">
-                            Copy Link
-                          </a>
                         </div>
                       </div>
                     </div>
@@ -198,4 +180,4 @@
     </div>
   </div>
 </footer>
-<delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>
+<display-error-modal></display-error-modal>

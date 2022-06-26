@@ -171,5 +171,15 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async getHistories(props) {
+    try {
+      let query = SmartUrlSearchParams(props);
+      query.delete("webhook_id");
+      let resData = await axios.get(BaseService.WEBHOOK + `/${props.webhook_id}/histories?` + query.toString(), {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

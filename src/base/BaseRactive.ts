@@ -1,5 +1,6 @@
 import Ractive, { BaseParseOpts, ComputationDescriptor, ExtendOpts, PropertyOpts, ValueMap, InitOpts, AdaptorHandle } from "ractive";
 import { Router } from "routerjs";
+import GetDate from "./GetDate";
 import NewRactive, { RactiveExtendInterface, RactiveStaticInterface } from './NewRactive';
 
 export interface BaseRactiveInterface extends RactiveExtendInterface {
@@ -10,6 +11,7 @@ export interface BaseRactiveInterface extends RactiveExtendInterface {
   reInitializeObserve?: { (): void }
   getLang?: any
   parseQuery?: { (queryString: string) }
+  getDate?: { (date?: string, timezone?: string): string }
 }
 
 export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
@@ -41,6 +43,9 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
     }
     return query;
+  },
+  getDate(date,timezone){
+    return GetDate(date,timezone);
   },
   newOn: {},
 })

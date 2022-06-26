@@ -75,6 +75,9 @@ export default BaseRactive.extend<LoginInterface>({
         formData.append(key, form_data[key]);
       }
       let resData = await AuthService.loginService(formData);
+      if (this.req.query.redirect != null) {
+        return window.location.href = this.req.query.redirect;
+      }
       window.location.href = "/dashboard";
     } catch (ex) {
       console.error("submit - ex :: ", ex);

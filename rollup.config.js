@@ -3,7 +3,6 @@ import notify from 'rollup-plugin-notify';
 import multiInput from 'rollup-plugin-multi-input';
 import babel from 'rollup-plugin-babel';
 import html from "rollup-plugin-html";
-import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 import css from "rollup-plugin-import-css";
 import copy from 'rollup-plugin-copy'
@@ -17,6 +16,7 @@ import { baseUrl } from 'rollup-plugin-base-url';
 import typescriptPlugin from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 import svg from 'rollup-plugin-svg-import';
+import json from "@rollup/plugin-json";
 
 let baseOut = 'dist';
 export default {
@@ -29,10 +29,10 @@ export default {
     notify(),
     inject({
       // '$': 'jQuery',
-      exclude: ['**/*.html', "**/*.ts", "**/*.scss", "**/*.css"],
+      exclude: ['**/*.html', "**/*.ts", "**/*.scss", "**/*.css","**/*.json"],
     }),
     html(),
-    multiInput(), json(),
+    multiInput(),
     typescriptPlugin({
       clean: false,
       typescript,
@@ -45,6 +45,7 @@ export default {
       // prefix: `@import "src/base/flexbox.scss";`
     }),
     css(),
+    json(),
     nodeResolve({
       browser: true
     }),

@@ -8,6 +8,8 @@ export interface UserSelfInterface extends BaseRactiveInterface {
   getSelfUser?: { (): void }
   setSelfUser?: { (props: any): void }
   submitUpdate?: { (): void }
+  getTimezones?: { (): void }
+  setTimezones?: { (props: any): void }
 }
 
 const UserSelf = BaseRactive.extend<UserSelfInterface>({
@@ -19,12 +21,14 @@ const UserSelf = BaseRactive.extend<UserSelfInterface>({
         2: "Deactivate"
       },
       form_data: {},
-      form_error: {}
+      form_error: {},
+      timezone_datas: []
     }
   },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
+      this.setTimezones(await this.getTimezones());
       this.setSelfUser(await this.getSelfUser());
       _super();
       resolve();
@@ -160,7 +164,8 @@ const UserSelf = BaseRactive.extend<UserSelfInterface>({
         last_name: _form_data.last_name,
         email: _form_data.email,
         password: _form_data.password,
-        status: _form_data.status
+        status: _form_data.status,
+        timezone: _form_data.timezone
       })
 
       new Notify({
@@ -173,6 +178,18 @@ const UserSelf = BaseRactive.extend<UserSelfInterface>({
     } catch (ex) {
       console.error("submitUpdate - ex :: ", ex);
     }
+  },
+  getTimezones() {
+    try {
+      let resDatas = UserService.getTimezones();
+      return resDatas;
+    } catch (ex) {
+      console.error("getTimeZones - ex :: ", ex);
+    }
+  },
+  setTimezones(props: any) {
+    if (props == null) return;
+    this.set("timezone_datas", props.return);
   }
 });
 

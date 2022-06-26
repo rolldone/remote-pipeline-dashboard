@@ -28,6 +28,14 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           req: req
         })
       })
+      .get("/:id/histories",async(req,context)=>{
+        // Handle the route here...
+        let webhook = (await import("./WebhookHistories")).default;
+        new webhook({
+          target: "#index-body",
+          req: req
+        })
+      })
       .run();
     window.webhookRouter = this.router
   }
