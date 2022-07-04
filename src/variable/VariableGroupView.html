@@ -1,0 +1,80 @@
+<div class="row row-cards">
+  <div class="col-md-12">
+    <div class="card">
+      <ul class="nav nav-tabs" data-bs-toggle="tabs">
+        <li class="nav-item">
+          <a href="#tabs-home-schema" class="nav-link {{active_tab == -1?'active':''}}" data-bs-toggle="tab"
+            on-click="@this.handleClick('SWITCH_TAB',{ index : -1 },@event)">
+            <span>
+              Schema
+              <span>
+          </a>
+        </li>
+        {{#each variable_groups:i}}
+        <li class="nav-item">
+          <a href="#tabs-home-schema" class="nav-link {{active_tab == i?'active':''}}" data-bs-toggle="tab"
+            on-click="@this.handleClick('SWITCH_TAB',{ index : i },@event)">
+            <svg xmlns="http://www.w3.org/2000/svg" on-click="@this.handleClick('DELETE_TAB',{ index : i },@event)" style="color: red; font-size: 0.5em;" class="icon icon-tabler icon-tabler-x"
+              width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span contenteditable="true" value="{{name}}">
+              {{name}}
+            <span>
+          </a>
+        </li>
+        {{/each}}
+        <li class="nav-item-button">
+          <a href="#tabs-settings-10" class="nav-link-button" title="Settings" data-bs-toggle="tab"
+            on-click="@this.handleClick('ADD_TAB',{},@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24"
+              height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <circle cx="12" cy="12" r="9"></circle>
+              <line x1="9" y1="12" x2="15" y2="12"></line>
+              <line x1="12" y1="9" x2="12" y2="15"></line>
+            </svg>
+          </a>
+        </li>
+      </ul>
+      <div class="card-body" style="padding:0;">
+        <div class="tab-content">
+          {{#if active_tab == -1}}
+          <div class="tab-pane {{ active_tab == -1 ? 'active' : '' }}">
+            <div>
+              <div class="list-group list-group-flush">
+                {{> input_schema_partials}}
+              </div>
+            </div>
+          </div>
+          {{else}}
+          <div class="tab-pane {{ active_tab > -1 ? 'active' : '' }}">
+            <div>
+              <div class="list-group list-group-flush">
+                {{> input_type_partials}}
+              </div>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+      {{#if variable_groups.length > 0}}
+      <div class="card-footer">
+        <div class="row align-items-center">
+          <div class="col">Learn more about <a href="#">Project ID</a></div>
+          <div class="col-auto">
+            <a href="#" class="btn btn-primary" on-click="@this.handleClick('ADD_MORE',{},@event)">
+              Add More
+            </a>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

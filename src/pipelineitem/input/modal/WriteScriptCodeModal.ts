@@ -1,8 +1,9 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './WriteScriptCodeModalView.html';
+import loadjs from 'loadjs';
 // Ace Editor
-import * as ace from 'brace';
-import 'brace/theme/github';
+// import * as ace from 'brace';
+// import 'brace/theme/github';
 
 import { debounce, DebouncedFunc } from "lodash";
 
@@ -12,9 +13,11 @@ export interface WriteScriptCodeModalInterface extends BaseRactiveInterface {
   show: { (props: any): void }
   hide: { (): void }
   selectLanguage: { (whatLang: string): any }
+  loadAceEditor?: { (): any }
+
 }
 
-var editor: ace.Editor = null;
+var editor = null;
 const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
   template,
   data() {
@@ -40,6 +43,56 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
         break;
     }
   },
+  loadAceEditor() {
+    let self = this;
+    return new Promise((resolve) => {
+      let loadAceEditorFunc = () => {
+        let props = this.get("form_data");
+        let pendingSave: DebouncedFunc<any> = null;
+        editor = window.ace.edit(this.get("id_code_mirror"));
+        editor.setTheme('ace/theme/github');
+        editor.setOption("tabSize", 2);
+        let _content = props.content == null ? [] : props.content;
+        editor.setValue(_content.join("\r\n"));
+        editor.clearSelection();
+
+        let _pendingCheckTypeFile: DebouncedFunc<any> = null;
+        this.observe("form_data.file_path", (val: string) => {
+          if (_pendingCheckTypeFile != null) {
+            _pendingCheckTypeFile.cancel();
+          }
+          _pendingCheckTypeFile = debounce(async () => {
+            let _ext = val.split('.').pop();
+            let language = await this.selectLanguage(_ext);
+            if (language != null) {
+              editor.getSession().setMode(language);
+            }
+          }, 2000);
+          _pendingCheckTypeFile();
+        });
+        return window.ace;
+      }
+      if (window.ace == null) {
+        loadjs([
+          'https://cdnjs.cloudflare.com/ajax/libs/ace/1.6.0/ace.js',
+        ], 'ace_editor', {
+          before: function (path, scriptEl) { /* execute code before fetch */ },
+          async: true,  // load files synchronously or asynchronously (default: true)
+          numRetries: 3, // see caveats about using numRetries with async:false (default: 0),
+          returnPromise: false  // return Promise object (default: false)
+        })
+        loadjs.ready('ace_editor', {
+          success: function () {
+            resolve(loadAceEditorFunc());
+          },
+          error: function (err) {
+          }
+        })
+      } else {
+        resolve(loadAceEditorFunc());
+      }
+    })
+  },
   async show(props) {
     this.set("form_data", props);
     this.set("allow_var_environment", props.allow_var_environment == true ? [null] : []);
@@ -52,27 +105,7 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
     });
     myModal.show();
 
-    editor = ace.edit(this.get("id_code_mirror"));
-    editor.setTheme('ace/theme/github');
-    editor.setOption("tabSize", 2);
-    let _content = props.content == null ? [] : props.content;
-    editor.setValue(_content.join("\r\n"));
-    editor.clearSelection();
 
-    let _pendingCheckTypeFile: DebouncedFunc<any> = null;
-    this.observe("form_data.file_path", (val: string) => {
-      if (_pendingCheckTypeFile != null) {
-        _pendingCheckTypeFile.cancel();
-      }
-      _pendingCheckTypeFile = debounce(async () => {
-        let _ext = val.split('.').pop();
-        let language = await this.selectLanguage(_ext);
-        if (language != null) {
-          editor.getSession().setMode(language);
-        }
-      }, 2000);
-      _pendingCheckTypeFile();
-    });
   },
   hide() {
     myModal.hide();

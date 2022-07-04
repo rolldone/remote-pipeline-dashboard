@@ -22,6 +22,7 @@ export interface QueueRecordInterface {
   type?: string
   exe_process_mode?: string
   exe_process_limit?: number
+  exe_variable_id?: number
   exe_delay?: null
 }
 

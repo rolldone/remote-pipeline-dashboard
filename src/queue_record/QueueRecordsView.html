@@ -146,6 +146,10 @@
                             on-click="@this.handleClick('COPY_LINK',{ id : id, index : i },@event)">
                             Copy Link
                           </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('OVERRIDE_QUEUE_VALUE',{ id : id, index : i },@event)">
+                            Add to queue with override value
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -199,3 +203,4 @@
   </div>
 </footer>
 <delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>
+<override-queue-modal on-listener="onOverrideQueueModalListener"></override-queue-modal>

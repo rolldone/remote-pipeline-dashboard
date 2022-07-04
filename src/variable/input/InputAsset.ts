@@ -4,9 +4,9 @@ import VariableService from "services/VariableService";
 import InputText, { InputTextInterface } from "./InputText";
 
 export interface InputAssetInterface extends InputTextInterface {
-  createNewAttachment: { (): void }
-  deleteAttachment: { (index: number): void }
-  submitFile: { (): void }
+  createNewAttachment?: { (): void }
+  deleteAttachment?: { (index: number): void }
+  submitFile?: { (): void }
 }
 
 export default InputText.extend<InputAssetInterface>({
@@ -125,53 +125,53 @@ export default InputText.extend<InputAssetInterface>({
       })
       let _resAttachmentDatas = resData.return;
       for (let a in _resAttachmentDatas) {
-        if (_resAttachmentDatas[a] instanceof Object){
+        if (_resAttachmentDatas[a] instanceof Object) {
           _form_data.attachment_datas[a] = {
             file: []
           }
-        _form_data.attachment_datas[a].file[0] = {
-          ..._resAttachmentDatas[a],
-          name: _resAttachmentDatas[a].originalname,
-          temp_name: _resAttachmentDatas[a].filename
+          _form_data.attachment_datas[a].file[0] = {
+            ..._resAttachmentDatas[a],
+            name: _resAttachmentDatas[a].originalname,
+            temp_name: _resAttachmentDatas[a].filename
+          }
+        } else {
+          // This is file exist before and if had exist the return just string like
+          // [Object object] so ignore it.
         }
-      }else{
-        // This is file exist before and if had exist the return just string like
-        // [Object object] so ignore it.
       }
-}
       this.set("form_data", _form_data);
     } catch (ex) {
-  throw ex;
-}
+      throw ex;
+    }
   },
-deleteAttachment(index) {
-  let _attachment_datas_deleted = [];
-  let _form_data = this.get("form_data");
-  let _attachment_datas_form_data = _form_data.attachment_datas;
-  // Add to deleted datas attachement
-  _attachment_datas_deleted.push(cloneDeep(_attachment_datas_form_data[index]));
-  _form_data.attachment_datas_deleted = _attachment_datas_deleted;
-  // Then you can delete the attachement
-  _attachment_datas_form_data.splice(index, 1);
+  deleteAttachment(index) {
+    let _attachment_datas_deleted = [];
+    let _form_data = this.get("form_data");
+    let _attachment_datas_form_data = _form_data.attachment_datas;
+    // Add to deleted datas attachement
+    _attachment_datas_deleted.push(cloneDeep(_attachment_datas_form_data[index]));
+    _form_data.attachment_datas_deleted = _attachment_datas_deleted;
+    // Then you can delete the attachement
+    _attachment_datas_form_data.splice(index, 1);
 
-  let _form_scheme = this.get("form_scheme");
-  let _attachment_datas = _form_scheme.attachment_datas || []
-  _form_scheme.attachment_datas = _attachment_datas;
-  _attachment_datas.splice(index, 1);
-  setTimeout(() => {
-    this.set("form_scheme", _form_scheme);
-    this.set("form_data", _form_data);
-  }, 100)
-},
-createNewAttachment() {
-  let _form_scheme = this.get("form_scheme");
-  let _attachment_datas = _form_scheme.attachment_datas || [];
-  _attachment_datas.push({
-    file: "",
-  });
-  _form_scheme.attachment_datas = _attachment_datas;
-  setTimeout(() => {
-    this.set("form_scheme", _form_scheme);
-  }, 100)
-}
+    let _form_scheme = this.get("form_scheme");
+    let _attachment_datas = _form_scheme.attachment_datas || []
+    _form_scheme.attachment_datas = _attachment_datas;
+    _attachment_datas.splice(index, 1);
+    setTimeout(() => {
+      this.set("form_scheme", _form_scheme);
+      this.set("form_data", _form_data);
+    }, 100)
+  },
+  createNewAttachment() {
+    let _form_scheme = this.get("form_scheme");
+    let _attachment_datas = _form_scheme.attachment_datas || [];
+    _attachment_datas.push({
+      file: "",
+    });
+    _form_scheme.attachment_datas = _attachment_datas;
+    setTimeout(() => {
+      this.set("form_scheme", _form_scheme);
+    }, 100)
+  }
 })

@@ -1,15 +1,17 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive"
+import loadjs from 'loadjs';
 // Ace editor
-import * as ace from 'brace';
-import 'brace/theme/github';
+// import * as ace from 'brace';
+// import 'brace/theme/github';
 
 
 import { debounce, DebouncedFunc } from "lodash"
 
-var editor: ace.Editor = null;
+var editor = null;
 
 export interface SimpleScriptInterface extends BaseRactiveInterface {
   selectLanguage: { (whatLang: string): any }
+  loadAceEditor?: { (): void }
 }
 
 const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
@@ -53,40 +55,104 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
       this.set("allow_var_environment", _form_data.allow_var_environment == true ? [null] : []);
       let mySelector = document.getElementById(this.get("id_code_mirror"));
 
-      editor = ace.edit(this.get("id_code_mirror"));
-      editor.setTheme('ace/theme/github');
-      editor.setValue(_form_data.content || "");
-      editor.setOption("tabSize", 2);
-      editor.clearSelection();
+      // editor = ace.edit(this.get("id_code_mirror"));
+      // editor.setTheme('ace/theme/github');
+      // editor.setValue(_form_data.content || "");
+      // editor.setOption("tabSize", 2);
+      // editor.clearSelection();
 
-      let _pendingSave: DebouncedFunc<any> = null;
-      editor.on("change", (e) => {
-        if (_pendingSave != null) {
-          _pendingSave.cancel();
-        }
-        _pendingSave = debounce(() => {
-          let textStr: string = editor.getValue();
-          this.set("form_data.content", textStr);
-          this.fire("listener", "SAVE", this.get("form_data"), e);
-        }, 2000);
-        _pendingSave();
-      })
+      // let _pendingSave: DebouncedFunc<any> = null;
+      // editor.on("change", (e) => {
+      //   if (_pendingSave != null) {
+      //     _pendingSave.cancel();
+      //   }
+      //   _pendingSave = debounce(() => {
+      //     let textStr: string = editor.getValue();
+      //     this.set("form_data.content", textStr);
+      //     this.fire("listener", "SAVE", this.get("form_data"), e);
+      //   }, 2000);
+      //   _pendingSave();
+      // })
 
-      let _pendingCheckTypeFile: DebouncedFunc<any> = null;
-      this.observe("form_data.file_name", (val: string) => {
-        if (_pendingCheckTypeFile != null) {
-          _pendingCheckTypeFile.cancel();
-        }
-        _pendingCheckTypeFile = debounce(async () => {
-          let _ext = val.split('.').pop();
-          let language = await this.selectLanguage(_ext);
-          if (language != null) {
-            editor.getSession().setMode(language);
-          }
-        }, 2000);
-        _pendingCheckTypeFile();
-      });
+      // let _pendingCheckTypeFile: DebouncedFunc<any> = null;
+      // this.observe("form_data.file_name", (val: string) => {
+      //   if (_pendingCheckTypeFile != null) {
+      //     _pendingCheckTypeFile.cancel();
+      //   }
+      //   _pendingCheckTypeFile = debounce(async () => {
+      //     let _ext = val.split('.').pop();
+      //     let language = await this.selectLanguage(_ext);
+      //     if (language != null) {
+      //       editor.getSession().setMode(language);
+      //     }
+      //   }, 2000);
+      //   _pendingCheckTypeFile();
+      // });
+      this.loadAceEditor();
       resolve();
+    })
+  },
+
+  loadAceEditor() {
+    let self = this;
+    return new Promise((resolve) => {
+      let loadAceEditorFunc = () => {
+        let _form_data = this.get("form_data");
+        let pendingSave: DebouncedFunc<any> = null;
+        editor = window.ace.edit(this.get("id_code_mirror"));
+        editor.setTheme('ace/theme/github');
+        editor.setValue(_form_data.content || "");
+        editor.setOption("tabSize", 2);
+        editor.clearSelection();
+  
+        let _pendingSave: DebouncedFunc<any> = null;
+        editor.on("change", (e) => {
+          if (_pendingSave != null) {
+            _pendingSave.cancel();
+          }
+          _pendingSave = debounce(() => {
+            let textStr: string = editor.getValue();
+            this.set("form_data.content", textStr);
+            this.fire("listener", "SAVE", this.get("form_data"), e);
+          }, 2000);
+          _pendingSave();
+        })
+  
+        let _pendingCheckTypeFile: DebouncedFunc<any> = null;
+        this.observe("form_data.file_name", (val: string) => {
+          if (_pendingCheckTypeFile != null) {
+            _pendingCheckTypeFile.cancel();
+          }
+          _pendingCheckTypeFile = debounce(async () => {
+            let _ext = val.split('.').pop();
+            let language = await this.selectLanguage(_ext);
+            if (language != null) {
+              editor.getSession().setMode(language);
+            }
+          }, 2000);
+          _pendingCheckTypeFile();
+        });
+        return window.ace;
+      }
+      if (window.ace == null) {
+        loadjs([
+          'https://cdnjs.cloudflare.com/ajax/libs/ace/1.6.0/ace.js',
+        ], 'ace_editor', {
+          before: function (path, scriptEl) { /* execute code before fetch */ },
+          async: true,  // load files synchronously or asynchronously (default: true)
+          numRetries: 3, // see caveats about using numRetries with async:false (default: 0),
+          returnPromise: false  // return Promise object (default: false)
+        })
+        loadjs.ready('ace_editor', {
+          success: function () {
+            resolve(loadAceEditorFunc());
+          },
+          error: function (err) {
+          }
+        })
+      } else {
+        resolve(loadAceEditorFunc());
+      }
     })
   },
   handleChange(action, props, e) {

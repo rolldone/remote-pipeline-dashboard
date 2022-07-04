@@ -80,7 +80,8 @@ export default BaseRactive.extend<DoneInterface>({
           process_mode: _form_data.process_mode,
           delay: _form_data.delay,
           variable_id: _form_data.variable_id,
-          variable_option: _form_data.variable_option
+          variable_option: _form_data.variable_option,
+          access_host_type: _form_data.access_host_type
         });
         new Notify({
           status: 'success',

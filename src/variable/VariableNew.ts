@@ -5,6 +5,7 @@ import ProjectService from "services/ProjectService";
 import VariableService from "services/VariableService";
 import Notify from "simple-notify";
 import VariableGroup from "./VariableGroup";
+import VariableGroup2 from "./VariableGroup2";
 import template from './VariableNewView.html';
 
 declare let window: Window
@@ -20,7 +21,7 @@ export interface VariableNewInterface extends BaseRactiveInterface {
 export default BaseRactive.extend<VariableNewInterface>({
   template,
   components: {
-    "variable-group": VariableGroup,
+    "variable-group": VariableGroup2,
   },
   data() {
     return {
@@ -28,8 +29,9 @@ export default BaseRactive.extend<VariableNewInterface>({
       form_error: {},
       project_datas: [],
       pipeline_datas: [],
-      form_schemes: [],
-      variable_groups: []
+      schema_datas: [],
+      variable_groups: [],
+      deleted_ids: []
     }
   },
   oncomplete() {
@@ -62,6 +64,12 @@ export default BaseRactive.extend<VariableNewInterface>({
         },
         form_attribute_name: {
         }
+      })
+      this.observe("schema_datas", (val) => {
+        console.log("VariableNew - schema_datas :: ", val);
+      })
+      this.observe("variable_groups", (val) => {
+
       })
       _super();
       resolve();

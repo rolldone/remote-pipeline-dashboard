@@ -18,6 +18,7 @@ export interface ExecutionInterface {
   pipeline_item_ids?: Array<number>
   host_ids?: Array<number>
   description?: string
+  access_host_type?: string
   branch?: string
   mode?: string
   delay?: number

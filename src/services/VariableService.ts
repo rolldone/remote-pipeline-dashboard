@@ -14,6 +14,8 @@ export interface variable {
   data?: any
   schema?: any
   description?: string
+
+  deleted_ids?: Array<number>
 }
 
 export interface assetUpload {
@@ -30,7 +32,8 @@ export default {
         switch (key) {
           case 'data':
           case 'schema':
-            formData.append(key, JSON.stringify(props[key]));
+          case 'deleted_ids':
+            formData.append(key, JSON.stringify(props[key] || []));
             break;
           default:
             formData.append(key, props[key]);
@@ -82,7 +85,8 @@ export default {
         switch (key) {
           case 'data':
           case 'schema':
-            formData.append(key, JSON.stringify(props[key]));
+          case 'deleted_ids':
+            formData.append(key, JSON.stringify(props[key] || []));
             break;
           default:
             formData.append(key, props[key]);
@@ -326,7 +330,10 @@ export default {
       formData.append("id_variable", props.id_variable + "");
       formData.append("var_name", props.var_name);
       for (var a = 0; a < props.file_datas.length; a++) {
-        formData.append("file_datas[]", props.file_datas[a].file[0] as any);
+        if ((props.file_datas[a].file[0] instanceof Blob) == true) {
+          formData.append("files[]", props.file_datas[a].file[0] as any);
+        } else {
+        }
       }
       let resData = await FileService.upload(formData);
       return {

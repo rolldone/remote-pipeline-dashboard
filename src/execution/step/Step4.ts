@@ -24,6 +24,38 @@ export default BaseRactive.extend<BaseRactiveInterface>({
             <small class="form-hint">Put the name of this execution process.</small>
           </div>
         </div>
+        <label class="form-label">Access the host</label>
+        <div class="form-selectgroup-boxes row mb-3">
+          <div class="col-lg-6">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.access_host_type}}" value="one_to_many" class="form-selectgroup-input" checked="" on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">One queue to many host</span>
+                  <span class="d-block text-muted">This is the normal way how queue work. With one value with running on many hosts</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="col-lg-6">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.access_host_type}}" value="one_to_one" class="form-selectgroup-input" on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">One queue to one host</span>
+                  <span class="d-block text-muted">The queue with different value will running with on different host.</span>
+                  <span class="d-block text-muted">The is good option for dynamic variable. Request by api http request.</span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
         <label class="form-label">Process Mode</label>
         <div class="form-selectgroup-boxes row mb-3">
           <div class="col-lg-6">

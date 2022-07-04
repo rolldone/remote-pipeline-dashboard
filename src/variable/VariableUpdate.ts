@@ -18,8 +18,9 @@ export default VariableNew.extend<VariableUpdateInterface>({
   },
   async submitVariable() {
     try {
+      let _deleted_ids = this.get("deleted_ids");
       let form_data = this.get("form_data");
-      let _form_schemes = this.get("form_schemes");
+      let _schema_datas = this.get("schema_datas");
       let _variable_groups = this.get("variable_groups");
       let resData = await VariableService.updateVariable({
         id: form_data.id,
@@ -27,9 +28,11 @@ export default VariableNew.extend<VariableUpdateInterface>({
         description: form_data.description,
         project_id: form_data.project_id,
         pipeline_id: form_data.pipeline_id,
-        schema: _form_schemes,
-        data: _variable_groups
+        schema: _schema_datas,
+        data: _variable_groups,
+        deleted_ids: _deleted_ids
       });
+
       new Notify({
         status: 'success',
         title: 'Update Variable',
@@ -47,8 +50,10 @@ export default VariableNew.extend<VariableUpdateInterface>({
         type: 1,
         position: 'right top'
       })
+
     } catch (ex: any) {
       console.error("submitVariable - ex :: ", ex);
+      
       new Notify({
         status: 'error',
         title: 'Variable Error',
@@ -91,7 +96,7 @@ export default VariableNew.extend<VariableUpdateInterface>({
       schema: props.schema
     });
     this.set("variable_groups", props.data);
-    this.set("form_schemes", props.schema);
+    this.set("schema_datas", props.schema);
 
     this.setPipelines(await this.getPipelines(props.project_id));
   },

@@ -3,6 +3,7 @@ import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
 import Notify from "simple-notify";
 import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
+import OverrideQueueModal, { OverrideQueueModalInterface } from "./override_queue_modal/OverrideQueueModal";
 import template from './QueueRecordsView.html';
 
 export interface QueueRecordsInterface extends BaseRactiveInterface {
@@ -22,7 +23,8 @@ export interface QueueRecordsInterface extends BaseRactiveInterface {
 export default BaseRactive.extend<QueueRecordsInterface>({
   template,
   components: {
-    "delete-info-modal": DeleteInfoModal
+    "delete-info-modal": DeleteInfoModal,
+    "override-queue-modal": OverrideQueueModal
   },
   data() {
     return {
@@ -40,6 +42,12 @@ export default BaseRactive.extend<QueueRecordsInterface>({
               this.setQueueRecords(await this.getQueueRecords());
               let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
               _deleteModalInfo.hide();
+              break;
+          }
+        },
+        onOverrideQueueModalListener: async (c, action, text, e) => {
+          switch (action) {
+            case 'SUBMIT':
               break;
           }
         }
@@ -87,6 +95,12 @@ export default BaseRactive.extend<QueueRecordsInterface>({
         let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
         _deleteModalInfo.show(queue_record_data);
         // this.submitDeleteQueueRecord(props.id);
+        break;
+      case 'OVERRIDE_QUEUE_VALUE':
+        e.preventDefault();
+        queue_record_data = queue_record_datas[props.index];
+        let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
+        _override_queue_modal.show(queue_record_data);
         break;
     }
   },
