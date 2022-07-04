@@ -9,6 +9,7 @@ export interface OverrideQueueModalInterface extends BaseRactiveInterface {
   hide?: { (): void }
   getVariable?: { (): void }
   setVariable?: { (props: any): void }
+  submitAddVariableItem?: { (): void }
 }
 
 const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
@@ -40,6 +41,15 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
       _super();
     });
   },
+  handleClick(action, props, e) {
+    let _variable_item = this.get("variable_item");
+    switch (action) {
+      case 'SUBMIT':
+        e.preventDefault();
+        console.log("variable_item :: ", _variable_item);
+        break;
+    }
+  },
   handleChange(action, props, e) {
     switch (action) {
       case 'SELECT_PROCESS':
@@ -62,6 +72,13 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   },
   hide() {
 
+  },
+  async submitAddVariableItem(){
+    try{
+      
+    }catch(ex){
+      console.error("submitAddVariableItem - ex :: ", ex);
+    }
   },
   async getVariable() {
     try {
