@@ -46,5 +46,6 @@ export default {
   TOKEN: ENDPOINT + '/personal-token',
   OAUTH_USER: ENDPOINT + '/oauth-user',
   CREDENTIAL: ENDPOINT + '/credential',
-  CONFIGURATION: ENDPOINT + "/configuration"
+  CONFIGURATION: ENDPOINT + "/configuration",
+  VARIABLE_ITEM: ENDPOINT + "/variable-item"
 }

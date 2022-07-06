@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { QueueRecordInterface } from "services/QueueRecordService";
+import VariableItemService from "services/VariableItemService";
 import VariableService from "services/VariableService";
 import template from './OverrideQueueModalView.html';
 import VariableForm from "./VariableForm";
@@ -47,6 +48,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
       case 'SUBMIT':
         e.preventDefault();
         console.log("variable_item :: ", _variable_item);
+        this.submitAddVariableItem();
         break;
     }
   },
@@ -73,10 +75,12 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   hide() {
 
   },
-  async submitAddVariableItem(){
-    try{
-      
-    }catch(ex){
+  async submitAddVariableItem() {
+    try {
+      let _variable_item = this.get("variable_item");
+      let resData = await VariableItemService.addVariableItem(_variable_item);
+      debugger;
+    } catch (ex) {
       console.error("submitAddVariableItem - ex :: ", ex);
     }
   },
