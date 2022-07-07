@@ -79,6 +79,8 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
     try {
       let _variable_item = this.get("variable_item");
       let resData = await VariableItemService.addVariableItem(_variable_item);
+      resData = resData.return;
+      resData = await VariableItemService.getRenderVariableItemById(resData.id);
       debugger;
     } catch (ex) {
       console.error("submitAddVariableItem - ex :: ", ex);

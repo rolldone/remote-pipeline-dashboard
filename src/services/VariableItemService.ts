@@ -52,7 +52,20 @@ export default {
   getVariableItems(props) {
 
   },
-  getVariableItemById(id: number) {
-
+  async getVariableItemById(id: number) {
+    try {
+      let resData = await axios.get(BaseService.VARIABLE + '/' + id + "/view", {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async getRenderVariableItemById(id: number) {
+    try {
+      let resData = await axios.get(BaseService.VARIABLE_ITEM + '/' + id + "/view?action=render", {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }
