@@ -1,6 +1,14 @@
 import axios from 'axios';
 import BaseService from '../BaseService';
 
+
+export interface OutSideQueueInterface {
+  data: any
+  process_mode: string
+  process_limit: string
+  delay: number
+}
+
 export default {
   deleteItem: async (props: FormData): Promise<any> => {
     try {
@@ -38,6 +46,33 @@ export default {
         method: "post",
         url: BaseService.QUEUE + '/create',
         data: props,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+
+  async createByExistKey(queue_key: string, props: OutSideQueueInterface) {
+    try {
+      let formData = new FormData();
+      for (var key in props) {
+        switch (key) {
+          case 'data':
+            formData.append(key, JSON.stringify(props[key] || {}));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
+      }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE + "/create/" + queue_key,
+        data: formData,
         headers: {
           // 'Content-Type': `multipart/form-data;`,
         }

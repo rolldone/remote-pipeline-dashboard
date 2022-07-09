@@ -30,6 +30,7 @@ const Done = DoneExecution.extend<DoneInterface>({
           pipeline_item_ids: _form_data.pipeline_item_ids,
           host_ids: _form_data.host_ids,
           process_limit: _form_data.process_limit || 1,
+          access_host_type: _form_data.access_host_type,
           process_mode: _form_data.process_mode,
           delay: _form_data.delay,
           variable_id: _form_data.variable_id,
