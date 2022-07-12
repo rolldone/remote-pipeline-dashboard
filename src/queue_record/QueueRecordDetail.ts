@@ -1,7 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueRecordDetailService, { QueueRecordDetailInterface } from "services/QueueRecordDetailService";
 import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
-import DisplayProcessModal from "./display_process_modal/DisplayProcessModal";
+import DisplayProcessModal, { DisplayProcessModalInterface } from "./display_process_modal/DisplayProcessModal";
 import template from './QueueRecordDetailView.html';
 
 export interface QueueRecordDetailsInterface extends BaseRactiveInterface {
@@ -72,7 +72,7 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
         break;
       case 'DISPLAY_PROCESS':
         e.preventDefault();
-        let displayProcessModal = this.findComponent("display-process-modal");
+        let displayProcessModal : DisplayProcessModalInterface = this.findComponent("display-process-modal");
         displayProcessModal.show(_queue_record_detail_datas[props.index]);
         break;
 

@@ -24,7 +24,8 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
       log_array: {},
       log_socket_messages: {},
       log_status: {},
-      show_process_id: null
+      show_process_id: null,
+      select_action: null
     }
   },
   handleClick(action, props, e) {
@@ -32,6 +33,9 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
       case 'SHOW_PROGRESS':
         e.preventDefault();
         this.set("show_process_id", props.id);
+        let _log_array = this.get("log_array");
+        let _select_action = _log_array[props.index].data[props.index2].action;
+        this.set("select_action", _select_action);
         break;
     }
   },
@@ -41,12 +45,14 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
     var myModal = new window.bootstrap.Modal(myModalEl, {
       backdrop: 'static', keyboard: false
     })
-    myModalEl.addEventListener('hidden.bs.modal', function (event) {
+    let closeModal = function (event) {
       // do something...
+      myModalEl.removeEventListener("hidden.bs.modal", closeModal);
       if (_ws != null) {
         _ws.webSocket.close();
       }
-    })
+    };
+    myModalEl.addEventListener('hidden.bs.modal', closeModal)
     myModal.show();
     await this.set("log_array", {});
     setTimeout(() => {
@@ -106,59 +112,88 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
 
       // And try call websocket
       _ws = await CreateWebSocket("print_process_" + _queue_record_detail.id);
+      this.set("log_status", {});
+      this.set("select_action", null);
+      this.set("show_process_id", null);
+      this.set("log_socket_messages", {});
       let _log_socket_messages = {};
-      let _log_status = {};
       let _currentActionRunning = null;
       fff = (event) => {
-        for (let i = 0; i < resGroupPipeline.length; i++) {
-          let _tasks = resGroupPipeline[i].data;
-          for (var a = 0; a < _tasks.length; a++) {
-            let gg = _tasks[a];
-            let _action = gg.action;
-            console.log("tttttttttttttttttt ", _action);
-            if (_log_status[_action] == null) {
-              _log_status[_action] = "WAITING";
-              this.set("log_status", _log_status);
-            }
-            if (_log_socket_messages[_action] == null) {
-              _log_socket_messages[_action] = [];
-              this.set("log_socket_messages", {
-                ...this.get("log_socket_messages"),
-                [_action]: _log_socket_messages[_action]
-              })
-            }
-            try {
-              let _data = JSON.parse(event.data);
-
-              if (_data.action == _action) {
-                if (_data.data.includes("error-error") == true) {
-                  _log_status[_action] = "FAILED";
-                  this.set("log_status", _log_status);
-                  break;
-                }
-                if (_data.data != "--") {
-                  _log_status[_action] = "RUNNING";
-                  if (_currentActionRunning != _data.action) {
-                    _currentActionRunning = _data.action;
-                  }
-                }
-                // var element = document.getElementById("modal-theboyd");
-                //  var element2 = document.getElementById("modal-theboyd2");
-                // element.scrollTo(0, element2.offsetHeight);
-                console.log(_action + " :: " + _data.action + " :: ", _data.data);
-                _log_socket_messages[_action].push(_data.data);
-                this.set("log_socket_messages." + _action, _log_socket_messages[_action]);
-                this.set("log_status", _log_status);
-
-                // console.log(_data.action + " :: ", _data.data);
-              }
-            } catch (ex) {
-              console.log("vmadfvkdfvmkdfv :: ", event.data);
-              throw ex;
+        let _log_status = this.get("log_status") || {};
+        let _eventData = JSON.parse(event.data)
+        console.log("action :: ", _eventData.action);
+        console.log("data :: ", _eventData.data);
+        if (_log_socket_messages[_eventData.action] == null) {
+          _log_socket_messages[_eventData.action] = [];
+        }
+        if (_log_status[_eventData.action] == null) {
+          _log_status[_eventData.action] = "";
+        }
+        _log_socket_messages[_eventData.action].push(_eventData.data);
+        if (_eventData.data != null) {
+          if (_eventData.data.includes('error-error') == true) {
+            _log_status[_eventData.action] = 'FAILED';
+          } else {
+            if (_eventData.data != "--") {
+              _log_status[_eventData.action] = 'RUNNING';
+            } else {
+              _log_status[_eventData.action] = 'WAITING';
             }
           }
         }
-        console.log("log_socket_messages :: ", this.get("log_socket_messages"));
+        this.set("log_status", _log_status);
+        this.set("log_socket_messages", {
+          ..._log_socket_messages
+        });
+        // for (let i = 0; i < resGroupPipeline.length; i++) {
+        //   let _tasks = resGroupPipeline[i].data;
+        //   for (var a = 0; a < _tasks.length; a++) {
+        //     let gg = _tasks[a];
+        //     let _action = gg.action;
+        //     console.log("tttttttttttttttttt ", _action);
+        //     if (_log_status[_action] == null) {
+        //       _log_status[_action] = "WAITING";
+        //       this.set("log_status", _log_status);
+        //     }
+        //     if (_log_socket_messages[_action] == null) {
+        //       _log_socket_messages[_action] = [];
+        //       this.set("log_socket_messages", {
+        //         ...this.get("log_socket_messages"),
+        //         [_action]: _log_socket_messages[_action]
+        //       })
+        //     }
+        //     try {
+        //       let _data = JSON.parse(event.data);
+
+        //       if (_data.action == _action) {
+        //         if (_data.data.includes("error-error") == true) {
+        //           _log_status[_action] = "FAILED";
+        //           this.set("log_status", _log_status);
+        //           break;
+        //         }
+        //         if (_data.data != "--") {
+        //           _log_status[_action] = "RUNNING";
+        //           if (_currentActionRunning != _data.action) {
+        //             _currentActionRunning = _data.action;
+        //           }
+        //         }
+        //         // var element = document.getElementById("modal-theboyd");
+        //         //  var element2 = document.getElementById("modal-theboyd2");
+        //         // element.scrollTo(0, element2.offsetHeight);
+        //         console.log(_action + " :: " + _data.action + " :: ", _data.data);
+        //         _log_socket_messages[_action].push(_data.data);
+        //         this.set("log_socket_messages." + _action, _log_socket_messages[_action]);
+        //         this.set("log_status", _log_status);
+
+        //         // console.log(_data.action + " :: ", _data.data);
+        //       }
+        //     } catch (ex) {
+        //       console.log("vmadfvkdfvmkdfv :: ", event.data);
+        //       throw ex;
+        //     }
+        //   }
+        // }
+        // console.log("log_socket_messages :: ", this.get("log_socket_messages"));
       }
       _ws.webSocket.onmessage = fff;
       let resData = await QueueRecordDetailService.getQueueRecordDetailDisplayProcess({

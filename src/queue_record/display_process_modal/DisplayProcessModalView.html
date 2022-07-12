@@ -27,6 +27,8 @@
                     <span class="badge bg-red"></span>
                     {{elseif log_status[action] == "RUNNING"}}
                     <span class="badge bg-green"></span>
+                    {{else}}
+                    <span class="badge bg-yellow"></span>
                     {{/if}}
                   </div>
                   <div class="col-auto">
@@ -40,7 +42,7 @@
                   </div>
                   <div class="col-auto">
                     <a href="#" class="btn btn-cyan w-100 btn-sm"
-                      on-click="@this.handleClick('SHOW_PROGRESS',{id: id, index:j },@event)">
+                      on-click="@this.handleClick('SHOW_PROGRESS',{id: id, index: i, index2:j },@event)">
                       Show
                     </a>
                   </div>
@@ -50,6 +52,13 @@
               <div>
                 <div style="background: black;color: white; padding: 12px;">
                   {{#log_socket_messages:p}}
+                    {{#if p == select_action}}
+                      {{#log_socket_messages[p]:i}}
+                      <p>{{log_socket_messages[p][i]}}</p>
+                      {{/log_socket_messages[p]}}
+                    {{/if}}
+                  {{/log_socket_messages}}
+                 <!--  {{#log_socket_messages:p}}
                   {{#if action == null}}
                     {{#log_socket_messages[p]:ui}}
                       <p>{{log_socket_messages[p][ui]}}</p>
@@ -61,7 +70,7 @@
                     {{/log_socket_messages}}
                     {{/if}}
                   {{/if}}
-                  {{/log_socket_messages}}
+                  {{/log_socket_messages}} -->
                 </div>
               </div>
               {{/if}}
