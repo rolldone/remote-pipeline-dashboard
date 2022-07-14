@@ -244,6 +244,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
     let partial_input = [];
     for (var a = 0; a < command_datas.length; a++) {
       let command_item = command_datas[a];
+      command_item.parent_order_temp_ids = command_item.parent_order_temp_ids || [];
       if (a == 0) {
         if (command_item.parent_order_temp_ids.length > 0) {
           command_item.parent_order_temp_ids.splice(0, 1);

@@ -39,7 +39,6 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
         this.set("form_data", _form_data);
         console.log(this.get("form_data"));
         this.fire("listener", action, this.get("form_data"), e);
-        editor = null;
         break;
     }
   },
@@ -104,7 +103,7 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
       keyboard: false
     });
     myModal.show();
-
+    this.loadAceEditor();
 
   },
   hide() {

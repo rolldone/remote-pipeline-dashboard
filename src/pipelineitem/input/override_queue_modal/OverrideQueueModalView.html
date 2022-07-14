@@ -1,0 +1,89 @@
+<div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Override {{queue_data.exe_name}} "Not permanent!"</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Execution Name</label>
+          <input type="text" class="form-control" name="exe_name" value="{{queue_data.exe_name}}"
+            placeholder="Your report name" readonly>
+        </div>
+        <label class="form-label">Process Mode</label>
+        <div class="form-selectgroup-boxes row mb-3">
+          <div class="col-lg-6">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.process_mode}}" value="sequential" class="form-selectgroup-input"
+                checked="" on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Sequential Process</span>
+                  <span class="d-block text-muted">Provide only basic data needed for the report</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="col-lg-6">
+            <label class="form-selectgroup-item">
+              <input type="radio" name="{{form_data.process_mode}}" value="parallel" class="form-selectgroup-input"
+                on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
+              <span class="form-selectgroup-label d-flex align-items-center p-3">
+                <span class="me-3">
+                  <span class="form-selectgroup-check"></span>
+                </span>
+                <span class="form-selectgroup-label-content">
+                  <span class="form-selectgroup-title strong mb-1">Prallel Process</span>
+                  <span class="d-block text-muted">Insert charts and additional advanced analyses to be inserted in the
+                    report</span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+        {{#if form_data.process_mode == "parallel"}}
+        <div class="mb-3 ">
+          <label class="form-label">Parallel Process Limit</label>
+          <div>
+            <input type="number" class="form-control" name="process_limit" value="{{form_data.process_limit}}"
+              aria-describedby="emailHelp" placeholder="Enter number of limit">
+            <small class="form-hint">You can set how much limit parallel process every loop process. If you set 0 it
+              mean process all ip hosts at the same time.</small>
+          </div>
+        </div>
+        {{/if}}
+        <div class="mb-3 ">
+          <label class="form-label">Delay to start</label>
+          <div>
+            <input class="form-control" type="number" aria-describedby="emailHelp" placeholder="Enter number of limit"
+              value="{{form_data.delay}}" name="delay">
+            <small class="form-hint">You can set how much delay to start the queue default from system is 2000
+              ms</small>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        {{> variable_form_partial}}
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+          Cancel
+        </a>
+        <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('SUBMIT',{},@event)">
+          <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Submit
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
