@@ -110,47 +110,47 @@ const WriteScriptCodeModal = BaseRactive.extend<WriteScriptCodeModalInterface>({
     myModal.hide();
   },
   async selectLanguage(whatLang) {
-    (await import("brace/mode/plain_text"));
+    // (await import("brace/mode/plain_text"));
     let language = "ace/mode/plain_text";
     switch (whatLang) {
       case 'js':
-        (await import("brace/mode/javascript"));
+        // (await import("brace/mode/javascript"));
         language = "ace/mode/javascript";
         break;
       case 'php':
-        (await import("brace/mode/php"));
+        // (await import("brace/mode/php"));
         language = "ace/mode/php";
         break;
       case 'html':
-        (await import("brace/mode/html"));
+        // (await import("brace/mode/html"));
         language = "ace/mode/html";
         break;
       case 'py':
-        (await import("brace/mode/python"));
+        // (await import("brace/mode/python"));
         language = "ace/mode/python";
         break;
       case 'cpp':
-        (await import("brace/mode/c_cpp"));
+        // (await import("brace/mode/c_cpp"));
         language = "ace/mode/c_cpp";
         break;
       case 'rs':
-        (await import("brace/mode/rust"));
+        // (await import("brace/mode/rust"));
         language = "ace/mode/rust";
         break;
       case 'css':
-        (await import("brace/mode/css"));
+        // (await import("brace/mode/css"));
         language = "ace/mode/css";
         break;
       case 'json':
-        (await import("brace/mode/json"));
+        // (await import("brace/mode/json"));
         language = "ace/mode/json";
         break;
       case 'yaml':
-        (await import("brace/mode/yaml"));
+        // (await import("brace/mode/yaml"));
         language = "ace/mode/yaml";
         break;
       case 'sh':
-        (await import("brace/mode/sh"));
+        // (await import("brace/mode/sh"));
         language = "ace/mode/sh";
         break;
     }

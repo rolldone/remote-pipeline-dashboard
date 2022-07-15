@@ -12,6 +12,7 @@ export interface BaseRactiveInterface extends RactiveExtendInterface {
   getLang?: any
   parseQuery?: { (queryString: string) }
   getDate?: { (date?: string, timezone?: string): string }
+  safeJSON?: { (props: any, endpoint: string | Array<string>, defaultValue?: any, index?: number) }
 }
 
 export interface BaseRactiveStaticInterface extends Omit<RactiveStaticInterface, 'extend'> {
@@ -44,8 +45,30 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     }
     return query;
   },
-  getDate(date,timezone){
-    return GetDate(date,timezone);
+  getDate(date, timezone) {
+    return GetDate(date, timezone);
   },
   newOn: {},
+  safeJSON: function (props, endpoint, defaultValue = null, index) {
+    let _endpotingString = endpoint as string;
+    endpoint = _endpotingString.split(".");
+    if (endpoint.length == 0) {
+      return defaultValue;
+    }
+    if (index == null) {
+      index = 0;
+    }
+    if (props == null) {
+      return defaultValue;
+    }
+    if (props[endpoint[index]] == null) {
+      return defaultValue;
+    }
+    props = props[endpoint[index]];
+    index += 1;
+    if (index == endpoint.length) {
+      return props;
+    }
+    return this.safeJSON(props, endpoint.join("."), defaultValue, index);
+  }
 })

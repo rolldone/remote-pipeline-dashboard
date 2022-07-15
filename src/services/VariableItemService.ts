@@ -43,8 +43,34 @@ export default {
       throw ex;
     }
   },
-  updateVariableItem(props?: VariableItemInterface) {
-
+  async updateVariableItem(props?: VariableItemInterface) {
+    try {
+      let formData = new FormData();
+      for (var key in props) {
+        switch (key) {
+          case 'datas':
+          case 'schema':
+          case 'deleted_ids':
+          case 'var_schema':
+            formData.append(key, JSON.stringify(props[key] || []));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
+      }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.VARIABLE_ITEM + '/update',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   },
   deleteVariableItems(ids: Array<number>) {
 
@@ -54,7 +80,7 @@ export default {
   },
   async getVariableItemById(id: number) {
     try {
-      let resData = await axios.get(BaseService.VARIABLE + '/' + id + "/view", {});
+      let resData = await axios.get(BaseService.VARIABLE_ITEM + '/' + id + "/view", {});
       return resData.data;
     } catch (ex) {
       throw ex;

@@ -30,7 +30,16 @@ const CreateQueueCommand = BasicCommand.extend<CreateQueueCommandInterface>({
   onconstruct() {
     this.newOn = {
       onOverrideQueueModalListener: (c, action, text, e) => {
-        debugger;
+        switch (action) {
+          case 'SUBMIT':
+            let _index = this.get("select_index");
+            let _register_queue_datas: Array<any> = this.get("form_data.data.queue_datas") || [];
+            _register_queue_datas[_index].data = text;
+            this.set("form_data.data.queue_datas", _register_queue_datas);
+            let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
+            _override_queue_modal.hide();
+            break;
+        }
       }
     }
     this._super();
@@ -62,7 +71,8 @@ const CreateQueueCommand = BasicCommand.extend<CreateQueueCommandInterface>({
         queue_data = _queue_datas[props.index];
         _register_queue_datas.push({
           id: queue_data.id,
-          name: queue_data.exe_name
+          name: queue_data.exe_name,
+          data: {}
         });
         this.set("form_data.data.queue_datas", _register_queue_datas);
         this.displayRegisterQueuePartial();
@@ -75,15 +85,17 @@ const CreateQueueCommand = BasicCommand.extend<CreateQueueCommandInterface>({
         break;
       case 'OVERRIDE':
         e.preventDefault();
+        this.set("select_index", props.index);
         _register_queue_data = _register_queue_datas[props.index];
         for (let i in _queue_datas) {
           if (_register_queue_data.id == _queue_datas[i].id) {
             queue_data = _queue_datas[i];
+            queue_data = queue_data;
+            let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
+            _override_queue_modal.show(queue_data, _register_queue_data.data);
             break;
           }
         }
-        let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
-        _override_queue_modal.show(queue_data);
         break;
     }
   },

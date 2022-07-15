@@ -1,8 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './PipeLinesView.html';
-import { BrowserHistoryEngine, createRouter, Router } from "routerjs";
 import PipelineService from "services/PipelineService";
-import Ractive from "ractive";
 import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 
 declare let window: Window;
