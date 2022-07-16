@@ -55,8 +55,7 @@ export default BaseRactive.extend<ExecutionsInterface>({
                 data: text,
                 execution_id: text.execution_id,
               })
-              break;
-            case 'DISPOSE':
+
               break;
           }
         }
@@ -211,6 +210,8 @@ export default BaseRactive.extend<ExecutionsInterface>({
         queue_record_id: resData.return.id,
         schedule_type: props.schedule_type
       })
+      let queueSchedulerModal: QueueSchedulerInterface = this.findComponent("scheduler-modal");
+      queueSchedulerModal.hide();
     } catch (ex) {
       console.error("submitAddQueueSchedule - ex :: ", ex);
     }

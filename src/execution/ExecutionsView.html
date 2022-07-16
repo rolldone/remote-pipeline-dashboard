@@ -93,6 +93,8 @@
               <thead>
                 <tr>
                   <th>Execution Name</th>
+                  <th>Pipeline Name</th>
+                  <th>Variable</th>
                   <th>Status</th>
                   <th>Role</th>
                   <th class="w-1"></th>
@@ -103,12 +105,22 @@
                 <tr>
                   <td data-label="Name">
                     <div class="d-flex py-1 align-items-center">
-                      <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)"></span>
+                      <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)">
+                        {{id}}
+                      </span>
                       <div class="flex-fill">
                         <div class="font-weight-medium">{{name}}</div>
                         <div class="text-muted"><a href="#" class="text-reset">{{description}}</a></div>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    <div>{{pip_name}}</div>
+                    <div class="text-muted">{{pro_name}}</div>
+                  </td>
+                  <td>
+                    <div>{{var_name}}</div>
+                    <div class="text-muted">{{variable_option}}</div>
                   </td>
                   <td data-label="Title">
                     <div>Ready</div>

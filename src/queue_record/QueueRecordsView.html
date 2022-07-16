@@ -78,9 +78,10 @@
               <thead>
                 <tr>
                   <th>Execution Name</th>
+                  <th>Pipeline Name</th>
                   <th>Queue Mode</th>
                   <th>Status</th>
-                  <th>--</th>
+                  <!-- <th>--</th> -->
                   <th class="w-1"></th>
                 </tr>
               </thead>
@@ -89,16 +90,22 @@
                 <tr>
                   <td data-label="Name">
                     <div class="d-flex py-1 align-items-center">
-                      <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)"></span>
+                      <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)">
+                        {{id}}
+                      </span>
                       <div class="flex-fill">
                         <div class="font-weight-medium">{{exe_name}}</div>
                         <div class="text-muted"><a href="#" class="text-reset">{{@this.getDate(updated_at)}}</a></div>
+                        <div class="text-muted"><b>{{queue_key}}</b></div>
                       </div>
                     </div>
                   </td>
                   <td data-label="Title">
+                    {{pip_name}}
+                  </td>
+                  <td data-label="Title">
                     <div>{{exe_process_mode}}</div>
-                    <!-- <div class="text-muted">30 Tasks</div> -->
+                    <div class="text-muted">Access Type : {{exe_access_host_type}}</div>
                   </td>
                   <td data-label="Title">
                     {{#if ids_status[id] == 0}}
@@ -114,9 +121,9 @@
                     {{/if}}
                     <!-- <div class="text-muted">30 Tasks</div> -->
                   </td>
-                  <td class="text-muted" data-label="Role">
+                  <!-- <td class="text-muted" data-label="Role">
                     User
-                  </td>
+                  </td> -->
                   <td>
                     <div class="btn-list flex-nowrap">
                       <a href="/dashboard/queue-record/{{id}}/view" class="btn">

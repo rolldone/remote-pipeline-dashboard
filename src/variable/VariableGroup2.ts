@@ -160,26 +160,30 @@ const VariableGroup2 = BaseRactive.extend<VariableGroup2Interface>({
           ..._template.t[0]
         });
       } else {
-        if (_variable_group.datas[a].name == null) {
-          _variable_group.datas[a].name = _schema_datas[a].name;
-          let _template = this.renderValue(a);
-          _input_type_partials.push({
-            ..._template.t[0]
-          });
-        } else if (_variable_group.datas[a].name != _schema_datas[a].name) {
+        if (
+          _variable_group.datas[a].name == null ||
+          _variable_group.datas[a].name != _schema_datas[a].name) {
           _variable_group.datas[a].name = _schema_datas[a].name;
           let _template = this.renderValue(a);
           _input_type_partials.push({
             ..._template.t[0]
           });
         } else {
-
+          if (_variable_group.datas[a].type != _schema_datas[a].type) {
+            _variable_group.datas[a] = JSON.parse(JSON.stringify(_schema_datas[a]));
+          } else {
+            _variable_group.datas[a].name = _schema_datas[a].name;
+          }
+          let _template = this.renderValue(a);
+          _input_type_partials[a] = {
+            ..._template.t[0]
+          }
         }
       }
     }
-    this.set("variable_groups", _variable_groups);
     console.log("_variable_groups :: ", _variable_groups);
     console.log("_input_type_partials :: ", _input_type_partials);
+    this.set("variable_groups", _variable_groups);
     this.resetPartial("input_type_partials", _input_type_partials);
     this.resetPartial("input_schema_partials", []);
   },

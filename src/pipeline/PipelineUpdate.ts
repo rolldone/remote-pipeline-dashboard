@@ -3,6 +3,14 @@ import Notify from "simple-notify";
 import PipelineNew, { PipelineNewInterface } from "./PipelineNew";
 
 export default PipelineNew.extend<PipelineNewInterface>({
+  data() {
+    return {
+      page: {
+        title_name: 'Edit Pipeline',
+        form_name: 'Edit Pipeline form'
+      }
+    }
+  },
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {

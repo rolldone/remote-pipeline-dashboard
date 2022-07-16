@@ -1,3 +1,4 @@
+import { DeleteInfoModalInterface } from "queue_record/delete_info_modal/DeleteInfoModal";
 import QueueRecords, { QueueRecordsInterface } from "queue_record/QueueRecords";
 import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
@@ -24,6 +25,15 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   },
   onconstruct() {
     this.newOn = {
+      onDeleteModalInfoListener: async (c, action, text, e) => {
+        switch (action) {
+          case 'DELETED':
+            this.setQueueRecords(await this.getQueueRecords());
+            let _deleteModalInfo: DeleteInfoModalInterface = this.findComponent("delete-info-modal");
+            _deleteModalInfo.hide();
+            break;
+        }
+      },
       onSchedulerModalListener: async (object, action, text, c) => {
         switch (action) {
           case 'SUBMIT':

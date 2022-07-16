@@ -72,6 +72,10 @@ export default BaseRactive.extend<PipelineNewInterface>({
   },
   data() {
     return {
+      page: {
+        title_name: 'Add New Pipeline',
+        form_name: 'New Pipeline form'
+      },
       select_source_from: null,
       form_data: {},
       form_error: {},

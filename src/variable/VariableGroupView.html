@@ -27,9 +27,8 @@
           </a>
         </li>
         {{/each}}
-        <li class="nav-item-button">
-          <a href="#tabs-settings-10" class="nav-link-button" title="Settings" data-bs-toggle="tab"
-            on-click="@this.handleClick('ADD_TAB',{},@event)">
+        <li class="nav-item" style="display: flex; width: 50px; border-right: 1px solid #cbd5e1; border-left: 1px solid #cbd5e1;">
+          <a href="#tabs-settings-10" class="nav-link-button" style="margin: 0 auto; display: flex; transition: color 0.3s; align-items: center; margin-bottom: -1px; background: none; border: 1px solid transparent; border-top-left-radius: 4px; border-top-right-radius: 4px;" title="New Variable" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" on-click="@this.handleClick('ADD_TAB',{},@event)">
             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24"
               height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -42,7 +41,7 @@
           </a>
         </li>
       </ul>
-      <div class="card-body" style="padding:0;">
+      <div class="card-body">
         <div class="tab-content">
           {{#if active_tab == -1}}
           <div class="tab-pane {{ active_tab == -1 ? 'active' : '' }}">

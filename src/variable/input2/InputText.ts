@@ -7,7 +7,7 @@ export interface InputTextInterface extends BaseRactiveInterface {
 const InputText = BaseRactive.extend<InputTextInterface>({
   template: /* html */`
     <div class="col text-truncate">
-      <input type="text" class="form-control" name="name" value="{{schema_data.name}}" placeholder="Input var name">
+      <input type="text" class="form-control" name="name" value="{{schema_data.name}}" placeholder="Input var name" readonly={{readonly}}>
       <br/>
       <input type="text" class="form-control" name="value" value="{{schema_data.value}}" placeholder="Input Value">
     </div>
@@ -35,6 +35,7 @@ const InputText = BaseRactive.extend<InputTextInterface>({
   },
   data() {
     return {
+      readonly: false,
       form_data: {},
       index: null,
       schema_data: {},

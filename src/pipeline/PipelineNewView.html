@@ -8,17 +8,19 @@
           pipeline
         </div>
         <h2 class="page-title">
-          Add New Pipeline
+          {{page.title_name}}
         </h2>
       </div>
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
+          {{#if form_data.id != null && form_data.id != ""}}
           <span class="d-none d-sm-inline">
             <a href="/dashboard/variable?pipeline_id={{@this.req.params.id}}" class="btn btn-white">
               Manage Variable
             </a>
           </span>
+          {{/if}}
           <a href="/dashboard/pipeline" class="btn btn-primary d-none d-sm-inline-block">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-corner-up-left" width="24"
@@ -39,7 +41,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">New Pipeline form</h3>
+        <h3 class="card-title">{{page.form_name}}</h3>
       </div>
       <div class="card-body">
         <form id="pipeline-form">
@@ -81,11 +83,11 @@
           </div>
           <div class="mb-3">
             {{#if form_data.repo_data.repo_name != null}}
-              <repo-selected on-listener="onRepoSelectedListener" form_data={{form_data.repo_data}}></repo-selected>
+            <repo-selected on-listener="onRepoSelectedListener" form_data={{form_data.repo_data}}></repo-selected>
             {{else}}
-              {{#if select_source_from != ""}}
-                {{ > repo_list_partial }}
-              {{/if}}
+            {{#if select_source_from != ""}}
+            {{ > repo_list_partial }}
+            {{/if}}
             {{/if}}
           </div>
           {{/if}}

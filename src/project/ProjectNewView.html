@@ -14,11 +14,13 @@
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
+          {{#if form_data.id != null}}
           <span class="d-none d-sm-inline">
-            <a href="/dashboard/pipeline?project_id=1" class="btn btn-white">
+            <a href="/dashboard/pipeline?project_id={{form_data.id}}" class="btn btn-white">
               Manage Pipeline
             </a>
           </span>
+          {{/if}}
           <a href="/dashboard/project" class="btn btn-primary d-none d-sm-inline-block">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-corner-up-left" width="24"
