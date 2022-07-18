@@ -23,6 +23,11 @@ export interface PipelineNewInterface extends BaseRactiveInterface {
   submit?: { (): void }
 }
 
+export const SELECT_PIPLINE_PLANNING = {
+  WITH_REPOSITORY: 'WITH_REPOSITORY',
+  BASIC: 'BASIC'
+}
+
 export default BaseRactive.extend<PipelineNewInterface>({
   template,
   partials: {
@@ -76,6 +81,7 @@ export default BaseRactive.extend<PipelineNewInterface>({
         title_name: 'Add New Pipeline',
         form_name: 'New Pipeline form'
       },
+      select_pipeline_planning: SELECT_PIPLINE_PLANNING.BASIC,
       select_source_from: null,
       form_data: {},
       form_error: {},
@@ -150,6 +156,15 @@ export default BaseRactive.extend<PipelineNewInterface>({
   },
   async handleClick(action, props, e) {
     switch (action) {
+      case 'SELECT_PIPLINE_PLANNING':
+        e.preventDefault();
+        this.set("select_pipeline_planning", props);
+        switch (props) {
+          case SELECT_PIPLINE_PLANNING.BASIC:
+            this.set("form_data.repo_data", {});
+            break;
+        }
+        break;
       case 'SELECT_PROVIDER':
         e.preventDefault();
         let _repository_popup = this.findComponent("repository-popup");

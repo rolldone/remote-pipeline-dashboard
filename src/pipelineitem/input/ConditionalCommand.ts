@@ -36,13 +36,13 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
       switch (val) {
         case 'includes':
         case 'equals':
+        case 'next':
+        case 'failed':
           let _condition_values = this.get("condition_values");
           this.displayPartial('parent_conditon_partial', _condition_values);
           this.set("form_data.data.condition_values", _condition_values);
           this.set("form_data.data.parent_condition_type", val);
           return;
-        case 'next':
-        case 'failed':
         case 'success':
           this.set("form_data.data.parent_condition_type", val);
           this.resetPartial('parent_conditon_partial', []);

@@ -1,6 +1,6 @@
 import PipelineService from "services/PipelineService";
 import Notify from "simple-notify";
-import PipelineNew, { PipelineNewInterface } from "./PipelineNew";
+import PipelineNew, { PipelineNewInterface, SELECT_PIPLINE_PLANNING } from "./PipelineNew";
 
 export default PipelineNew.extend<PipelineNewInterface>({
   data() {
@@ -32,6 +32,9 @@ export default PipelineNew.extend<PipelineNewInterface>({
   setPipeline(props) {
     if (props == null) return;
     this.set("form_data", props.return);
+    if (this.safeJSON(this.get("form_data"), "repo_data.repo_name", null) != null) {
+      this.set("select_pipeline_planning", SELECT_PIPLINE_PLANNING.WITH_REPOSITORY);
+    }
     let parseQuery = this.parseQuery(window.location.search);
     if (parseQuery.oauth_user_id != null) {
       this.set("form_data", {

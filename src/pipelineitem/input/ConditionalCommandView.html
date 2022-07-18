@@ -30,14 +30,12 @@
         <button type="button"
           class="btn {{parent_condition_type==@this.getParentConditionType().FAILED?'btn-primary':''}}"
           on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().FAILED },@event)">Failed</button>
-        <button type="button"
-          class="btn {{parent_condition_type==@this.getParentConditionType().SUCCESS?'btn-primary':''}}"
-          on-click="@this.handleClick('PARENT_CONDITION',{ value : @this.getParentConditionType().SUCCESS },@event)">Success</button>
       </div>
     </div>
     <div class="mb-3">
       {{> parent_conditon_partial}}
     </div>
+    {{#if parent_condition_type==@this.getParentConditionType().EQUALS || parent_condition_type==@this.getParentConditionType().INCLUDES}}
     <div class="mb-3">
       <label class="form-label">Working Directory</label>
       <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}"
@@ -48,6 +46,7 @@
       <input type="text" class="form-control" name="command" value="{{form_data.data.command}}"
         placeholder="Input command">
     </div>
+    {{/if}}
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>
       <textarea class="form-control" name="description" rows="6"

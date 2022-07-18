@@ -73,6 +73,17 @@
           </div>
           {{#if form_data.id != ""}}
           <div class="mb-3">
+            <label class="form-label">Pipeline Planning</label>
+            <div class="btn-group w-100">
+              <button type="button" class="btn {{select_pipeline_planning=='BASIC'?'btn-primary':''}}"
+                on-click="@this.handleClick('SELECT_PIPLINE_PLANNING','BASIC',@event)">Basic Pipeline</button>
+              <button type="button" class="btn {{select_pipeline_planning=='WITH_REPOSITORY'?'btn-primary':''}}"
+                on-click="@this.handleClick('SELECT_PIPLINE_PLANNING','WITH_REPOSITORY',@event)">With
+                repository</button>
+            </div>
+          </div>
+          {{#if select_pipeline_planning == "WITH_REPOSITORY"}}
+          <div class="mb-3">
             <label class="form-label">Source From </label>
             <div>
               <a href="#" class="btn btn-cyan" on-click="@this.handleClick('SELECT_PROVIDER',{},@event)">
@@ -90,6 +101,7 @@
             {{/if}}
             {{/if}}
           </div>
+          {{/if}}
           {{/if}}
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"
