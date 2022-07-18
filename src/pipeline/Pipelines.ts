@@ -1,6 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import template from './PipeLinesView.html';
-import PipelineService from "services/PipelineService";
+import PipelineService, { PipelineInterface, PipelineServiceInterface } from "services/PipelineService";
 import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 
 declare let window: Window;
@@ -43,8 +43,13 @@ export default BaseRactive.extend<PipelinesInterface>({
   },
   handleClick(action, props, e) {
     let _pipeline_datas = this.get("pipeline_datas");
-    let _pipeline_data = null;
+    let _pipeline_data: PipelineServiceInterface = null;
     switch (action) {
+      case 'DOWNLOAD_PIPELINE_TASK':
+        e.preventDefault();
+        _pipeline_data = _pipeline_datas[props.index];
+        PipelineService.downloadPipelineItems(_pipeline_data.pipeline_items)
+        break;
       case 'DELETE':
         e.preventDefault();
         _pipeline_data = _pipeline_datas[props.index];

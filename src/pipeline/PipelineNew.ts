@@ -3,7 +3,7 @@ import SmartValidation from "base/SmartValidation";
 import PipelineItems from "pipelineitem/PipelineItems";
 import Ractive from "ractive";
 import { Router } from "routerjs";
-import PipelineService from "services/PipelineService";
+import PipelineService, { PipelineServiceInterface } from "services/PipelineService";
 import ProjectService from "services/ProjectService";
 import RepositoryService from "services/RepositoryService";
 import Notify from "simple-notify";
@@ -155,7 +155,12 @@ export default BaseRactive.extend<PipelineNewInterface>({
     this.set("project_datas", props.return);
   },
   async handleClick(action, props, e) {
+    let _form_data: PipelineServiceInterface = this.get("form_data");
     switch (action) {
+      case 'DOWNLOAD_PIPELINE_TASK':
+        e.preventDefault();
+        PipelineService.downloadPipelineItems(_form_data.pipeline_items);
+        break;
       case 'SELECT_PIPLINE_PLANNING':
         e.preventDefault();
         this.set("select_pipeline_planning", props);

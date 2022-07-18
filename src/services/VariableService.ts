@@ -4,6 +4,7 @@ import SqlService from "./core/SqlService";
 import axios from "axios";
 import BaseService from "./BaseService";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
+import YAML from 'json-to-pretty-yaml';
 
 export interface variable {
   id?: number
@@ -341,6 +342,20 @@ export default {
         status_code: 200,
         return: resData
       }
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  downloadVariable(props: variable) {
+    try {
+      const data = YAML.stringify(props);
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+      element.setAttribute('download', "variable.yaml");
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
     } catch (ex) {
       throw ex;
     }

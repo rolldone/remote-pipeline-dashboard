@@ -4,6 +4,9 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 import { PipelinesInterface } from "pipeline/Pipelines";
+import { PipelineItemInterface, PipelineItemServiceInterface } from "./PipelineItemService";
+import YAML from 'json-to-pretty-yaml';
+import { PipelineTaskServiceInterface } from "./PipelineTaskService";
 
 export interface PipelineInterface {
   id?: number
@@ -21,6 +24,9 @@ export interface PipelineInterface {
 export interface PipelineServiceInterface extends PipelineInterface {
   ids?: Array<number>
   force_deleted?: boolean
+
+  pipeline_tasks?: Array<PipelineTaskServiceInterface>
+  pipeline_items?: Array<PipelineItemServiceInterface>
 }
 
 export default {
@@ -166,4 +172,18 @@ export default {
       throw ex;
     }
   },
+  downloadPipelineItems: async function (pipelineItems: Array<PipelineItemInterface>) {
+    try {
+      const data = YAML.stringify(pipelineItems);
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+      element.setAttribute('download', "pipeline_item.yaml");
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    } catch (ex) {
+      throw ex;
+    }
+  }
 }

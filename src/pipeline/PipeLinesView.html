@@ -83,6 +83,10 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('DOWNLOAD_PIPELINE_TASK',{ id : id, index: i},@event)">
+                            Download Pipeline Task
+                          </a>
+                          <a class="dropdown-item" href="#"
                             on-click="@this.handleClick('DELETE',{ id : id, index: i},@event)">
                             Delete
                           </a>

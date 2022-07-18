@@ -23,8 +23,14 @@ export default BaseRactive.extend<VariablesInterface>({
     });
   },
   handleClick(action, props, e) {
+    let _variable_datas = this.get("variable_datas");
     switch (action) {
       case 'TO_VARIABLE':
+        break;
+      case 'DOWNLOAD':
+        e.preventDefault();
+        let _variable_data = _variable_datas[props.index];
+        VariableService.downloadVariable(_variable_data);
         break;
     }
   },
