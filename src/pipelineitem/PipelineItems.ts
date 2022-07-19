@@ -9,6 +9,8 @@ import PipelineTaskService from "services/PipelineTaskService";
 import TestPipelineItemModal, { TestPipelineItemModalInterface } from "./execution_modal/TestPipelineItemModal";
 import Sortable from 'sortablejs';
 import ArrayMove from "base/ArrayMove";
+import ImportItemModal, { ImportItemModalInterface } from "./import_item_modal/ImportItemModal";
+import PipelineService from "services/PipelineService";
 
 export interface PipelineItemsInterface extends BaseRactiveInterface {
   setPipelineItems: { (props: any): void }
@@ -25,7 +27,8 @@ export default BaseRactive.extend<PipelineItemsInterface>({
     "command-group": CommandGroup,
     "add-pipeline-item": AddCommand,
     "list-group-item": ListGroupItem,
-    "test-pipeline-modal": TestPipelineItemModal
+    "test-pipeline-modal": TestPipelineItemModal,
+    "import-item-modal": ImportItemModal
   },
   data() {
     return {
@@ -36,6 +39,38 @@ export default BaseRactive.extend<PipelineItemsInterface>({
   },
   onconstruct() {
     this.newOn = {
+      onImportItemModalListener: async (c, action, text, object) => {
+        let pipeline = this.get("pipeline");
+        let pipeline_items = this.get("pipeline_items") || [];
+        switch (action) {
+          case 'SUBMIT':
+            let importItemModal: ImportItemModalInterface = this.findComponent("import-item-modal");
+            importItemModal.hide();
+            switch (text.import_type) {
+              case 'replace':
+                for (let i = 0; i < pipeline_items.length; i++) {
+                  await this.deletePipelineItem(i);
+                }
+                pipeline_items = text.file;
+                break;
+              case 'add_existing':
+                pipeline_items = [
+                  ...pipeline_items,
+                  ...text.file
+                ];
+                break;
+            }
+            for (var i in pipeline_items) {
+              pipeline_items[i].order_number = i;
+              pipeline_items[i].pipeline_id = pipeline.id;
+              pipeline_items[i].project_id = pipeline.project_id;
+              pipeline_items[i].command_datas = pipeline_items[i].pipeline_tasks;
+            }
+            this.set("pipeline_items", pipeline_items);
+            this.calibrateListGroup();
+            break;
+        }
+      },
       onTestPipelineModalListener: (c, action, text, object) => {
 
       },
@@ -98,6 +133,29 @@ export default BaseRactive.extend<PipelineItemsInterface>({
       resolve();
     });
   },
+  handleClick(action, props, e) {
+    let pipeline_items = this.get("pipeline_items");
+    switch (action) {
+      case 'SAVE_ALL':
+        e.preventDefault();
+        for (let i = 0; i < pipeline_items.length; i++) {
+          this.submitPipelineItem(i);
+        }
+        break;
+      case 'IMPORT_ITEM':
+        e.preventDefault();
+        let importItemModal: ImportItemModalInterface = this.findComponent("import-item-modal");
+        importItemModal.show({});
+        break;
+      case 'DOWNLOAD_ITEM':
+        e.preventDefault();
+        for (var i in pipeline_items) {
+          delete pipeline_items[i].command_datas;
+        }
+        PipelineService.downloadPipelineItems(pipeline_items);
+        break;
+    }
+  },
   calibrateListGroup() {
     let pipeline_items = this.get("pipeline_items");
     let command_group_calc = [];
@@ -138,7 +196,8 @@ export default BaseRactive.extend<PipelineItemsInterface>({
         type: _pipeline_item.type,
         order_number: _pipeline_item.order_number,
         project_id: _pipeline_item.pro_id,
-        pipeline_id: _pipeline_item.pip_id
+        pipeline_id: _pipeline_item.pip_id,
+        pipeline_tasks: _pipeline_item.pipeline_tasks
       })
     }
     this.set("pipeline_items", pipeline_items);

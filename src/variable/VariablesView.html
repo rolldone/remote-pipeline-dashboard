@@ -19,16 +19,26 @@
               Manage Pipelines
             </a>
           </span> -->
-          <a href="/dashboard/variable/new" class="btn btn-primary d-none d-sm-inline-block">
-            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-              stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Create new variable
-          </a>
+          <div class="dropdown">
+            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/dashboard/variable/new">
+                Create New Variable
+              </a>
+              <a class="dropdown-item" href="#" on-click="@this.handleClick('IMPORT_VARIABLE',{},@event)">
+                Import Variable
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -90,8 +100,9 @@
                             on-click="@this.handleClick('DOWNLOAD',{ id: id, index: i},@event)">
                             Download
                           </a>
-                          <a class="dropdown-item" href="#">
-                            Another action
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('DELETE',{ id: id, index: i},@event)">
+                            Delete
                           </a>
                         </div>
                       </div>
@@ -145,3 +156,4 @@
     </div>
   </div>
 </footer>
+<import-variable-modal on-listener="onImportVariableModalListener"></import-variable-modal>

@@ -9,10 +9,44 @@
       </div>
       <div class="list-group list-group-flush list-group-hoverable">
         <div class="list-group-item">
-          <add-pipeline-item on-listener="onAddPipelineItemListener" button_text="Add Pipeline Item"></add-pipeline-item>
+          <div class="row">
+            <div class="col">
+              <add-pipeline-item on-listener="onAddPipelineItemListener" button_text="Add Pipeline Item">
+              </add-pipeline-item>
+            </div>
+            <div class="col-md-auto">
+              <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle btn-info" data-bs-toggle="dropdown">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots" width="24"
+                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <circle cx="5" cy="12" r="1"></circle>
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="19" cy="12" r="1"></circle>
+                  </svg>
+                  <!-- SVG icon code -->
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#" on-click="@this.handleClick('SAVE_ALL',{},@event)">
+                    Save All
+                  </a>
+                  <a class="dropdown-item" href="#" on-click="@this.handleClick('IMPORT_ITEM',{},@event)">
+                    Import
+                  </a>
+                  <a class="dropdown-item" href="#" on-click="@this.handleClick('DOWNLOAD_ITEM',{},@event)">
+                    Download
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 <test-pipeline-modal on-listener="onTestPipelineModalListener"></test-pipeline-modal>
+<import-item-modal on-listener="onImportItemModalListener"></import-item-modal>
