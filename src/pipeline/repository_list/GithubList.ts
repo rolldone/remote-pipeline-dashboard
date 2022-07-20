@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import { debounce } from "lodash";
 import RepositoryService from "services/RepositoryService";
 import GithubSelectBranch, { GithubSelectBranchInterface } from "./GithubSelectBranch";
 
@@ -17,8 +18,15 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
   },
   template:/* html */`
     <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Repositories from ${FROM}</h3>
+      <div class="card-header" style="padding-right:0;">
+        <div class="row" style="width:100%;">
+          <div class="col" style="display:flex;">
+            <h3 class="card-title" style="align-self:center">Repositories from ${FROM}</h3>
+          </div>
+          <div class="col-md-auto">
+            <input class="form-control" type="text" aria-describedby="emailHelp" placeholder="Search Repository" value="{{query.search}}" name="search_repository">
+          </div>
+        </div>
       </div>
       <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
         <!-- <div class="list-group-header sticky-top">A</div> -->
@@ -31,7 +39,7 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
               </a>
             </div>
             <div class="col text-truncate">
-              <a href="#" class="text-body d-block">{{name}}</a>
+              <a href="#" class="text-body d-block">{{full_name}}</a>
               <div class="text-muted text-truncate mt-n1">{{description}}</div>
             </div>
             <div class="col-auto">
@@ -48,6 +56,7 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
   `,
   data() {
     return {
+      query: {},
       select_branch: {},
       repository_datas: [],
       form_data: {}
@@ -69,6 +78,19 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
       this.setRepositories(await this.getRepositories());
+      let pendingSearch = null;
+      this.observe("query.search", (val) => {
+        console.log(val);
+        if (pendingSearch != null) {
+          pendingSearch.cancel();
+        }
+
+        pendingSearch = debounce(async (data) => {
+          this.setRepositories(await this.getRepositories());
+        }, 1000);
+
+        pendingSearch(val)
+      })
       _super();
       resolve();
     });
@@ -98,9 +120,11 @@ const GitlabList = BaseRactive.extend<GitlabListInterface>({
   async getRepositories() {
     try {
       let form_data = this.get("form_data");
+      let query = this.get("query");
       let resData = await RepositoryService.getRepositories({
         from_provider: FROM,
-        oauth_user_id: form_data.oauth_user_id
+        oauth_user_id: form_data.oauth_user_id,
+        search: query.search
       })
       return resData;
     } catch (ex) {

@@ -10,6 +10,8 @@ export interface RepositoryInterface {
   orgName?: string
   repo_name?: string
   from_provider?: string
+
+  search?: string
 }
 
 export default {
