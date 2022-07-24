@@ -3,49 +3,38 @@ import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 
 declare let window: Window;
 
-interface ProjectInterface extends BaseRactiveInterface {
-}
-
-export default BaseRactive.extend<ProjectInterface>({
+const File = BaseRactive.extend<BaseRactiveInterface>({
   data() {
-    return {
-      project_datas: []
-    }
+    return {}
   },
   oncomplete() {
     return new Promise(async (resolve: Function) => {
       this.router = createRouter({
         engine: BrowserHistoryEngine({ bindClick: false }),
-        basePath: "/dashboard/project"
+        basePath: "/dashboard/file"
       })
         // Define the route matching a path with a callback
         .get('/', async (req, context) => {
           // Handle the route here...
-          let Projects = (await import("./Projects")).default;
-          new Projects({
-            target: "#index-body",
-            req: req
-          })
-        })
-        .get('/new', async (req, context) => {
-          // Handle the route here...
-          let ProjectNew = (await import("./ProjectNew")).default;
-          new ProjectNew({
+          let Files = (await import("./Files")).default;
+          new Files({
             target: "#index-body",
             req: req
           })
         })
         .get('/:id/view', async (req, context) => {
-          let ProjectNew = (await import("./ProjectUpdate")).default;
-          new ProjectNew({
+          let FileInfo = (await import("./FileInfo")).default;
+          new FileInfo({
             target: "#index-body",
             req: req
           })
         })
         .run();
 
-      window.projectRouter = this.router;
+      window.fileRouter = this.router;
       resolve();
     });
   },
 });
+
+export default File;

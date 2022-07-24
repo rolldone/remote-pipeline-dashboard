@@ -28,6 +28,7 @@ const ENDPOINT = '/xhr'
 export default {
   SQL: ENDPOINT + '/sql',
   FILE: ENDPOINT + '/file',
+  FILE2: ENDPOINT + '/file2',
   QUEUE: ENDPOINT + '/queue',
   QUEUE_RECORD: ENDPOINT + '/queue-record',
   QUEUE_RECORD_DETAIL: ENDPOINT + "/queue-record-detail",

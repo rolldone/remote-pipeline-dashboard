@@ -15,6 +15,7 @@ import ConfigurationService from "services/ConfigurationService";
 declare global {
   interface Window {
     router: Router
+    fileRouter: Router
     pipelineRouter: Router
     projectRouter: Router
     variableRouter: Router
@@ -108,6 +109,12 @@ export default function () {
               let Dashboard = (await import("./dashboard/Dashboard")).default;
               new Dashboard({
                 target: "#index-body",
+              })
+            })
+            .get('/file/(.*)?', async (req, context) => {
+              let Files = (await import("./file")).default;
+              new Files({
+                target: "#index-body"
               })
             })
             .get('/project/(.*)?', async (req, context) => {
