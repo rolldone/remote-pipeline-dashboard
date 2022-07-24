@@ -48,6 +48,8 @@ export default BaseRactive.extend<QueueRecordsInterface>({
         onOverrideQueueModalListener: async (c, action, text, e) => {
           switch (action) {
             case 'SUBMIT':
+              let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
+              _override_queue_modal.hide();
               break;
           }
         }

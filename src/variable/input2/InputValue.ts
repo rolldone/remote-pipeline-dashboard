@@ -4,6 +4,7 @@ import template from './InputValueView.html';
 import InputScript from "./InputScript";
 import InputText from "./InputText";
 import SwitchType from "./SwitchType";
+import InputAsset2 from "./InputAsset2";
 
 export interface InputValueInterface extends BaseRactiveInterface {
   displayPartial?: { (): void }
@@ -13,7 +14,7 @@ const InputValue = BaseRactive.extend<InputValueInterface>({
   template,
   components: {
     "input-text": InputText,
-    "input-asset": InputAsset,
+    "input-asset": InputAsset2,
     "input-script": InputScript,
     "switch-type": SwitchType
   },

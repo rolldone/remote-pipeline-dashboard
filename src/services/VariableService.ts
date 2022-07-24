@@ -102,29 +102,29 @@ export default {
           // 'Content-Type': `multipart/form-data;`,
         }
       })
-      for (let a = 0; a < props.data.length; a++) {
-        let tabs = props.data[a];
-        for (let b = 0; b < tabs.datas.length; b++) {
-          let _data = tabs.datas[b];
-          if (_data.attachment_datas != null) {
-            for (let c = 0; c < _data.attachment_datas.length; c++) {
-              let _item = _data.attachment_datas[c];
-              let _formData = new FormData();
-              _formData.append("from_path", _item.file[0].path);
-              _formData.append("to_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
-              let resMove = await FileService.move(_formData);
-            }
-          }
-          if (_data.attachment_datas_deleted != null) {
-            for (let c = 0; c < _data.attachment_datas_deleted.length; c++) {
-              let _item = _data.attachment_datas_deleted[c];
-              let _formData = new FormData();
-              _formData.append("delete_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
-              let resDelete = await FileService.delete(_formData);
-            }
-          }
-        }
-      }
+      // for (let a = 0; a < props.data.length; a++) {
+      //   let tabs = props.data[a];
+      //   for (let b = 0; b < tabs.datas.length; b++) {
+      //     let _data = tabs.datas[b];
+      //     if (_data.attachment_datas != null) {
+      //       for (let c = 0; c < _data.attachment_datas.length; c++) {
+      //         let _item = _data.attachment_datas[c];
+      //         let _formData = new FormData();
+      //         _formData.append("from_path", _item.file[0].path);
+      //         _formData.append("to_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
+      //         let resMove = await FileService.move(_formData);
+      //       }
+      //     }
+      //     if (_data.attachment_datas_deleted != null) {
+      //       for (let c = 0; c < _data.attachment_datas_deleted.length; c++) {
+      //         let _item = _data.attachment_datas_deleted[c];
+      //         let _formData = new FormData();
+      //         _formData.append("delete_path", "./storage/app/variables/" + props.id + "/" + _item.file[0].name)
+      //         let resDelete = await FileService.delete(_formData);
+      //       }
+      //     }
+      //   }
+      // }
       return resData.data;
     } catch (ex) {
       throw ex;

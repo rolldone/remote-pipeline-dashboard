@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import InputAsset from "./InputAsset";
+import InputAsset2 from "./InputAsset2";
 import template from './InputSchemaView.html';
 import InputScript from "./InputScript";
 import InputText from "./InputText";
@@ -13,7 +14,7 @@ const InputSchema = BaseRactive.extend<InputSchemaInterface>({
   template,
   components: {
     "input-text": InputText,
-    "input-asset": InputAsset,
+    "input-asset": InputAsset2,// InputAsset,
     "input-script": InputScript,
     "switch-type": SwitchType
   },

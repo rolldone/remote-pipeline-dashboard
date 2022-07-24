@@ -1,0 +1,34 @@
+<div class="modal modal-blur fade" id="{{id_element}}" tabindex="-1" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-full-width modal-dialog-centered" style="
+  width: 1200px;
+  margin-top: 12px;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select File</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <file-explorer on-listener="onFileExplorerListener" form_data="{{form_data}}"></file-explorer>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+          Cancel
+        </a>
+        <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('SUBMIT',{},@event)">
+          <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Select
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

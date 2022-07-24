@@ -1,5 +1,6 @@
-
-import { cloneDeep } from "lodash";
+import BaseRactive from "base/BaseRactive";
+import FileModals, { FileModalInterface } from "file/file_modals/FilesModal";
+import File2Service from "services/File2Service";
 import VariableService from "services/VariableService";
 import InputText, { InputTextInterface } from "./InputText";
 
@@ -7,9 +8,14 @@ export interface InputAssetInterface extends InputTextInterface {
   createNewAttachment?: { (): void }
   deleteAttachment?: { (index: number): void }
   submitFile?: { (): void }
+  getFile?: { (id: number): void }
+  setFile?: { (props): void }
 }
 
-const InputAsset = InputText.extend<InputAssetInterface>({
+const InputAsset2 = InputText.extend<InputAssetInterface>({
+  components: {
+    "file-modal": FileModals
+  },
   template: /* html */`
     <div class="col text-truncate">
       <input type="text" class="form-control" name="name" value="{{schema_data.name}}" placeholder="Input var name">
@@ -18,8 +24,7 @@ const InputAsset = InputText.extend<InputAssetInterface>({
       <div class="mb-3">
         <div class="row">
           <div class="col">
-            <input type="file" style="display:none" value="{{schema_data.attachment_datas[i].file}}" name="attatchment-{{i}}" on-change="@this.handleChange('CHOOSED_FILE',{ index : i },@event)" class="form-control" placeholder="{{schema_data.attachment_datas.file[0].name}}">
-            <input type="text" class="form-control" value="{{schema_data.attachment_datas[i].file[0].name}}" on-click="@this.handleClick('CHOOSE_FILE',{ name : 'attatchment-'+i },@event)" placeholder="Choose a file" readonly="readyonly">
+            <input type="text" class="form-control" value="{{schema_data.attachment_datas[i].name}}" on-click="@this.handleClick('CHOOSE_FILE',{ name : 'attatchment-'+i, index : i },@event)" placeholder="Choose a file" readonly="readyonly">
           </div>
           <div class="col-auto">
             {{#if (schema_data.attachment_datas.length - 1) == i}}
@@ -44,22 +49,24 @@ const InputAsset = InputText.extend<InputAssetInterface>({
         </div>
       </div>
       {{/schema_data.attachment_datas}}
-      {{#if schema_data.attachment_datas.length > 0}}
-      <div class="mb-3">
-        <div class="row">
-          <div class="col-1">
-            <a href="#" class="btn btn-blue w-100" on-click="@this.handleClick('SUBMIT_FILE',{},@event)">
-              Uploads
-            </a>
-          </div>
-        </div>
-      </div>
-      {{/if}}
+      <file-modal on-listener="onFileModalListener"></file-modal>
     </div>
   `,
+  onconstruct() {
+    this.newOn = {
+      ...this.newOn,
+      onFileModalListener: async (c, action, props, e) => {
+        let fileModal: FileModalInterface = this.findComponent("file-modal");
+        fileModal.hide();
+        this.setFile(await this.getFile(props));
+      }
+    }
+    this.reInitializeObserve();
+  },
   data() {
     return {
-      schema_data: {}
+      schema_data: {},
+      select_index: null
     }
   },
   oncomplete() {
@@ -81,11 +88,14 @@ const InputAsset = InputText.extend<InputAssetInterface>({
   handleClick(action, props, e) {
     switch (action) {
       case 'CHOOSE_FILE':
-        $(e.target).siblings(`input[name=${props.name}]`).trigger("click");
+        // $(e.target).siblings(`input[name=${props.name}]`).trigger("click");
+        let fileModal: FileModalInterface = this.findComponent("file-modal");
+        fileModal.show({});
+        this.set("select_index", props.index);
         break;
       case 'SUBMIT_FILE':
         e.preventDefault();
-        this.submitFile();
+        // this.submitFile();
         break;
       case 'MOREE_UPLOAD':
         e.preventDefault();
@@ -163,7 +173,27 @@ const InputAsset = InputText.extend<InputAssetInterface>({
     setTimeout(() => {
       this.set("schema_data", _schema_data);
     }, 100)
+  },
+  async getFile(id: number) {
+    try {
+      let resData = await File2Service.getFileById(id);
+      return resData;
+    } catch (ex) {
+      console.error("getFile - ex :: ", ex);
+    }
+  },
+  async setFile(props) {
+    if (props == null) return;
+    let _schema_data = this.get("schema_data");
+    let _select_index = this.get("select_index");
+    for (let b in _schema_data.attachment_datas) {
+      if (b == _select_index) {
+        _schema_data.attachment_datas[b] = props.return;
+        break;
+      }
+    }
+    this.set("schema_data", _schema_data);
   }
 })
 
-export default InputAsset;
+export default InputAsset2;

@@ -14,6 +14,7 @@ export interface OverrideQueueModalInterface extends BaseRactiveInterface {
   submitAddVariableItem?: { (): void }
 }
 
+let myModal = null;
 const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   template,
   components: {
@@ -50,6 +51,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
         e.preventDefault();
         console.log("variable_item :: ", _variable_item);
         this.submitAddVariableItem();
+        this.fire("listener", 'SUBMIT', {}, e);
         break;
     }
   },
@@ -63,7 +65,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   async show(props) {
     this.set("queue_data", props);
     let myModalEl = document.getElementById(this.get("id_element"));
-    var myModal = new window.bootstrap.Modal(myModalEl, {
+    myModal = new window.bootstrap.Modal(myModalEl, {
       backdrop: 'static', keyboard: false
     })
     myModalEl.addEventListener('hidden.bs.modal', function (event) {
@@ -74,7 +76,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
     this.setVariable(await this.getVariable());
   },
   hide() {
-
+    myModal.hide();
   },
   async submitAddVariableItem() {
     try {
