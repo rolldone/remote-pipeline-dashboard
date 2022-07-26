@@ -32,6 +32,11 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
     switch (action) {
       case 'SHOW_PROGRESS':
         e.preventDefault();
+        if (props.id == this.get("show_process_id")) {
+          this.set("show_process_id", null);
+          this.set("select_action", null);
+          return;
+        }
         this.set("show_process_id", props.id);
         let _log_array = this.get("log_array");
         let _select_action = _log_array[props.index].data[props.index2].action;

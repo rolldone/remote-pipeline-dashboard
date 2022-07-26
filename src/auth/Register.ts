@@ -5,6 +5,7 @@ import template from './RegisterView.html';
 
 export interface RegisterInterface extends BaseRactiveInterface {
   submit?: { (): void }
+  registerExpiredCheck?: { (): void }
 }
 
 export default BaseRactive.extend<RegisterInterface>({
@@ -12,8 +13,18 @@ export default BaseRactive.extend<RegisterInterface>({
   data() {
     return {
       form_data: {},
-      form_error: {}
+      form_error: {},
+      form_blocked: false
     }
+  },
+  onconfig() {
+    return new Promise(async (resolve: Function) => {
+      let resData = await this.registerExpiredCheck() as any;
+      if (resData.return == "expired") {
+        this.set("form_blocked", true);
+      }
+      resolve();
+    })
   },
   oncomplete() {
     let _smartValidation = SmartValidation("main-auth-form");
@@ -95,6 +106,14 @@ export default BaseRactive.extend<RegisterInterface>({
       window.router.navigate(window.router.buildUrl(`/login`));
     } catch (ex) {
       console.error("submit - ex :: ", ex);
+    }
+  },
+  async registerExpiredCheck() {
+    try {
+      let resData = await AuthService.registerExpiredCheck();
+      return resData;
+    } catch (ex) {
+      console.error("registerExpiredCheck - ex :: ", ex);
     }
   }
 });

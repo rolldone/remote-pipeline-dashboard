@@ -92,5 +92,13 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async registerExpiredCheck() {
+    try {
+      let resData = await axios.get(BaseService.AUTH + '/auth/register-expired-check', {});
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

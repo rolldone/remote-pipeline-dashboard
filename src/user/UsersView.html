@@ -57,8 +57,13 @@
                       <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)"></span>
                       <div class="flex-fill">
                         <div class="font-weight-medium">{{usr_part_first_name}} {{usr_part_last_name}}</div>
-                        <div class="text-muted"><a href="#" class="text-reset">{{usr_part_email}} <span
-                              class="badge ms-2">you</span></a></div>
+                        <div class="text-muted">
+                          <a href="#" class="text-reset">{{usr_part_email}} 
+                            {{#if id == user_data.id}}
+                            <span class="badge ms-2">You</span>
+                            {{/if}}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </td>

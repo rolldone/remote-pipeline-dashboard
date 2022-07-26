@@ -43,22 +43,22 @@
                   <div class="col-auto">
                     <a href="#" class="btn btn-cyan w-100 btn-sm"
                       on-click="@this.handleClick('SHOW_PROGRESS',{id: id, index: i, index2:j },@event)">
-                      Show
+                      {{show_process_id == id?'Hide':'Show'}}
                     </a>
                   </div>
                 </div>
               </div>
               {{#if show_process_id == id}}
               <div>
-                <div style="background: black;color: white; padding: 12px;">
+                <div style="background: black;color: white; padding: 12px; max-height: 600px; overflow-y: auto;">
                   {{#log_socket_messages:p}}
-                    {{#if p == select_action}}
-                      {{#log_socket_messages[p]:i}}
-                      <p>{{log_socket_messages[p][i]}}</p>
-                      {{/log_socket_messages[p]}}
-                    {{/if}}
+                  {{#if p == select_action}}
+                  {{#log_socket_messages[p]:i}}
+                  <p>{{log_socket_messages[p][i]}}</p>
+                  {{/log_socket_messages[p]}}
+                  {{/if}}
                   {{/log_socket_messages}}
-                 <!--  {{#log_socket_messages:p}}
+                  <!--  {{#log_socket_messages:p}}
                   {{#if action == null}}
                     {{#log_socket_messages[p]:ui}}
                       <p>{{log_socket_messages[p][ui]}}</p>

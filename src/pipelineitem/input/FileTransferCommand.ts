@@ -81,6 +81,10 @@ export default BasicCommand.extend<FileTransferCommandInterface>({
     form_data.data.asset_datas = form_data.data.asset_datas || [];
     let asset_datas = form_data.data.asset_datas;
     switch (action) {
+      case 'REFRESH':
+        e.preventDefault();
+        this.setVariables(await this.getVariables());
+        break;
       case 'METHOD_TYPE':
         this.set("form_data.data.method_type", props.value);
         switch (props.value) {
@@ -139,12 +143,26 @@ export default BasicCommand.extend<FileTransferCommandInterface>({
       <div class="row">
         <div class="col">
           <div class="form-label">Select your attachment file</div>
-          <select class="form-select" value="{{form_data.data.asset_datas[i].name}}" name="name">
-          <option value="-">--</option>
-            {{#variable_asset_datas:i}}
-            <option value="{{name}}">{{label}}</option>
-            {{/variable_asset_datas}}
-          </select>
+          <div class="row">
+            <div class="col">
+              <select class="form-select" value="{{form_data.data.asset_datas[i].name}}" name="name">
+              <option value="-">--</option>
+                {{#variable_asset_datas:i}}
+                <option value="{{name}}">{{label}}</option>
+                {{/variable_asset_datas}}
+              </select>
+            </div>
+            <div class="col-auto" style="padding:0;">
+              <a href="#" class="btn btn-flickr w-100 btn-icon" on-click="@this.handleClick('REFRESH',{},@event)" aria-label="Flickr">
+                <!-- Download SVG icon from http://tabler-icons.io/i/brand-flickr -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
         <div class="col">
           <label class="form-label">Put the target path</label>
@@ -202,10 +220,19 @@ export default BasicCommand.extend<FileTransferCommandInterface>({
       let _schema: Array<any> = resData.schema;
       _schema.forEach((resSchema) => {
         if (resSchema.type == "input-asset") {
-          variable_asset_datas.push({
-            ...resSchema,
-            label: resSchema.name + " - " + resData.name
-          });
+          let isExist = false;
+          for (var a = 0; a < variable_asset_datas.length; a++) {
+            if (variable_asset_datas[a].label == resSchema.name + " - " + resData.name) {
+              isExist = true;
+              break;
+            }
+          }
+          if (isExist == false) {
+            variable_asset_datas.push({
+              ...resSchema,
+              label: resSchema.name + " - " + resData.name
+            });
+          }
         }
       })
     })
