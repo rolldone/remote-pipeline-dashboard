@@ -6,12 +6,12 @@ import template from './QueueRecordDetailDisplayDataView.html';
 export interface QueueRecordDetailDisplayDataInterface extends BaseRactiveInterface {
   getDirectories: { (): void }
   setDirectories: { (props: any): void }
-  renderDirItem?: { (props: any, index: number): ParsedTemplate }
+  renderDirItem?: { (props: any, index: string): Promise<ParsedTemplate> }
   displayDirPartials?: { (): void }
 }
 
 const randomArray = [
-  '#cc0000','#00cc00', '#0000cc'
+  '#cc0000', '#00cc00', '#0000cc'
 ];
 
 const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplayDataInterface>({
@@ -53,7 +53,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
       console.error("getDirectories - ex :: ", ex);
     }
   },
-  setDirectories(props) {
+  async setDirectories(props) {
     if (props == null) return;
     this.set("directories", props.return);
     let _directories = this.get("directories");
@@ -61,16 +61,17 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
     let _directory_partials = this.partials.directory_partials || [];
     console.log(_children);
     for (let a = 0; a < _children.length; a++) {
-      let _template = this.renderDirItem(_children[a], a);
+      let _template = await this.renderDirItem(_children[a], a + "");
       _directory_partials.push({
         ..._template.t[0]
       });
     }
+    console.log(_directory_partials);
     this.resetPartial("directory_partials", [
       ..._directory_partials
     ]);
   },
-  renderDirItem(props: any, index: number) {
+  async renderDirItem(props: any, index: string) {
     switch (props.type) {
       case 'file':
         return Ractive.parse(/* html */`
@@ -99,12 +100,12 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
         let _children_partial: Array<any> = this.partials["children_partial_" + index] || [];
         let _childrens: Array<any> = props.children || [];
         for (let a = 0; a < _childrens.length; a++) {
-          let _template = this.renderDirItem(_childrens[a], a);
+          let _template = await this.renderDirItem(_childrens[a], a + "_" + index);
           _children_partial.push({
             ..._template.t[0]
           })
         }
-        this.resetPartial("children_partial_" + index, [
+        await this.resetPartial("children_partial_" + index, [
           ..._children_partial
         ]);
         return Ractive.parse(/* html */`

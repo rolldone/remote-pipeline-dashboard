@@ -68,6 +68,16 @@ const DownloadRequest = BasicCommand.extend<DownloadRequestInterface>({
       ...method_type_partial
     ]);
   },
+  handleChange(action, props, e) {
+    let _form_data = this.get("form_data");
+    switch (action) {
+      case 'SELECT_IS_FOLDER':
+        e.preventDefault();
+        // form_data.data.asset_datas[i].is_folder
+        this.set(`form_data.data.asset_datas[${props.index}].is_folder`, e.target.checked);
+        break;
+    }
+  },
   async handleClick(action, props, e) {
     let _template = null;
     let _sync_action = null;
@@ -144,6 +154,10 @@ const DownloadRequest = BasicCommand.extend<DownloadRequestInterface>({
               <input type="text" class="form-control" value={{form_data.data.asset_datas[i].source_path}} name="source_path" placeholder="Source Path" style="width:98%;">
             </div>
           </div>
+          <label class="form-check">
+            <input class="form-check-input" name="is_folder" on-change="@this.handleChange('SELECT_IS_FOLDER',{ index : i },@event)" type="checkbox" checked={{form_data.data.asset_datas[i].is_folder==true?true:false}} twoway="false">
+            <span class="form-check-label">This is folder?</span>
+          </label>
         </div>
         <div class="col">
           <label class="form-label">Save as new name</label>

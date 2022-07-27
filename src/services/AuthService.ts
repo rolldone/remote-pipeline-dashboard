@@ -95,7 +95,7 @@ export default {
   },
   async registerExpiredCheck() {
     try {
-      let resData = await axios.get(BaseService.AUTH + '/auth/register-expired-check', {});
+      let resData = await axios.get(BaseService.AUTH + '/register-expired-check', {});
       return resData.data;
     } catch (ex) {
       throw ex;
