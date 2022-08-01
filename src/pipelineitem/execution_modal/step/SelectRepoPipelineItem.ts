@@ -1,10 +1,10 @@
-import Step2Execution, { Step2Interface } from "execution/step/Step2";
+import SelectRepoPipelineItemIndex, { SelectRepoPipelineItemInterface } from "execution/step/SelectRepoPipelineItem";
 import PipelineService from "services/PipelineService";
 import RepositoryService from "services/RepositoryService";
 import Sortable from 'sortablejs';
 
 
-export interface Step1Interface extends Step2Interface {
+export interface SelectRepoPipelineItemIndexInterface extends SelectRepoPipelineItemInterface {
   getPipeline?: { (): void }
   setPipeline?: { (props: any): void }
 }
@@ -13,7 +13,7 @@ export interface Step1Interface extends Step2Interface {
  * Step1 extends Step2 from execution
  * Because we dont need select pipeline again
  */
-const Step1 = Step2Execution.extend<Step1Interface>({
+const SelectRepoPipelineItem = SelectRepoPipelineItemIndex.extend<SelectRepoPipelineItemIndexInterface>({
   template:/* html */`
   <div class="card card-md">
     <div class="card-body text-center py-4 p-sm-5">
@@ -184,4 +184,4 @@ const Step1 = Step2Execution.extend<Step1Interface>({
   },
 })
 
-export default Step1;
+export default SelectRepoPipelineItem;

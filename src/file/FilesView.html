@@ -23,53 +23,7 @@
   <div class="container-xl">
     <div class="row row-cards">
       <div class="col-12">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Form Filter</h3>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="form-group mb-3 row">
-                <label class="form-label col-3 col-form-label">Search Executions</label>
-                <div class="col">
-                  <input type="search_text" class="form-control" aria-describedby="emailHelp"
-                    placeholder="Enter search">
-                  <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
-                </div>
-              </div>
-              <div class="form-group mb-3 row">
-                <label class="form-label col-3 col-form-label">Group By</label>
-                <div class="col">
-                  <select class="form-select">
-                    <option value="project">Project</option>
-                    <option value="pipeline">Pipeline</option>
-                    <option value="host">Host</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="form-label col-3 col-form-label pt-0">Checkboxes</label>
-                <div class="col">
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox" checked="">
-                    <span class="form-check-label">Option 1</span>
-                  </label>
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox">
-                    <span class="form-check-label">Option 2</span>
-                  </label>
-                  <label class="form-check">
-                    <input class="form-check-input" type="checkbox" disabled="">
-                    <span class="form-check-label">Option 3</span>
-                  </label>
-                </div>
-              </div>
-              <!-- <div class="form-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div> -->
-            </form>
-          </div>
-        </div>
+        <form-filter on-listener="onFormFilterListener"></form-filter>
       </div>
       <div class="col-12">
         <div class="card">

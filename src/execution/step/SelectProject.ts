@@ -2,12 +2,15 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import ProjectService from "services/ProjectService";
 
 
-export interface Step1Interface extends BaseRactiveInterface {
+export interface SelectProjectInterface extends BaseRactiveInterface {
   getProjects?: { (): Promise<any> }
   setProjects?: { (props: any): void }
 }
 
-export default BaseRactive.extend<Step1Interface>({
+const SelectProject = BaseRactive.extend<SelectProjectInterface>({
+  components: {
+    // "child-execution-item-modal": ChildExecutionItemWizardModal
+  },
   template: /* html */`
   <div class="card card-md">
     <div class="card-body text-center py-4 p-sm-5">
@@ -48,12 +51,14 @@ export default BaseRactive.extend<Step1Interface>({
       </div>
     </div>
   </div>
-  
+  <group-modal></group-modal>
   `,
   data() {
     return {
       form_data: {},
       project_datas: [],
+      execution_datas: [],
+      child_execution_datas: []
     }
   },
   oncomplete() {
@@ -63,6 +68,27 @@ export default BaseRactive.extend<Step1Interface>({
       this.setProjects(await this.getProjects());
       resolve();
     });
+  },
+  handleChange(action, props, e) {
+    switch (action) {
+      case 'SELECT_EXECUTION_ITEM':
+        e.preventDefault();
+        break;
+    }
+  },
+  handleClick(action, props, e) {
+    switch (action) {
+      case 'BACK':
+        e.preventDefault();
+        // this.fire("listener",action,props,e);
+        break;
+      case 'CONTINUE':
+        e.preventDefault();
+        this.fire("listener", action, {
+          component: "step-three",
+        }, e);
+        break;
+    }
   },
   async getProjects() {
     try {
@@ -76,19 +102,6 @@ export default BaseRactive.extend<Step1Interface>({
     if (props == null) return;
     this.set("project_datas", props.return)
   },
-
-  handleClick(action, props, e) {
-    switch (action) {
-      case 'BACK':
-        e.preventDefault();
-        // this.fire("listener",action,props,e);
-        break;
-      case 'CONTINUE':
-        e.preventDefault();
-        this.fire("listener", action, {
-          component: "step-two",
-        }, e);
-        break;
-    }
-  }
 });
+
+export default SelectProject;

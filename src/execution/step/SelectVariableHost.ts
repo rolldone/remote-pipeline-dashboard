@@ -2,7 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import HostService from "services/HostService";
 import VariableService from "services/VariableService";
 
-export interface Step3Interface extends BaseRactiveInterface {
+export interface SelectVariableHostInterface extends BaseRactiveInterface {
   getHosts?: { (): Promise<any> }
   setHOst?: { (props: any): void }
   getVariables?: { (): Promise<any> }
@@ -15,7 +15,7 @@ export interface Step3Interface extends BaseRactiveInterface {
  * - Can select multiple variable 
  * - Anything will work with loop
  */
-export default BaseRactive.extend<Step3Interface>({
+const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
   template: /* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -159,14 +159,14 @@ export default BaseRactive.extend<Step3Interface>({
       case 'BACK':
         e.preventDefault();
         this.fire("listener", action, {
-          component: "step-two"
+          component: "step-three"
         }, e);
         break;
       case 'CONTINUE':
         e.preventDefault();
         this.set("form_data.host_ids", this.get("host_ids") || []);
         this.fire("listener", action, {
-          component: "step-four"
+          component: "step-five"
         }, e);
         break;
     }
@@ -202,3 +202,5 @@ export default BaseRactive.extend<Step3Interface>({
     this.set("variable_datas", _datas);
   },
 });
+
+export default SelectVariableHost;

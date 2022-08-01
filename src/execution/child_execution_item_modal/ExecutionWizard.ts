@@ -1,17 +1,19 @@
-import ExecutionNew, { ExecutionNewInterface } from "execution/ExecutionNew"
-import ExecutionUpdate, { ExecutionUpdateInterface } from "execution/ExecutionUpdate";
 import ExecutionService, { ExecutionServiceInterface } from "services/ExecutionService";
+import ExecutionNew, { ExecutionNewInterface } from "./base/ExecutionNew";
+import ExecutionUpdate, { ExecutionUpdateInterface } from "./base/ExecutionUpdate";
 import template from './ExecutionWizardView.html';
 import Done from "./step/Done";
 import SelectRepoPipelineItem from "./step/SelectRepoPipelineItem";
 import SelectVariableHost from "./step/SelectVariableHost";
-import SelectExeConfig from "./step/SelectExeConfig";
+import SelectExeConfigConfig from "./step/SelectExeConfigConfig";
+import StepSelectProject from "./step/StepSelectProject";
 
-const ExecutionWizardNew = ExecutionNew.extend<ExecutionNewInterface>({
+export const ExecutionWizardNew = ExecutionNew.extend<ExecutionNewInterface>({
   components: {
-    "step-one": SelectRepoPipelineItem,
-    "step-two": SelectVariableHost,
-    "step-three": SelectExeConfig,
+    "step-one": StepSelectProject,
+    "step-two": SelectRepoPipelineItem,
+    "step-three": SelectVariableHost,
+    "step-four": SelectExeConfigConfig,
     "done": Done
   },
   template,
@@ -35,11 +37,12 @@ const ExecutionWizardNew = ExecutionNew.extend<ExecutionNewInterface>({
   },
 });
 
-const ExecutionWizardUpdate = ExecutionUpdate.extend<ExecutionUpdateInterface>({
+export const ExecutionWizardUpdate = ExecutionUpdate.extend<ExecutionUpdateInterface>({
   components: {
-    "step-one": SelectRepoPipelineItem,
-    "step-two": SelectVariableHost,
-    "step-three": SelectExeConfig,
+    "step-one": StepSelectProject,
+    "step-two": SelectRepoPipelineItem,
+    "step-three": SelectVariableHost,
+    "step-four": SelectExeConfigConfig,
     "done": Done
   },
   template,
@@ -74,7 +77,3 @@ const ExecutionWizardUpdate = ExecutionUpdate.extend<ExecutionUpdateInterface>({
   },
 });
 
-export default {
-  ExecutionWizardNew,
-  ExecutionWizardUpdate
-};

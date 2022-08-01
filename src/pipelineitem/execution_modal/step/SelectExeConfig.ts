@@ -1,7 +1,7 @@
 import { BaseRactiveInterface } from "base/BaseRactive";
-import Step4 from "execution/step/Step4"
+import SelectExeConfigIndex from "execution/step/SelectExeConfig"
 
-const Step3 = Step4.extend<BaseRactiveInterface>({
+const SelectExeConfig = SelectExeConfigIndex.extend<BaseRactiveInterface>({
   handleClick(action, props, e) {
     switch (action) {
       case 'BACK':
@@ -22,4 +22,4 @@ const Step3 = Step4.extend<BaseRactiveInterface>({
 
 });
 
-export default Step3;
+export default SelectExeConfig;

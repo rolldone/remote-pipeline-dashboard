@@ -1,12 +1,12 @@
-import Step3, { Step3Interface } from "execution/step/Step3"
+import SelectVariableHostIndex, { SelectVariableHostInterface } from "execution/step/SelectVariableHost"
 
-const Step2 = Step3.extend<Step3Interface>({
+const SelectVariableHost = SelectVariableHostIndex.extend<SelectVariableHostInterface>({
   handleClick(action, props, e) {
     switch (action) {
       case 'BACK':
         e.preventDefault();
         this.fire("listener", action, {
-          component: "step-one"
+          component: "step-two"
         }, e);
         return;
       case 'CONTINUE':
@@ -14,7 +14,7 @@ const Step2 = Step3.extend<Step3Interface>({
         this.set("form_data.host_ids", this.get("host_ids") || []);
         console.log(this.get("form_data"));
         this.fire("listener", action, {
-          component: "step-three"
+          component: "step-four"
         }, e);
         return;
     }
@@ -22,4 +22,4 @@ const Step2 = Step3.extend<Step3Interface>({
   }
 });
 
-export default Step2;
+export default SelectVariableHost;

@@ -7,7 +7,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
  * - with trigger webhook
  */
 
-export default BaseRactive.extend<BaseRactiveInterface>({
+const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
   template: /* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -152,7 +152,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       case 'BACK':
         e.preventDefault();
         this.fire("listener", action, {
-          component: "step-three"
+          component: "step-four"
         }, e);
         break;
       case 'CONTINUE':
@@ -166,3 +166,5 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     }
   }
 })
+
+export default SelectExeConfig;

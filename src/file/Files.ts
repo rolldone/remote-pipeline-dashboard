@@ -1,6 +1,7 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import File2Service from "services/File2Service";
 import template from './FilesView.html';
+import FormFilter from "./form_filter/FormFilter";
 
 export interface FilesInterface extends BaseRactiveInterface {
   submitUpload?: { (file: File): void }
@@ -17,8 +18,12 @@ export interface FilesInterface extends BaseRactiveInterface {
 let cancelObsFiles = null;
 const Files = BaseRactive.extend<FilesInterface>({
   template,
+  components: {
+    "form-filter": FormFilter
+  },
   data() {
     return {
+      query: {},
       file_datas: [],
       form_data: {
         checks: {}
@@ -29,6 +34,15 @@ const Files = BaseRactive.extend<FilesInterface>({
       display_new_dir: false,
       select_rename: null
     }
+  },
+  onconstruct() {
+    this.newOn = {
+      onFormFilterListener: async (c, action, props, e) => {
+        this.set("query", props);
+        this.setFiles(await this.getFiles())
+      }
+    }
+    this._super();
   },
   oncomplete() {
     let _super = this._super.bind(this);
@@ -184,9 +198,11 @@ const Files = BaseRactive.extend<FilesInterface>({
   },
   async getFiles() {
     try {
+      let _query = this.get("query");
       let _select_dir = this.get("select_dir");
       let resDatas = await File2Service.getFiles({
-        path: _select_dir
+        path: _select_dir,
+        ..._query
       });
       return resDatas;
     } catch (ex) {

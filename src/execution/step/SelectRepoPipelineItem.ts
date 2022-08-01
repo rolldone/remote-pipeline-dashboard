@@ -5,7 +5,7 @@ import RepositoryService from "services/RepositoryService";
 import Sortable from 'sortablejs';
 
 
-export interface Step2Interface extends BaseRactiveInterface {
+export interface SelectRepoPipelineItemInterface extends BaseRactiveInterface {
   getPipelines?: { (): Promise<any> }
   setPipelines?: { (props: any): void }
   getPipelineItems?: { (): Promise<any> }
@@ -15,7 +15,7 @@ export interface Step2Interface extends BaseRactiveInterface {
   saveSortPipeline?: { (): void }
 }
 
-const Step2 = BaseRactive.extend<Step2Interface>({
+const SelectRepoPipelineItem = BaseRactive.extend<SelectRepoPipelineItemInterface>({
   template: /* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -186,14 +186,14 @@ const Step2 = BaseRactive.extend<Step2Interface>({
       case 'BACK':
         e.preventDefault();
         this.fire("listener", action, {
-          component: "step-one"
+          component: "step-two"
         }, e);
         break;
       case 'CONTINUE':
         e.preventDefault();
         this.saveSortPipeline();
         this.fire("listener", action, {
-          component: "step-three"
+          component: "step-four"
         }, e);
         break;
     }
@@ -290,4 +290,4 @@ const Step2 = BaseRactive.extend<Step2Interface>({
   }
 });
 
-export default Step2;
+export default SelectRepoPipelineItem;

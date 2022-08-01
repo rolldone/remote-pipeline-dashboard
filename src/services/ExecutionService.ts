@@ -5,6 +5,10 @@ import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
 
+const EXECUTION_TYPE = {
+  GROUP: 'group',
+  SINGLE: 'single'
+}
 export interface ExecutionInterface {
   id?: number
   name?: string
@@ -12,6 +16,7 @@ export interface ExecutionInterface {
   process_limit?: number
   pipeline_id?: number
   project_id?: number
+  parent_id?: number
   user_id?: number
   variable_id?: number
   variable_option?: string
@@ -21,8 +26,11 @@ export interface ExecutionInterface {
   access_host_type?: string
   branch?: string
   mode?: string
-  delay?: number
+  delay?: number,
 
+
+  execution_type?: string
+  child_execution_datas?: Array<ExecutionInterface>
 }
 
 export interface ExecutionServiceInterface extends ExecutionInterface {
@@ -34,6 +42,7 @@ export interface ExecutionServiceInterface extends ExecutionInterface {
 }
 
 export default {
+  EXECUTION_TYPE,
   async addExecution(props: ExecutionServiceInterface) {
     try {
       let formData = new FormData();
@@ -41,6 +50,7 @@ export default {
         switch (key) {
           case 'host_ids':
           case 'pipeline_item_ids':
+          case 'child_execution_datas':
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
@@ -92,6 +102,7 @@ export default {
         switch (key) {
           case 'pipeline_item_ids':
           case 'host_ids':
+          case 'child_execution_datas':
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
