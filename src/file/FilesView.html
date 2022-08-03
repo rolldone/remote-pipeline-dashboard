@@ -206,10 +206,17 @@
                   </td>
                   <td>
                     <div class="btn-list flex-nowrap">
+                      {{#if filter_data.search != null && filter_data.search != ""}}
+                      <a href="#" class="btn"
+                        on-click="@this.handleClick('OPEN_LOCATION',{ type: type, id : id, index : i },@event)">
+                        Open Location
+                      </a>
+                      {{else}}
                       <a href="#" class="btn"
                         on-click="@this.handleClick('VIEW',{ type: type, id : id, index : i },@event)">
                         View
                       </a>
+                      {{/if}}
                       <div class="dropdown">
                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                           Actions

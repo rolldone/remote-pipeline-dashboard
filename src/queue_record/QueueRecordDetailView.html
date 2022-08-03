@@ -23,7 +23,7 @@
   <div class="container-xl">
     <div class="row row-cards">
       <div class="col-12">
-        <div class="card">
+        <div class="card" style="display: none;">
           <div class="card-header">
             <h3 class="card-title">Form Filter</h3>
           </div>
@@ -137,7 +137,7 @@
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          {{#if ids_status[id] == 0 || ids_status[id] == 5 || ids_status[id] == 3 || ids_status[id] == 6}}
+                          {{#if ids_status[id] == 0 || ids_status[id] == 5 || ids_status[id] == 3 || ids_status[id] == 6 }}
                           <a class="dropdown-item" href="#"
                             on-click="@this.handleClick('RETRY',{ id : id, index : i },@event)">
                             Retry

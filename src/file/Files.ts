@@ -24,6 +24,7 @@ const Files = BaseRactive.extend<FilesInterface>({
   data() {
     return {
       query: {},
+      filter_data: {},
       file_datas: [],
       form_data: {
         checks: {}
@@ -38,8 +39,13 @@ const Files = BaseRactive.extend<FilesInterface>({
   onconstruct() {
     this.newOn = {
       onFormFilterListener: async (c, action, props, e) => {
-        this.set("query", props);
+        this.set("query", {
+          ...this.get("query"),
+          ...props
+        });
+        this.set("filter_data", JSON.parse(decodeURIComponent(props.filter)) || {});
         this.setFiles(await this.getFiles())
+        console.log(props);
       }
     }
     this._super();
@@ -100,6 +106,13 @@ const Files = BaseRactive.extend<FilesInterface>({
     let _form_data = this.get("form_data");
     let _file_data = null;
     switch (action) {
+      case 'OPEN_LOCATION':
+        e.preventDefault();
+        _file_data = _file_datas[props.index];
+        this.set("select_dir", _file_data.path);
+        this.setFiles(await this.getFiles());
+        this.findComponent("form-filter").resetFilter();
+        break;
       case 'UPLOAD_FILE':
         e.preventDefault();
         $("#files").trigger("click");

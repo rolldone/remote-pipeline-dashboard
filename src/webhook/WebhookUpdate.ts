@@ -34,6 +34,12 @@ const WebhookUpdate = WebhookNew.extend<WebhookUpdateInterface>({
     this.set("form_data", _form_data);
     this.set("datas", _form_data.data);
     this.set("webhook_datas", _form_data.webhook_datas);
+    this.observe("webhook_datas", (val) => {
+      if(val == null) return
+      this.submitWebHook();
+    }, {
+      init: false
+    })
   },
   async submitWebHook() {
     try {

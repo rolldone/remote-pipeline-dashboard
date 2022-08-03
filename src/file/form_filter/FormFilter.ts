@@ -2,13 +2,15 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { debounce, DebouncedFunc } from "lodash";
 import template from './FormFilterView.html';
 
-const FormFilter = BaseRactive.extend<BaseRactiveInterface>({
+export interface FormFilterInterface extends BaseRactiveInterface {
+  resetFilter?: { (): void }
+}
+
+const FormFilter = BaseRactive.extend<FormFilterInterface>({
   template,
   data() {
     return {
-      form_data: {
-        filter: true
-      }
+      form_data: {}
     }
   },
   oncomplete() {
@@ -21,19 +23,29 @@ const FormFilter = BaseRactive.extend<BaseRactiveInterface>({
           _debounce.cancel();
         }
         _debounce = debounce((val) => {
-          this.fire("listener", "SUBMIT", this.get("form_data"));
+          this.fire("listener", "SUBMIT", {
+            filter: encodeURIComponent(JSON.stringify(this.get("form_data")))
+          });
         }, 2000);
         _debounce(val);
+      }, {
+        init: false
       })
 
       let unMountFormData = this.observe("form_data.group_by", (val) => {
-        this.fire("listener", "SUBMIT", this.get("form_data"));
+        this.fire("listener", "SUBMIT", {
+          filter: encodeURIComponent(JSON.stringify(this.get("form_data")))
+        });
       })
       _super();
       resolve();
     });
   },
-
+  resetFilter() {
+    this.set("form_data", {
+      search: ""
+    });
+  }
 });
 
 export default FormFilter;
