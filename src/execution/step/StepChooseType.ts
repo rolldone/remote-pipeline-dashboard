@@ -1,7 +1,9 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import ChildExecutionItemWizardModal, { ChildExecutionItemWizardModalInterface } from "execution/child_execution_item_modal/ChildExecutionItemWizardModal";
+import Ractive, { ParsedTemplate } from "ractive";
 import ExecutionService, { ExecutionInterface } from "services/ExecutionService";
 import ProjectService from "services/ProjectService";
+import localStorageDB from 'localstoragedb';
 
 
 export interface StepChooseTypeInterface extends BaseRactiveInterface {
@@ -12,11 +14,19 @@ export interface StepChooseTypeInterface extends BaseRactiveInterface {
   submitCloneExecution?: { (exe_id: number): void }
   createNewSubGroup?: { (): void }
   createNewExecution?: { (): void }
+  recursiveChildExecutions?: { (parse_child_execution_datas?: Array<ExecutionInterface>): void }
+  renderChildExecutionView?: { (props): ParsedTemplate }
 }
+
+
+var childd = new localStorageDB("child_execution_datas", localStorage);
 
 const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
   components: {
     "child-execution-item-wizard-modal": ChildExecutionItemWizardModal
+  },
+  partials: {
+    "child_execution_partials": []
   },
   template:/* html */`
   <div class="card card-md">
@@ -45,7 +55,7 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
           </div>
           <div class="col-lg-6">
             <label class="form-selectgroup-item">
-              <input type="radio" name="report-type" value="group" name="{{form_data.execution_type}}" class="form-selectgroup-input">
+              <input type="radio" name="report-type" value="group" name="{{form_data.execution_type}}" class="form-selectgroup-input" disabled>
               <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                   <span class="form-selectgroup-check"></span>
@@ -62,52 +72,23 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
       {{#if form_data.execution_type == "single"}}
       
       {{else}}
-      <div class="row row-cards">
+      <div class="row row-cards" style="display:none;">
         <div class="col-12">
           <div class="card">
             <div class="card-header">
+              {{#if select_parent_temp_ids.length > 0}}
+              <div class="col-6 col-sm-4 col-md-2 col-xl-auto py-3">
+                <a href="#" class="btn btn-blue w-100" on-click="@this.handleClick('BACK_PARENT_TEMP_ID',{},@event)">
+                  Back
+                </a>
+              </div>
+              &nbsp;
+              {{/if}}
               <h3 class="card-title">Execution Items</h3>
+              
             </div>
             <div class="list-group list-group-flush list-group-hoverable" id="sort-list-pip-item">
-              {{#form_data.child_execution_datas:i}}
-              <div class="list-group-item">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <span class="badge bg-red"></span>
-                  </div>
-                  <div class="col-auto">
-                    <a href="#">
-                      <span style="background-image: url(./static/avatars/000m.jpg);" class="avatar"></span>
-                    </a>
-                  </div>
-                  <div class="col text-truncate">
-                    <span class="text-reset d-block">{{name}}</span>
-                    <div class="d-block text-muted text-truncate mt-n1">Type : {{execution_type}}</div>
-                  </div>
-                  <div class="col-auto">
-                    <div class="btn-list flex-nowrap">
-                      {{#if execution_type == "group"}}
-                      <a class="btn" on-click="@this.handleClick('BROWSE_GROUP_CHILD_EXEUCTION_ITEM',{ id : id, index: i }, @event)" href="/dashboard/queue-record/3/view">Browse</a>
-                      {{/if}}
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                          <svg class="icon icon-tabler icon-tabler-settings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#" on-click="@this.handleClick('EDIT_CHILD_EXEUCTION_ITEM',{ id : id, index: i }, @event)">Edit</a>
-                          <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE_CHILD_EXEUCTION_ITEM',{ id : id, index: i }, @event)">Delete</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br>
-              </div>
-              {{/form_data.child_execution_datas}}
+              {{> child_execution_partials}}
             </div>
             <div class="list-group list-group-flush list-group-hoverable">
               <div class="list-group-item">
@@ -172,7 +153,8 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
       form_data: {},
       project_datas: [],
       execution_datas: [],
-      select_execution_child_index: null
+      select_execution_child_index: null,
+      select_parent_temp_ids: []
     }
   },
   onconstruct() {
@@ -185,6 +167,7 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
             _child_execution_datas[index] = text;
             this.set("child_execution_datas", _child_execution_datas);
             this.set("form_data.child_execution_datas", this.get("child_execution_datas"));
+
             let _ChildExecutionItemWizardModal: ChildExecutionItemWizardModalInterface = this.findComponent("child-execution-item-wizard-modal");
             _ChildExecutionItemWizardModal.hide();
             break;
@@ -201,7 +184,7 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
       this.observe("form_data.execution_type", async (val) => {
         if (val == null) return;
         if (val == "group") {
-          this.setExecutions(await this.getExecutions());
+          // this.setExecutions(await this.getExecutions());
         }
       })
       resolve();
@@ -217,15 +200,27 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
   handleClick(action, props, e) {
     let _form_data: ExecutionInterface = this.get("form_data");
     let _child_execution_datas = [];
+    let _select_parent_temp_ids = this.get("select_parent_temp_ids") || [];
     switch (action) {
+      case 'BACK_PARENT_TEMP_ID':
+        e.preventDefault();
+        _select_parent_temp_ids.pop();
+        this.set("select_parent_temp_ids", _select_parent_temp_ids);
+        this.recursiveChildExecutions(_form_data.child_execution_datas);
+        break;
       case 'BROWSE_GROUP_CHILD_EXEUCTION_ITEM':
         e.preventDefault();
+        console.log(_form_data.child_execution_datas[props.index]);
+        _select_parent_temp_ids.push(_form_data.child_execution_datas[props.index].temp_id);
+        this.set("select_parent_temp_ids", _select_parent_temp_ids);
+        this.recursiveChildExecutions(_form_data.child_execution_datas);
         break;
       case 'DELETE_CHILD_EXEUCTION_ITEM':
         e.preventDefault();
         _child_execution_datas = _form_data.child_execution_datas;
         _child_execution_datas.splice(props.index, 1);
         this.set("form_data.child_execution_datas", _child_execution_datas);
+        this.recursiveChildExecutions(_form_data.child_execution_datas);
         break;
       case 'EDIT_CHILD_EXEUCTION_ITEM':
         e.preventDefault();
@@ -239,10 +234,10 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
         let _select_execution_id = this.get("form_data.select_execution_id");
         switch (_select_execution_id) {
           case 'new-execution':
-            this.createNewExecution();
+            // this.createNewExecution();
             return;
           case 'new-group':
-            this.createNewSubGroup();
+            // this.createNewSubGroup();
             return;
         }
         this.submitCloneExecution(props.id);
@@ -253,8 +248,20 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
         break;
       case 'CONTINUE':
         e.preventDefault();
+
         let _nextStep = "step-two"
         if (_form_data.execution_type == "group") {
+          this.set("form_data", {
+            ...this.get("form_data"),
+            pipeline_id: null,
+            branch: null,
+            project_id: null,
+            pipeline_item_ids: [],
+            host_ids: [],
+            process_mode: null,
+            variable_id: null,
+            variable_option: null,
+          })
           _nextStep = "step-group-one";
         }
         this.fire("listener", action, {
@@ -290,7 +297,10 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
   createNewSubGroup() {
     try {
       let _child_execution_datas = this.get("form_data.child_execution_datas") || [];
+      let _select_parent_temp_ids = this.get("select_parent_temp_ids");
       _child_execution_datas.push({
+        temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+        parent_temp_id: _select_parent_temp_ids[_select_parent_temp_ids.length - 1],
         name: `Group - ${_child_execution_datas.length + 1}`,
         description: null,
         pipeline_id: null,
@@ -307,6 +317,7 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
         child_execution_datas: []
       })
       this.set("form_data.child_execution_datas", _child_execution_datas);
+      this.recursiveChildExecutions(_child_execution_datas);
     } catch (ex) {
       console.error("createNewSubGroup - ex :: ", ex);
     }
@@ -314,7 +325,10 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
   createNewExecution() {
     try {
       let _child_execution_datas = this.get("form_data.child_execution_datas") || [];
+      let _select_parent_temp_ids = this.get("select_parent_temp_ids");
       _child_execution_datas.push({
+        temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+        parent_temp_id: _select_parent_temp_ids[_select_parent_temp_ids.length - 1],
         name: `Execution - ${_child_execution_datas.length + 1}`,
         description: null,
         pipeline_id: null,
@@ -331,24 +345,95 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
         child_execution_datas: []
       })
       this.set("form_data.child_execution_datas", _child_execution_datas);
+      this.recursiveChildExecutions(_child_execution_datas);
     } catch (ex) {
       console.error("createNewExecution - ex :: ", ex);
     }
   },
   async submitCloneExecution(exe_id) {
     try {
+      let _select_parent_temp_ids = this.get("select_parent_temp_ids");
       let _child_execution_datas = this.get("form_data.child_execution_datas") || [];
       let resData = await ExecutionService.getExecution({
         id: exe_id
       });
       resData = resData.return;
       delete resData.id;
-      _child_execution_datas.push(resData);
+      _child_execution_datas.push({
+        ...resData,
+        temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
+        parent_temp_id: _select_parent_temp_ids[_select_parent_temp_ids.length - 1],
+      });
       this.set("form_data.child_execution_datas", _child_execution_datas);
+      this.recursiveChildExecutions(_child_execution_datas);
     } catch (ex) {
       console.error("submitCloneExecution - ex :: ", ex);
     }
   },
+  recursiveChildExecutions(parse_child_execution_datas) {
+    let _child_execution_partials = [];
+    let _select_parent_temp_ids = this.get("select_parent_temp_ids");
+    let _child_execution_datas = parse_child_execution_datas || [];
+    for (var a = 0; a < _child_execution_datas.length; a++) {
+      if (_select_parent_temp_ids[_select_parent_temp_ids.length - 1] == _child_execution_datas[a].parent_temp_id) {
+        let _template = this.renderChildExecutionView({
+          ..._child_execution_datas[a],
+          index: a
+        });
+        _child_execution_partials.push({
+          ..._template.t[0]
+        })
+      }
+    }
+    this.resetPartial('child_execution_partials', _child_execution_partials);
+  },
+  renderChildExecutionView(props) {
+    let {
+      name,
+      execution_type,
+      index,
+      id
+    } = props;
+    return Ractive.parse(/* html */`
+    <div class="list-group-item">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <span class="badge bg-red"></span>
+        </div>
+        <div class="col-auto">
+          <a href="#">
+            <span style="background-image: url(./static/avatars/000m.jpg);" class="avatar"></span>
+          </a>
+        </div>
+        <div class="col text-truncate">
+          <span class="text-reset d-block">${name}</span>
+          <div class="d-block text-muted text-truncate mt-n1">Type : ${execution_type}</div>
+        </div>
+        <div class="col-auto">
+          <div class="btn-list flex-nowrap">
+            {{#if "${execution_type}" == "group"}}
+            <a class="btn" on-click="@this.handleClick('BROWSE_GROUP_CHILD_EXEUCTION_ITEM',{ id : ${id}, index: ${index} }, @event)" href="/dashboard/queue-record/3/view">Browse</a>
+            {{/if}}
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <svg class="icon icon-tabler icon-tabler-settings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('EDIT_CHILD_EXEUCTION_ITEM',{ id : id, index: i }, @event)">Edit</a>
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE_CHILD_EXEUCTION_ITEM',{ id : id, index: i }, @event)">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+    `)
+  }
 });
 
 export default StepChooseType;

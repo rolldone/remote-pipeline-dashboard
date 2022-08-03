@@ -27,10 +27,12 @@ export interface ExecutionInterface {
   branch?: string
   mode?: string
   delay?: number,
+  child_execution_datas?: Array<ExecutionInterface>
 
 
   execution_type?: string
-  child_execution_datas?: Array<ExecutionInterface>
+  parent_temp_id?: string
+  temp_id?: string
 }
 
 export interface ExecutionServiceInterface extends ExecutionInterface {
@@ -54,7 +56,9 @@ export default {
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            formData.append(key, props[key] || "");
+            if (props[key] != null) {
+              formData.append(key, props[key]);
+            }
             break;
         }
       }
@@ -106,7 +110,9 @@ export default {
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            formData.append(key, props[key] || "");
+            if (props[key] != null) {
+              formData.append(key, props[key]);
+            }
             break;
         }
       }

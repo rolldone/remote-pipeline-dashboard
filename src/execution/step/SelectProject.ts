@@ -42,7 +42,7 @@ const SelectProject = BaseRactive.extend<SelectProjectInterface>({
     </div>
     <div class="col">
       <div class="btn-list justify-content-end">
-        <a href="#" style="visibility:hidden;" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
+        <a href="#" class="btn btn-link link-secondary" on-click="@this.handleClick('BACK',{},@event)">
           Back
         </a>
         <a href="#" class="btn btn-primary" on-click="@this.handleClick('CONTINUE',{},@event)">
@@ -80,7 +80,9 @@ const SelectProject = BaseRactive.extend<SelectProjectInterface>({
     switch (action) {
       case 'BACK':
         e.preventDefault();
-        // this.fire("listener",action,props,e);
+        this.fire("listener",action,{
+          component: "step-one",
+        },e);
         break;
       case 'CONTINUE':
         e.preventDefault();

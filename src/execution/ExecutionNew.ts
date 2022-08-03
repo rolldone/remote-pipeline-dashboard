@@ -18,6 +18,8 @@ export interface ExecutionNewInterface extends BaseRactiveInterface {
     }): void
   }
 }
+const url: URL = new URL(window.location.href);
+const params: URLSearchParams = url.searchParams;
 
 const ExecutionNew = BaseRactive.extend<ExecutionNewInterface>({
   components: {
@@ -33,7 +35,9 @@ const ExecutionNew = BaseRactive.extend<ExecutionNewInterface>({
   template,
   data() {
     return {
-      form_data: {},
+      form_data: {
+        parent_id: params.get("parent_id")
+      },
       pipeline_datas: [],
       host_datas: [],
       variable_datas: [],

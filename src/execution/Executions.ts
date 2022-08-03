@@ -21,6 +21,9 @@ export interface ExecutionsInterface extends BaseRactiveInterface {
   submitAddQueueSchedule?: { (props: QueueScheduleInterface): void }
 }
 
+const url: URL = new URL(window.location.href);
+const params: URLSearchParams = url.searchParams;
+
 declare let window: Window;
 
 export default BaseRactive.extend<ExecutionsInterface>({
@@ -31,6 +34,9 @@ export default BaseRactive.extend<ExecutionsInterface>({
   },
   data() {
     return {
+      query: {
+        parent_id: params.get("parent_id")
+      },
       execution_datas: []
     }
   },
@@ -75,10 +81,15 @@ export default BaseRactive.extend<ExecutionsInterface>({
       resolve();
     });
   },
-  handleClick(action, props, e) {
+  async handleClick(action, props, e) {
     let _execution_data = null;
     let _execution_datas = this.get("execution_datas");
     switch (action) {
+      case 'BROWSE_GROUP':
+        e.preventDefault();
+        this.set("query.parent_id", props.id);
+        this.setExecutions(await this.getExecutions());
+        break;
       case 'DELETE':
         e.preventDefault();
         _execution_data = _execution_datas[props.index];
@@ -111,9 +122,8 @@ export default BaseRactive.extend<ExecutionsInterface>({
   },
   async getExecutions() {
     try {
-      let resData = await ExecutionService.getExecutions({
-
-      });
+      let _query = this.get("query");
+      let resData = await ExecutionService.getExecutions(_query);
       return resData;
     } catch (ex) {
       console.error("getExecutions - ex :: ", ex);

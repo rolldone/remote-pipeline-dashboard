@@ -7,6 +7,8 @@ import SelectRepoPipelineItem from "./step/SelectRepoPipelineItem";
 import SelectVariableHost from "./step/SelectVariableHost";
 import SelectExeConfigConfig from "./step/SelectExeConfigConfig";
 import StepSelectProject from "./step/StepSelectProject";
+import SelectExeConfigConfigGroup from "./step/SelectExeConfigConfigGroup";
+import DoneGroup from "./step/DoneGroup";
 
 export const ExecutionWizardNew = ExecutionNew.extend<ExecutionNewInterface>({
   components: {
@@ -14,7 +16,9 @@ export const ExecutionWizardNew = ExecutionNew.extend<ExecutionNewInterface>({
     "step-two": SelectRepoPipelineItem,
     "step-three": SelectVariableHost,
     "step-four": SelectExeConfigConfig,
-    "done": Done
+    "step-four-group": SelectExeConfigConfigGroup,
+    "done": Done,
+    "done-group": DoneGroup
   },
   template,
   onconstruct() {
@@ -43,7 +47,9 @@ export const ExecutionWizardUpdate = ExecutionUpdate.extend<ExecutionUpdateInter
     "step-two": SelectRepoPipelineItem,
     "step-three": SelectVariableHost,
     "step-four": SelectExeConfigConfig,
-    "done": Done
+    "step-four-group": SelectExeConfigConfigGroup,
+    "done": Done,
+    "done-group": DoneGroup
   },
   template,
   onconstruct() {

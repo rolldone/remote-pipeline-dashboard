@@ -19,6 +19,18 @@
               Manage Queue Records
             </a>
           </span>
+          {{#if query.parent_id != null && query.parent_id != ""}}
+          <a href="/dashboard/execution/new?parent_id={{query.parent_id}}" class="btn btn-primary d-none d-sm-inline-block">
+            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+              stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Create new execution
+          </a>
+          {{else}}
           <a href="/dashboard/execution/new" class="btn btn-primary d-none d-sm-inline-block">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -29,6 +41,7 @@
             </svg>
             Create new execution
           </a>
+          {{/if}}
         </div>
       </div>
     </div>
@@ -131,14 +144,19 @@
                   </td>
                   <td>
                     <div class="btn-list flex-nowrap">
-                      <a href="/dashboard/execution/{{id}}/view" class="btn">
-                        Edit
+                      {{#if execution_type == "group"}}
+                      <a href="/dashboard/execution?parent_id={{id}}" class="btn">
+                        Browse
                       </a>
+                      {{/if}}
                       <div class="dropdown">
                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
+                          <a class="dropdown-item" href="/dashboard/execution/{{id}}/view">
+                            Edit
+                          </a>
                           <a class="dropdown-item" href="#"
                             on-click="@this.handleClick('ADD_TO_QUEUE',{ id : id },@event)">
                             Add to queue
