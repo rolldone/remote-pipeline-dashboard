@@ -126,7 +126,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
               ${props.name}
             </span>
           </a>
-          <div class="dropdown-menu show" style="padding-left: 0px;">
+          <div class="dropdown-menu" style="padding-left: 0px;">
             <ul class="navbar-nav pt-lg-3" style="margin: 0 !important;margin-top: 0 !important;padding-top: 0 !important;padding: 0;">
             {{> children_partial_${index}}}
             </ul>
