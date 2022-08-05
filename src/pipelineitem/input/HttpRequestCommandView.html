@@ -148,6 +148,9 @@
       <label class="form-label">Content Type</label>
       <div class="btn-group w-100">
         <button type="button"
+          class="btn {{form_data.data.content_type=='multipart/form-data'?'btn-primary':''}}"
+          on-click="@this.handleClick('CONTENT_TYPE',{ value : 'multipart/form-data'},@event)">multipart/form-data</button>
+        <button type="button"
           class="btn {{form_data.data.content_type=='application/x-www-form-urlencoded'?'btn-primary':''}}"
           on-click="@this.handleClick('CONTENT_TYPE',{ value : 'application/x-www-form-urlencoded'},@event)">application/x-www-form-urlencoded</button>
         <button type="button" class="btn {{form_data.data.content_type=='application/json'?'btn-primary':''}}"
