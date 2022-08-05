@@ -56,7 +56,7 @@ export default {
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            if (props[key] != null) {
+            if (props[key] != null && props[key] != "") {
               formData.append(key, props[key]);
             }
             break;
@@ -110,7 +110,7 @@ export default {
             formData.append(key, JSON.stringify(props[key] || '[]'));
             break;
           default:
-            if (props[key] != null) {
+            if (props[key] != null && props[key] != "") {
               formData.append(key, props[key]);
             }
             break;

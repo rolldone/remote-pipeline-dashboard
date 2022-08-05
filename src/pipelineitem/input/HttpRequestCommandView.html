@@ -1,0 +1,212 @@
+<div class="col-md-6 col-xl-12">
+  <label class="form-label">File Transfer Command</label>
+  <fieldset class="form-fieldset">
+    <div class="mb-3">
+      <label class="form-label">Command Name</label>
+      <input type="text" class="form-control" name="name" value="{{form_data.name}}" placeholder="Input command">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Parent</label>
+      <select class="form-select" id="tags-input" name="parent_id" multiple
+        on-change="@this.handleChange('SELECT_PARENT_ORDER_NUMBER',{},@event)">
+        <!-- <option disabled hidden value="">Choose a parent...</option> -->
+        {{> parent_order_number_commands_partial}}
+      </select>
+      <!-- <input class="form-control" list="datalistOptions" placeholder="Type to search...">
+      <datalist id="datalistOptions">
+        <option value="Command 1">
+        </option>
+        <option value="Command 2">
+        </option>
+        <option value="Command xxx">
+        </option>
+      </datalist> -->
+    </div>
+    <div class="mb-3">
+      <div class="row">
+        <div class="col-auto">
+          <div class="form-label">Select</div>
+          <select name="verb" value="{{form_data.data.verb}}" class="form-select">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+            <option value="COPY">COPY</option>
+            <option value="HEAD">HEAD</option>
+            <option value="OPTIONS">OPTIONS</option>
+            <option value="LINK">LINK</option>
+            <option value="UNLINK">UNLINK</option>
+            <option value="PURGE">PURGE</option>
+            <option value="LOCK">LOCK</option>
+            <option value="UNLOCK">UNLOCK</option>
+            <option value="PROPFIND">PROPFIND</option>
+            <option value="VIEW">VIEW</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label required">Required</label>
+          <input type="text" class="form-control" value="{{form_data.data.url}}" name="url" placeholder="url..">
+        </div>
+      </div>
+    </div>
+    <div class="mb3">
+      <label class="form-label">Params</label>
+    </div>
+    {{#form_data.data.params:i}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.params[i].key}}" placeholder="Key Value">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.params[i].value}}" placeholder="Params Value">
+        </div>
+        <div class="col-auto">
+          <div style="padding:0;" class="col-auto">
+            <a class="btn btn-youtube w-100 btn-icon" on-click="@this.handleClick('DELETE_PARAM',{ index : i },@event)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/form_data.data.params}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col-auto">
+          <a href="#" class="btn btn-sm btn-tabler w-100" style="width: 100px !important;"
+            on-click="@this.handleClick('ADD_PARAMS',{},@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-tabler -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Params
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mb3">
+      <label class="form-label">Headers</label>
+    </div>
+    {{#form_data.data.headers:i}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.headers[i].key}}" placeholder="Key Value">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.headers[i].value}}"
+            placeholder="Header Value">
+        </div>
+        <div class="col-auto">
+          <div style="padding:0;" class="col-auto">
+            <a class="btn btn-youtube w-100 btn-icon"
+              on-click="@this.handleClick('DELETE_HEADER',{ index : i },@event)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/form_data.data.headers}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col-auto">
+          <a href="#" class="btn btn-sm btn-tabler w-100" style="width: 100px !important;"
+            on-click="@this.handleClick('ADD_HEADERS',{},@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-tabler -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Headers
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Content Type</label>
+      <div class="btn-group w-100">
+        <button type="button"
+          class="btn {{form_data.data.content_type=='application/x-www-form-urlencoded'?'btn-primary':''}}"
+          on-click="@this.handleClick('CONTENT_TYPE',{ value : 'application/x-www-form-urlencoded'},@event)">application/x-www-form-urlencoded</button>
+        <button type="button" class="btn {{form_data.data.content_type=='application/json'?'btn-primary':''}}"
+          on-click="@this.handleClick('CONTENT_TYPE',{ value : 'application/json'},@event)">application/json</button>
+        <button type="button" class="btn {{form_data.data.content_type=='application/xml'?'btn-primary':''}}"
+          on-click="@this.handleClick('CONTENT_TYPE',{ value : 'application/xml'},@event)">application/xml</button>
+      </div>
+    </div>
+    <div class="mb3">
+      <label class="form-label">Body Data</label>
+    </div>
+    {{#form_data.data.body_datas:i}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.body_datas[i].key}}" placeholder="Key Value">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" value="{{form_data.data.body_datas[i].value}}"
+            placeholder="Body Value">
+        </div>
+        <div class="col-auto">
+          <div style="padding:0;" class="col-auto">
+            <a class="btn btn-youtube w-100 btn-icon" on-click="@this.handleClick('DELETE_BODY',{ index : i },@event)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/form_data.data.body_datas}}
+    <div class="mb-3">
+      <div class="row">
+        <div class="col-auto">
+          <a href="#" class="btn btn-sm btn-tabler w-100" style="width: 100px !important;"
+            on-click="@this.handleClick('ADD_BODY_DATAS',{},@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-tabler -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Body Data
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description <span class="form-label-description">56/100</span></label>
+      <textarea class="form-control" name="description" rows="6"
+        placeholder="Description..">{{form_data.description}}</textarea>
+    </div>
+  </fieldset>
+</div>

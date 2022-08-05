@@ -5,6 +5,7 @@ import ConditionalCommand from "./input/ConditionalCommand";
 import CreateQueueCommand from "./input/CreateQueueCommand";
 import DownloadRequest from "./input/DownloadRequest";
 import FileTransferCommand from "./input/FileTransferCommand";
+import HttpRequestCommand from "./input/HttpRequestCommand";
 import RepoInstallCommand from "./input/RepoInstallCommand";
 import TransferRemoteCommand from "./input/TransferRemoteCommand";
 import WriteSCriptCode from "./input/WriteScriptCode";
@@ -30,7 +31,8 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     "repo-install": RepoInstallCommand,
     "transfer-remote": TransferRemoteCommand,
     "download-request": DownloadRequest,
-    "new-queue": CreateQueueCommand
+    "new-queue": CreateQueueCommand,
+    "http-request": HttpRequestCommand
   },
   template:/* html */`
     {{#if command_data.type == "basic-command"}}
@@ -51,6 +53,8 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     <write-script index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></write-script>
     {{elseif command_data.type == "new-queue"}}
     <new-queue index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></new-queue>
+    {{elseif command_data.type == "http-request"}}
+    <http-request index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></http-request>
     {{/if}}
   `,
   onconfig() {
