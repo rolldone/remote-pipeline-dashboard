@@ -15,6 +15,7 @@ export interface QueueRecordsInterface extends BaseRactiveInterface {
       status: number,
     }): Promise<any>
   }
+  submitStopQueueWorker?: { (id: number): Promise<any> }
   getQueueIdsStatus?: { (): void }
   setQueueIdsStatus?: { (props: any) }
   copyClipBoard?: { (props: any): void }
@@ -104,6 +105,10 @@ export default BaseRactive.extend<QueueRecordsInterface>({
         let _override_queue_modal: OverrideQueueModalInterface = this.findComponent("override-queue-modal");
         _override_queue_modal.show(queue_record_data);
         break;
+      case 'STOP_QUEUE_WORKER':
+        e.preventDefault();
+        this.submitStopQueueWorker(props.id)
+        break;
     }
   },
   async getQueueRecords() {
@@ -129,6 +134,23 @@ export default BaseRactive.extend<QueueRecordsInterface>({
       _idsStatObj[_datas[a].id] = _datas[a].status;
     }
     this.set("ids_status", _idsStatObj);
+  },
+  async submitStopQueueWorker(id) {
+    try {
+      let formData = new FormData();
+      formData.append("id", id + "");
+      let resData = await QueueService.stopWorker(formData);
+      new Notify({
+        status: "success",
+        autoclose: true,
+        autotimeout: 3000,
+        title: "Queue Worker",
+        text: "Queue Worker Stopped",
+      });
+      this.setQueueRecords(await this.getQueueRecords());
+    } catch (ex) {
+      console.error("submitStopQueueWorker - ex :: ", ex);
+    }
   },
   async submitUpdateQueueRecord(props) {
     try {

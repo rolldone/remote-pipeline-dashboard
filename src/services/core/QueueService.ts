@@ -112,6 +112,21 @@ export default {
       throw ex;
     }
   },
+  stopWorker: async (props: FormData): Promise<any> => {
+    try {
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE + '/stop-worker',
+        data: props,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
   deleteQueueScheduler: async (props: FormData): Promise<any> => {
     try {
       let resData = await axios({
@@ -142,5 +157,5 @@ export default {
     } catch (ex) {
       throw ex;
     }
-  },
+  }
 }

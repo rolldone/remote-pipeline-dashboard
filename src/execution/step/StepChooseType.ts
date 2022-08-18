@@ -3,7 +3,6 @@ import ChildExecutionItemWizardModal, { ChildExecutionItemWizardModalInterface }
 import Ractive, { ParsedTemplate } from "ractive";
 import ExecutionService, { ExecutionInterface } from "services/ExecutionService";
 import ProjectService from "services/ProjectService";
-import localStorageDB from 'localstoragedb';
 
 
 export interface StepChooseTypeInterface extends BaseRactiveInterface {
@@ -19,7 +18,6 @@ export interface StepChooseTypeInterface extends BaseRactiveInterface {
 }
 
 
-var childd = new localStorageDB("child_execution_datas", localStorage);
 
 const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
   components: {
