@@ -34,6 +34,7 @@ declare global {
     CKEDITOR: any
     ace: any
     $: JQueryStatic
+    oo: any
   }
 }
 
@@ -79,7 +80,7 @@ export interface IndexInterface extends BaseRactiveInterface {
   setConfig?: { (props: any): void }
 }
 
-export default function () {
+export default function (props?: IndexInterface) {
   window.pubsub = PubSub;
   window.masterData = MasterData;
   window.$ = $;
@@ -93,6 +94,7 @@ export default function () {
         auth: {}
       }
     },
+    css: /* css */``,
     router: null,
     onconfig() {
       let _super = this._super.bind(this);
@@ -256,5 +258,5 @@ export default function () {
     }
   });
 
-  return new App();
+  return App.extend(props);
 }

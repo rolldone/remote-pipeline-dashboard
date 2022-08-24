@@ -22,6 +22,7 @@ export interface RactiveExtendInterface extends OriginRactiveExtendListener<Ract
   get?: { (key: string): any }
   newOn?: any
   on?: any
+  css?: string
   off?: any
   fire?: { (action: string, ...props: any): void }
   parent?: any
@@ -33,6 +34,8 @@ export interface RactiveStaticInterface extends Omit<Static, 'extend'> {
   new(props?: RactiveExtendInterface): Ractive;
   on?: { (key: string, handler?: Function): void }
   off?: { (key: string, handler?: Function): void }
+  toHTML?: any
+  toCSS?: any
 }
 
 const NewRactive: RactiveStaticInterface = TsRactive as any;

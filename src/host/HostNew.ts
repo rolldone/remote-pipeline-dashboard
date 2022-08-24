@@ -28,6 +28,7 @@ export default BaseRactive.extend<HostNewInterface>({
       credential_datas: []
     }
   },
+  css:/* css */``,
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise((resolve: Function) => {

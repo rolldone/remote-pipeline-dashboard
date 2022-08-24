@@ -26,6 +26,7 @@ export default HostNew.extend<HostUpdateInterface>({
       console.error("getHost - ex :: ", ex);
     }
   },
+  css:/* css */``,
   setHost(props) {
     if (props == null) return;
     let _form_data = props.return;

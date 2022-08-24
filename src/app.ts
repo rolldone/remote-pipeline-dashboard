@@ -1,7 +1,22 @@
+import { BaseRactiveInterface } from "base/BaseRactive";
+
 var dashboard = async () => {
   var index = (await import("./index")).default;
-  index();
+  let theApp = index({
+    css: /* css */``
+  })
+  let gg = new theApp();
+  // console.log("aaaaaaaaaaaaaaa :: ",gg.toHTML());
+  // console.log("aaaaaaaaaaaaaaa :: ",gg.toCSS());
+  return {
+    css: gg.toCSS(),
+    html: gg.toHTML(),
+    gg
+  }
 }
-dashboard();
 
+dashboard().then((result) => {
+  console.log(result.html);
+  console.log(result.css);
+});
 

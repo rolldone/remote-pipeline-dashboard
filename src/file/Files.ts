@@ -184,6 +184,10 @@ const Files = BaseRactive.extend<FilesInterface>({
           this.setFiles(await this.getFiles());
           return;
         }
+        let a = document.createElement('a');
+        a.target = '_blank';
+        a.href = "/xhr/file2/display/" + _file_data.id;
+        a.click();
         break;
       case 'RENAME':
         e.preventDefault();

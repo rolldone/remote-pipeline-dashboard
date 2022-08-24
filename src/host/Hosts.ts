@@ -18,6 +18,7 @@ export default BaseRactive.extend<HostsInterface>({
       host_datas: []
     }
   },
+  css: /* css */``,
   onconstruct() {
     this.newOn = {
       onDeleteModalInfoListener: async (c, action, text, e) => {

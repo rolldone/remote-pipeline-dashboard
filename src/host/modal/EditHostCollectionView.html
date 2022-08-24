@@ -13,8 +13,7 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Host Address</label>
-          <input type="text" class="form-control" name="host" value="{{form_data.host}}"
-            placeholder="Your report name">
+          <input type="text" class="form-control" name="host" value="{{form_data.host}}" placeholder="Your report name">
         </div>
         <div class="mb-3">
           <label class="form-label">Port</label>
@@ -30,7 +29,7 @@
           <label class="form-label">Status</label>
           <select class="form-select" value="{{form_data.status}}">
             <option value={{true}} selected="">Activated</option>
-            <option value={{false}} >Deactivated</option>
+            <option value={{false}}>Deactivated</option>
           </select>
         </div>
         <div class="form-selectgroup-boxes row mb-3">
@@ -122,20 +121,20 @@
             placeholder="Content..">{{set_auth_value.passphrase}}</textarea>
         </div>
         {{elseif form_data.auth_type == "credential"}}
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username"
-              name="password" value="{{set_auth_value.username}}">
-            <small class="form-hint">Set the username.</small>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Select Credentials</label>
-            <select class="form-select" value="{{set_auth_value.credential_id}}">
-              {{#credential_datas:i}}
-                <option value="{{id}}" selected="">{{name}}</option>
-              {{/credential_datas}}
-            </select>
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username"
+            name="password" value="{{set_auth_value.username}}">
+          <small class="form-hint">Set the username.</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Select Credentials</label>
+          <select class="form-select" value="{{set_auth_value.credential_id}}">
+            {{#credential_datas:i}}
+            <option value="{{id}}" selected="">{{name}}</option>
+            {{/credential_datas}}
+          </select>
+        </div>
         {{/if}}
       </div>
       <div class="modal-footer">
@@ -157,3 +156,7 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(() => {
+  })
+</script>

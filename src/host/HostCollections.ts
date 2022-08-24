@@ -56,8 +56,12 @@ export default BaseRactive.extend<HostCollectionInterface>({
                           <a class="dropdown-item" href="#" on-click="@this.handleClick('ADD_MORE',{},@event)">
                             Add More
                           </a>
-                          <a class="dropdown-item" href="#" on-click="@this.handleClick('CHANGE_STATUS',{},@event)">
+                          <a class="dropdown-item" href="#" on-click="@this.handleClick('CHANGE_STATUS',{ index: i },@event)">
+                            {{#if status == true}}
                             Deactivated
+                            {{else}}
+                            Activated
+                            {{/if}}
                           </a>
                           <a class="dropdown-item" href="#" on-click="@this.handleClick('DELETE',{ index : i },@event)">
                             Delete
@@ -123,6 +127,11 @@ export default BaseRactive.extend<HostCollectionInterface>({
       case 'ADD_MORE':
         e.preventDefault();
         this.generateHostFirst();
+        break;
+      case 'CHANGE_STATUS':
+        e.preventDefault();
+        _datas[props.index].status = !_datas[props.index].status;
+        this.set("datas", _datas);
         break;
     }
   },
