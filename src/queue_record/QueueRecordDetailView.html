@@ -14,6 +14,17 @@
       <!-- Page title actions -->
       <div class="col-12 col-md-auto ms-auto d-print-none">
         <div class="btn-list">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" on-click="@this.handleClick('RETRIES',{},@event)">Retries</button>
+            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+              id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+              <li><a class="dropdown-item" href="#" on-click="@this.handleClick('STOPS',{},@event)">Stops</a></li>
+              <li><a class="dropdown-item" href="#" on-click="@this.handleClick('DELETES',{},@event)">Deletes</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -77,6 +88,11 @@
             <table class="table table-vcenter table-mobile-md card-table">
               <thead>
                 <tr>
+                  <th class="w-1">
+                    <input class="form-check-input m-0 align-middle check-head" type="checkbox"
+                      on-change="@this.handleChange('SELECT_QUEUE_HEAD',{},@event)" twoway="false"
+                      aria-label="Select all queue items">
+                  </th>
                   <th>Queue Name</th>
                   <th>Job Id</th>
                   <th>Process Mode</th>
@@ -88,12 +104,18 @@
               <tbody>
                 {{#each queue_record_detail_datas:i}}
                 <tr>
+                  <td>
+                    <input class="form-check-input m-0 align-middle check-item"
+                      checked="{{check_ids[id]==true?true:false}}" twoway="false"
+                      on-change="@this.handleChange('SELECT_QUEUE_ITEM',{ id : id, index : i },@event)" type="checkbox"
+                      aria-label="Select queue item">
+                  </td>
                   <td data-label="Name">
                     <div class="d-flex py-1 align-items-center">
                       <span class="avatar me-2" style="background-image: url(./static/avatars/010m.jpg)">{{id}}</span>
                       <div class="flex-fill">
                         <div class="font-weight-medium">{{queue_name}}</div>
-                        <div class="text-muted"><a href="#" class="text-reset">{{@this.getDate(created_at)}}</a></div>
+                        <div class="text-muted"><a href="#" class="text-reset">{{created_at}}</a></div>
                       </div>
                     </div>
                   </td>
@@ -137,7 +159,8 @@
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          {{#if ids_status[id] == 0 || ids_status[id] == 5 || ids_status[id] == 3 || ids_status[id] == 6 }}
+                          {{#if ids_status[id] == 0 || ids_status[id] == 5 || ids_status[id] == 3 || ids_status[id] == 6
+                          }}
                           <a class="dropdown-item" href="#"
                             on-click="@this.handleClick('RETRY',{ id : id, index : i },@event)">
                             Retry

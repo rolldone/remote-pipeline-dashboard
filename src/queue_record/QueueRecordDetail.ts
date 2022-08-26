@@ -21,7 +21,8 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
   data() {
     return {
       queue_record_detail_datas: [],
-      ids_status: []
+      ids_status: [],
+      check_ids: []
     }
   },
   oncomplete() {
@@ -33,17 +34,73 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
       resolve();
     })
   },
+  handleChange(action, props, e) {
+    let _check_ids = this.get("check_ids");
+    switch (action) {
+      case 'SELECT_QUEUE_HEAD':
+        e.preventDefault();
+        let _checkItems = document.getElementsByClassName("check-item");
+        for (var i = 0; i < _checkItems.length; i++) {
+          let _ii = _checkItems[i] as any;
+          if (e.target.checked != _ii.checked) {
+            _ii.click();
+          }
+        }
+        break;
+      case 'SELECT_QUEUE_ITEM':
+        e.preventDefault();
+        _check_ids[props.id] = e.target.checked;
+        this.set("check_ids", _check_ids);
+        break;
+    }
+  },
   async handleClick(action, props, e) {
     let _queue_record_detail_datas = this.get("queue_record_detail_datas");
+    let _check_ids = this.get("check_ids");
+    let resData = null;
+    let _ids = [];
+    let item: QueueRecordDetailInterface = null;
     switch (action) {
+      case 'DELETES':
+        e.preventDefault();
+        for (var i in _check_ids) {
+          if (_check_ids[i] == true) {
+            _ids.push(i);
+          }
+        }
+        resData = await QueueRecordDetailService.deleteQueueDetails(_ids);
+        this.setQueueRecordDetails(await this.getQueueRecordDetails());
+        break;
+      case 'STOPS':
+        e.preventDefault();
+        for (var i in _check_ids) {
+          if (_check_ids[i] == true) {
+            this.handleClick('STOP', {
+              id: i
+            }, e);
+          }
+        }
+        this.set("check_ids", {});
+        break;
+      case 'RETRIES':
+        e.preventDefault();
+        for (var i in _check_ids) {
+          if (_check_ids[i] == true) {
+            this.handleClick('RETRY', {
+              id: i
+            }, e);
+          }
+        }
+        this.set("check_ids", {});
+        break;
       case 'DISPLAY_DATA':
-        
+
         break;
       case 'RETRY':
         e.preventDefault();
-        let item: QueueRecordDetailInterface = _queue_record_detail_datas[props.index];
-        let resData = await QueueRecordService.updateQueueRecord({
-          id: item.queue_record_id,
+        item = _queue_record_detail_datas[props.index];
+        resData = await QueueRecordService.updateQueueRecord({
+          id: this.req.params.id,
           status: QueueRecordStatus.READY,
         })
         resData = await QueueRecordDetailService.retryQueueDetail({
@@ -72,7 +129,7 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
         break;
       case 'DISPLAY_PROCESS':
         e.preventDefault();
-        let displayProcessModal : DisplayProcessModalInterface = this.findComponent("display-process-modal");
+        let displayProcessModal: DisplayProcessModalInterface = this.findComponent("display-process-modal");
         displayProcessModal.show(_queue_record_detail_datas[props.index]);
         break;
 

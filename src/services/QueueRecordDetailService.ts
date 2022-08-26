@@ -26,6 +26,31 @@ export interface QueueItemInterface {
 }
 
 export default {
+  status: {
+    RUNNING: 1,
+    FAILED: 2,
+    WAITING: 3,
+    DELAYED: 4,
+    COMPLETED: 5,
+    STOPPED: 6
+  },
+  async deleteQueueDetails(ids: Array<number>) {
+    try {
+      let formData = new FormData();
+      formData.append("ids", JSON.stringify(ids));
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE_RECORD_DETAIL + '/deletes',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
   async retryQueueDetail(props: QueueRecordDetailInterface) {
     try {
       let formData = new FormData();
