@@ -13,6 +13,7 @@ export interface PipelineInterface {
   name?: string
   description?: string
   project_id?: number
+  connection_type?: string
   oauth_user_id?: number
   repo_data?: any
   repo_name?: string

@@ -68,7 +68,7 @@ export default BaseRactive.extend<QueueRecordsInterface>({
       resolve();
     })
   },
-  handleClick(action, props, e) {
+  async handleClick(action, props, e) {
     let queue_record_datas = this.get("queue_record_datas");
     let queue_record_data = null;
     switch (action) {
@@ -107,7 +107,9 @@ export default BaseRactive.extend<QueueRecordsInterface>({
         break;
       case 'STOP_QUEUE_WORKER':
         e.preventDefault();
-        this.submitStopQueueWorker(props.id)
+        queue_record_datas[props.index].status = QueueRecordStatus.STAND_BY;
+        await this.submitUpdateQueueRecord(queue_record_datas[props.index]);
+        await this.submitStopQueueWorker(props.id)
         break;
     }
   },

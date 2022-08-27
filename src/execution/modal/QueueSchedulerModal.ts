@@ -59,22 +59,22 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                 More
               </button>
               <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','* * * * *',@event)">
                   Every Minute
                 </a>
-                <a class="dropdown-item" href="#">
-                  Even Minutes
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','*/2 * * * *',@event)">
+                  Even Minutes, At every 2nd minute.
                 </a>
-                <a class="dropdown-item" href="#">
-                  Odd Minutes
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','1-59/2 * * * *',@event)">
+                  Every 2 minutes, minutes 1 through 59 past the hour
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','*/5 * * * *',@event)">
                   Every 5 Minutes
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','*/15 * * * *',@event)">
                   Every 15 Minutes
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MINUTES','*/30 * * * *',@event)">
                   Every 30 Minutes
                 </a>
               </div>
@@ -88,20 +88,20 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                 More
               </button>
               <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">
-                  Every Hour
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_HOURS','0 * * * *',@event)">
+                  Every Hour, At minute 0.
                 </a>
-                <a class="dropdown-item" href="#">
-                  Even Hours
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_HOURS','0 */2 * * *',@event)">
+                  Even Hours, At minute 0 past every 2nd hour.
                 </a>
-                <a class="dropdown-item" href="#">
-                  Odd Hours
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_HOURS','0 1-23/2 * * *',@event)">
+                  Odd Hours, At 0 minutes past the hour, every 2 hours, between 01:00 and 23:59
                 </a>
-                <a class="dropdown-item" href="#">
-                  Every 6 Hours
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_HOURS','0 */6 * * *',@event)">
+                  Every 6 Hours, At minute 0 past every 6th hour.
                 </a>
-                <a class="dropdown-item" href="#">
-                  Every 12 Hours
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_HOURS','0 */12 * * *',@event)">
+                  Every 12 Hours, At minute 0 past every 12th hour.
                 </a>
               </div>
               <input type="text" class="form-control" aria-label="Text input with dropdown button" name="hour" value="{{form_data.hour}}">
@@ -114,23 +114,20 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                 More
               </button>
               <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">
-                  Every Day
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_DAYS','0 1 * * *',@event)">
+                  Every Day at 1am
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_DAYS','0 0 2-30/2 * *',@event)">
                   Even Days
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_DAYS','0 0 1-31/2 * *',@event)">
                   Odd Days
                 </a>
-                <a class="dropdown-item" href="#">
-                  Every 5 Days
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_DAYS','0 0 */5 * *',@event)">
+                  Every 5 Days, At midnight
                 </a>
-                <a class="dropdown-item" href="#">
-                  Every 10 Days
-                </a>
-                <a class="dropdown-item" href="#">
-                  Every half month
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_DAYS','0 0 * * 0',@event)">
+                  Every 7 Days, At 00:00 on Sunday
                 </a>
               </div>
               <input type="text" class="form-control" aria-label="Text input with dropdown button" name="day" value="{{form_data.day}}">
@@ -143,19 +140,19 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                 More
               </button>
               <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MONTHS','0 * 1 * *',@event)">
                   Every Month
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MONTHS','0 0 1 2/2 *',@event)">
                   Even Months
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MONTHS','0 0 1 1/2 *',@event)">
                   Odd Months
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MONTHS','0 0 1 */4 *',@event)">
                   Every 4 Months
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_MONTHS','0 0 1 */6 *',@event)">
                   Every half year
                 </a>
               </div>
@@ -169,14 +166,11 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
                 More
               </button>
               <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_WEEKDAY','0 0 * * 1-5',@event)">
                   Every Weekday
                 </a>
-                <a class="dropdown-item" href="#">
-                  Monday-Friday
-                </a>
-                <a class="dropdown-item" href="#">
-                  Weekend Days
+                <a class="dropdown-item" href="#" on-click="@this.handleClick('INPUT_WEEKDAY','0 0 * * 6,0',@event)">
+                  Weekend Days, At 00:00 on Saturday and Sunday.
                 </a>
               </div>
               <input type="text" class="form-control" aria-label="Text input with dropdown button" name="weekday" value="{{form_data.weekday}}">
@@ -214,7 +208,7 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
           <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('SUBMIT',{},@event)">
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Create new schedule
+            Submit
           </a>
         </div>
       </div>
@@ -229,6 +223,22 @@ export default BaseRactive.extend<QueueSchedulerInterface>({
   },
   handleClick(action, props, e) {
     switch (action) {
+      case 'INPUT_MINUTES':
+      case 'INPUT_HOURS':
+      case 'INPUT_DAYS':
+      case 'INPUT_MONTHS':
+      case 'INPUT_WEEKDAY':
+        e.preventDefault();
+        let toArr = props.split(" ");
+        this.set("form_data", {
+          ...this.get("form_data"),
+          minute: toArr[0],
+          hour: toArr[1],
+          day: toArr[2],
+          month: toArr[3],
+          weekday: toArr[4]
+        });
+        break;
       case 'SUBMIT':
         e.preventDefault();
         let form_data = this.get("form_data");

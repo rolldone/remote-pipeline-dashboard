@@ -1,11 +1,8 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import SmartValidation from "base/SmartValidation";
 import PipelineItems from "pipelineitem/PipelineItems";
-import Ractive from "ractive";
-import { Router } from "routerjs";
 import PipelineService, { PipelineServiceInterface } from "services/PipelineService";
 import ProjectService from "services/ProjectService";
-import RepositoryService from "services/RepositoryService";
 import Notify from "simple-notify";
 import RepositoryList, { GitProps } from "./repository_list";
 import template from './PipelineNewView.html';
@@ -26,6 +23,11 @@ export interface PipelineNewInterface extends BaseRactiveInterface {
 export const SELECT_PIPLINE_PLANNING = {
   WITH_REPOSITORY: 'WITH_REPOSITORY',
   BASIC: 'BASIC'
+}
+
+export const CONNECTION_TYPE = {
+  BASIC_CONNECTION: 'basic',
+  SSH_CONNECTION: 'ssh'
 }
 
 export default BaseRactive.extend<PipelineNewInterface>({
@@ -83,7 +85,9 @@ export default BaseRactive.extend<PipelineNewInterface>({
       },
       select_pipeline_planning: SELECT_PIPLINE_PLANNING.BASIC,
       select_source_from: null,
-      form_data: {},
+      form_data: {
+        connection_type: CONNECTION_TYPE.SSH_CONNECTION
+      },
       form_error: {},
       pipeline_items: [],
       project_datas: [],

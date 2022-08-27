@@ -162,7 +162,7 @@ export default BaseRactive.extend<PipelineItemsInterface>({
     console.log("pipeline_items", pipeline_items);
     for (var a = 0; a < pipeline_items.length; a++) {
       let _exist_pipeline_item = Ractive.parse(/* html */`
-          <list-group-item pipeline_item={{pipeline_items[${a}]}} index={{${a}}} on-listener="onListGroupItemListener"></list-group-item>
+          <list-group-item pipeline={{pipeline}} pipeline_item={{pipeline_items[${a}]}} index={{${a}}} on-listener="onListGroupItemListener"></list-group-item>
       `);
       command_group_calc.push({
         ..._exist_pipeline_item.t[0]

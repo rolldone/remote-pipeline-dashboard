@@ -26,8 +26,9 @@ const QueueSchedulerModal = QueueSchedulerModalExectution.extend<QueueSchedulerI
         e.preventDefault();
         let form_data = this.get("form_data");
         this.fire("listener", action, form_data, e);
-        break;
+        return;
     }
+    this._super(action, props, e);
   },
   async getQueueSchedule(props) {
     try {

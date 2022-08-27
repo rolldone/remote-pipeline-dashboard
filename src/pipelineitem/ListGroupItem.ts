@@ -176,6 +176,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
         name: "New Pipeline Item",
         description: "Description for new pipeline item"
       },
+      pipeline: {}
     }
   },
   async handleClick(action, props, e) {
@@ -214,9 +215,9 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
   returnDisplayCommandRactive(index: number) {
     return Ractive.parse(/* html */`
       <div class='list-group-item' index='${index}'>
-        <switch-command-type on-listener="onSwitchCommandTypeListener" index='{{${index}}}' length={{command_datas.length}}></switch-command-type>
+        <switch-command-type pipeline="{{pipeline}}" on-listener="onSwitchCommandTypeListener" index='{{${index}}}' length={{command_datas.length}}></switch-command-type>
         <br>
-        <command-item on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${index}]}}' index='${index}'></command-item>
+        <command-item pipeline="{{pipeline}}" on-listener="onCommandItemListener" command_datas={{command_datas}} command_data='{{command_datas[${index}]}}' index='${index}'></command-item>
       </div>
     `);
   },

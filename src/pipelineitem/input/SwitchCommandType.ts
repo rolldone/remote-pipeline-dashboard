@@ -1,5 +1,89 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 
+const SSH_CONNECTION_MENU = [
+  {
+    label: "Calibrate the task",
+    value: "calibrate"
+  },
+  {
+    label: "Repo install location",
+    value: "repo-install"
+  },
+  {
+    label: "Remote Command",
+    value: "group",
+    command_types: [
+      {
+        label: "Transfer Remote Command",
+        value: "transfer-remote"
+      },
+      {
+        label: "Download Remote Command",
+        value: "download-remote"
+      },
+    ]
+  },
+  {
+    label: "Transfer Remote Command",
+    value: "transfer-remote"
+  },
+  {
+    label: "Download Remote Command",
+    value: "download-remote"
+  },
+  {
+    label: "Basic Command",
+    value: "basic-command"
+  },
+  {
+    label: "Conditional Command",
+    value: "conditional-command"
+  },
+  {
+    label: "File transfer",
+    value: "file-transfer"
+  },
+  {
+    label: "Write transfer",
+    value: "write-transfer"
+  },
+  {
+    label: "Write Script",
+    value: "write-script"
+  },
+  {
+    label: "Full Download Request",
+    value: "download-request"
+  },
+  {
+    label: "Http Request",
+    value: "http-request"
+  },
+  {
+    label: "Create new queue",
+    value: "new-queue"
+  },
+  {
+    label: "Delete",
+    value: "delete"
+  },
+];
+
+const BASIC_CONNECTION_MENU = [
+  {
+    label: "Calibrate the task",
+    value: "calibrate"
+  },
+  {
+    label: "Http Request",
+    value: "http-request"
+  },
+  {
+    label: "Delete",
+    value: "delete"
+  },
+];
+
 const SwitchCommandType = BaseRactive.extend<BaseRactiveInterface>({
   template: /* html */`
     <div class="row align-items-center">
@@ -61,77 +145,21 @@ const SwitchCommandType = BaseRactive.extend<BaseRactiveInterface>({
     return {
       length: null,
       index: null,
-      command_types: [
-        {
-          label: "Calibrate the task",
-          value: "calibrate"
-        },
-        {
-          label: "Repo install location",
-          value: "repo-install"
-        },
-        {
-          label: "Remote Command",
-          value: "group",
-          command_types: [
-            {
-              label: "Transfer Remote Command",
-              value: "transfer-remote"
-            },
-            {
-              label: "Download Remote Command",
-              value: "download-remote"
-            },
-          ]
-        },
-        {
-          label: "Transfer Remote Command",
-          value: "transfer-remote"
-        },
-        {
-          label: "Download Remote Command",
-          value: "download-remote"
-        },
-        {
-          label: "Basic Command",
-          value: "basic-command"
-        },
-        {
-          label: "Conditional Command",
-          value: "conditional-command"
-        },
-        {
-          label: "File transfer",
-          value: "file-transfer"
-        },
-        {
-          label: "Write transfer",
-          value: "write-transfer"
-        },
-        {
-          label: "Write Script",
-          value: "write-script"
-        },
-        {
-          label: "Full Download Request",
-          value: "download-request"
-        },
-        {
-          label: "Http Request",
-          value: "http-request"
-        },
-        {
-          label: "Create new queue",
-          value: "new-queue"
-        },
-        {
-          label: "Delete",
-          value: "delete"
-        },
-      ]
+      pipeline: {},
+      command_types: []
+    }
+  },
+  onconfig() {
+    this._super();
+    let pipeline = this.get("pipeline");
+    if (pipeline.connection_type == "ssh") {
+      this.set("command_types", SSH_CONNECTION_MENU);
+    } else {
+      this.set("command_types", BASIC_CONNECTION_MENU);
     }
   },
   oncomplete() {
+    this._super();
     // let dropdowns = document.querySelectorAll('.dropdown-toggle')
     // dropdowns.forEach((dd) => {
     //   dd.addEventListener('click', function (this: any, e) {

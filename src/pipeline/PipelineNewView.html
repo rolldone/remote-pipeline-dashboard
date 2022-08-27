@@ -47,6 +47,41 @@
         <form id="pipeline-form">
           <input type="hidden" name="id" value="{{form_data.id}}">
           <input type="hidden" name="project_id" value="{{form_data.project_id}}">
+          {{#if form_data.id == ""}}
+          <div class="mb-3">
+            <div class="form-label">Connection Type</div>
+            <div class="form-selectgroup-boxes row mb-3">
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="radio" name="{{form_data.connection_type}}" value="ssh" class="form-selectgroup-input">
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">SSH Connection</span>
+                      <span class="d-block text-muted">Provide with ssh connection as a target</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="radio" name="{{form_data.connection_type}}" value="basic" class="form-selectgroup-input">
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Basic Connection</span>
+                      <span class="d-block text-muted">Provide only basic connection like http request and some basic condition</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+          {{/if}}
           <div class="form-group mb-3 ">
             <label class="form-label">Project Name</label>
             <div>
@@ -71,6 +106,7 @@
             </select>
             <div class="invalid-feedback">{{form_error.project_id}}</div>
           </div>
+          {{#if form_data.connection_type == "ssh"}}
           {{#if form_data.id != ""}}
           <div class="mb-3">
             <label class="form-label">Pipeline Planning</label>
@@ -102,6 +138,8 @@
             {{/if}}
           </div>
           {{/if}}
+          {{/if}}
+          {{else}}
           {{/if}}
           <div class="form-footer">
             <button type="submit" class="btn btn-primary"

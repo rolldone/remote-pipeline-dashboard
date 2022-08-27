@@ -14,6 +14,7 @@ import WriteTransferCommand from "./input/WriteTransferCommand";
 const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
   data() {
     return {
+      pipeline: {},
       command_data: {
         type: "basic-command",
         temp_id: null
@@ -58,12 +59,13 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     {{/if}}
   `,
   onconfig() {
+    let pipeline = this.get("pipeline");
     this.set("command_data", {
       ...this.get("command_data"),
       // Awalys still regenerate
+      type: pipeline.connection_type == "ssh" ? "basic-command" : "http-request",
       order_number: this.get("index")
     })
-    console.log("command_data", this.get("command_data"));
   },
   newOn: {
     onCommandListener(c, action, text, object) {
