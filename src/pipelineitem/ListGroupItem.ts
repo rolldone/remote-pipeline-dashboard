@@ -227,7 +227,7 @@ const ListGroupItem = BaseRactive.extend<ListGroupItemInterface>({
       ...this.partials.pipeline_type_partial as Array<any>
     ];
     command_datas.push({
-      type: "basic-command",
+      type: null,// "basic-command",
       temp_id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
       is_active: true
       /* ...other datas */

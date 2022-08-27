@@ -79,6 +79,10 @@ const BASIC_CONNECTION_MENU = [
     value: "http-request"
   },
   {
+    label: "Conditional Command",
+    value: "conditional-command"
+  },
+  {
     label: "Delete",
     value: "delete"
   },

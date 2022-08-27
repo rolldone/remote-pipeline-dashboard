@@ -16,7 +16,7 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     return {
       pipeline: {},
       command_data: {
-        type: "basic-command",
+        // type: "basic-command",
         temp_id: null
       },
       command_datas: [],
@@ -56,6 +56,7 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     <new-queue index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></new-queue>
     {{elseif command_data.type == "http-request"}}
     <http-request index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></http-request>
+    {{else}}
     {{/if}}
   `,
   onconfig() {
@@ -63,7 +64,7 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     this.set("command_data", {
       ...this.get("command_data"),
       // Awalys still regenerate
-      type: pipeline.connection_type == "ssh" ? "basic-command" : "http-request",
+      // type: pipeline.connection_type == "ssh" ? "basic-command" : "http-request",
       order_number: this.get("index")
     })
   },
