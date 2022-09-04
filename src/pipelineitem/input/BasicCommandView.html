@@ -26,13 +26,74 @@
     </div>
     <div class="mb-3">
       <label class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" name="{{input_use_script}}" on-change="@this.handleChange('USE_SCRIPT',{},@event)">
+        <input class="form-check-input" type="checkbox" name="{{input_use_script}}"
+          on-change="@this.handleChange('USE_SCRIPT',{},@event)">
         <span class="form-check-label">Use script</span>
       </label>
     </div>
     <div class="mb-3">
       {{> simple_script_partial}}
     </div>
+    <div class="mb-3">
+      <label class="form-label">Command Type</label>
+      <div class="btn-group w-100">
+        <button type="button"
+          class="btn {{(form_data.data.command_type=='basic')||(form_data.data.command_type==null)?'btn-primary':''}}"
+          on-click="@this.handleClick('SELECT_COMMAND_TYPE',{ value : 'basic' },@event)">Basic</button>
+        <button type="button" class="btn {{form_data.data.command_type=='prompt'?'btn-primary':''}}"
+          on-click="@this.handleClick('SELECT_COMMAND_TYPE',{ value : 'prompt' },@event)">With Prompt</button>
+      </div>
+    </div>
+    {{#if (form_data.data.command_type || null) == "prompt"}}
+    <div class="mb-3">
+      {{#each (form_data.data.prompt_datas||[]):i}}
+      <div class="row">
+        <div class="col">
+          <label class="form-label">Catch the string characters</label>
+          <div class="input-group mb-2">
+            <div class="col">
+              <input class="form-control" type="text" placeholder="String Character"
+                value="{{form_data.data.prompt_datas[i].key}}" style="width: 98%;">
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <label class="form-label">Put the value</label>
+          <div class="input-group mb-2">
+            <div class="col">
+              <input class="form-control" type="text" placeholder="Target Path"
+                value="{{form_data.data.prompt_datas[i].value}}" style="width: 98%;">
+            </div>
+            <div class="col-auto align-self-center" on-click="@this.handleClick('DELETE_PROMPT',{ index : i },@event)">
+                <svg class="icon icon-tabler icon-tabler-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <!-- <small class="form-hint"></small> -->
+        </div>
+      </div>
+      {{/each}}
+      <div class="row">
+        <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+          <a class="btn btn-twitter w-100 btn-icon" href="#" aria-label="Twitter" on-click="@this.handleClick('ADD_PROMPT',{},@event)">
+            <svg class="icon icon-tabler icon-tabler-plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    {{/if}}
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>
       <textarea class="form-control" name="description" rows="6"

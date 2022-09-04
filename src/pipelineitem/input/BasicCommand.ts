@@ -38,7 +38,8 @@ export default BaseRactive.extend<BasicCommandInterface>({
   template,
   partials: {
     parent_order_number_commands_partial: [],
-    simple_script_partial: []
+    simple_script_partial: [],
+    prompt_partials: []
   },
   oncomplete() {
     this.displayParentOrderNumberCommandPartial();
@@ -65,8 +66,8 @@ export default BaseRactive.extend<BasicCommandInterface>({
     let _form_data: form_data = this.get("form_data");
 
     // Define checkbox use script
-    this.set("input_use_script", _form_data.data.use_script == true ? [null] : [])
-    this.displayScriptCode(_form_data.data.use_script || false);
+    this.set("input_use_script", this.safeJSON(_form_data, 'data.use_script', false) == true ? [null] : [])
+    this.displayScriptCode(this.safeJSON(_form_data, 'data.use_script', false));
 
     let _parent_order_temp_ids_selected = _form_data.parent_order_temp_ids || [];
     let parent_order_temp_ids: Array<parent_order_temp_ids> = [];
@@ -106,7 +107,29 @@ export default BaseRactive.extend<BasicCommandInterface>({
   },
   _pendingTriggerFormDataName: null,
   handleClick(action, props, e) {
-    switch (action) { }
+    let prompt_datas = this.get("form_data.data.prompt_datas") || [];
+    switch (action) {
+      case 'DELETE_PROMPT':
+        e.preventDefault();
+        prompt_datas.splice(props.index, 1);
+        this.set("form_data.data.prompt_datas", prompt_datas);
+        break;
+      case 'SELECT_COMMAND_TYPE':
+        e.preventDefault();
+        this.set("form_data.data.command_type", props.value)
+        if (props.value == "basic") {
+          this.set("form_data.data.prompt_datas", []);
+        }
+        break;
+      case 'ADD_PROMPT':
+        e.preventDefault();
+        prompt_datas.push({
+          key: "",
+          value: ""
+        })
+        this.set("form_data.data.prompt_datas", prompt_datas);
+        break;
+    }
   },
   handleChange(action, props, e) {
     let _simple_script_partial = [];
