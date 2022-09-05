@@ -93,5 +93,34 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async getRenderVariableItem(props?: VariableItemInterface){
+    try {
+      let formData = new FormData();
+      for (var key in props) {
+        switch (key) {
+          case 'datas':
+          case 'schema':
+          case 'deleted_ids':
+          case 'var_schema':
+            formData.append(key, JSON.stringify(props[key] || []));
+            break;
+          default:
+            formData.append(key, props[key]);
+            break;
+        }
+      }
+      let resData = await axios({
+        method: "post",
+        url: BaseService.VARIABLE_ITEM + '/render',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }
