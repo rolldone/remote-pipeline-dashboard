@@ -93,7 +93,14 @@ const DisplayProcessModal = BaseRactive.extend<DisplayProcessModalInterface>({
       let _reSortArr = [];
 
       // Sort again
-      resGroupPipeline = _.sortBy(resGroupPipeline, 'order_number');
+      resGroupPipeline = [
+        // {
+        //   name: "Init",
+        //   data: [],
+        //   order_number: null
+        // },
+        ..._.sortBy(resGroupPipeline, 'order_number')
+      ];
 
       // And save it
       await this.set("log_array", resGroupPipeline);

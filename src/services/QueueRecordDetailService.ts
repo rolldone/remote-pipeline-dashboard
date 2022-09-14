@@ -5,6 +5,7 @@ import { QueueRecordInterface } from "./QueueRecordService";
 import BaseService from "./BaseService";
 import axios from "axios";
 import SmartUrlSearchParams from "base/SmartUrlSearchParams";
+import GetQueryUrl from "base/GetQueryUrl";
 
 export interface QueueRecordDetailInterface {
   id?: any
@@ -353,23 +354,25 @@ export default {
       throw ex;
     }
   },
-  async getDirectories(job_id: string) {
+  async getDirectories(share_key: string) {
     try {
+      let parseQuery = GetQueryUrl();
       let query = SmartUrlSearchParams({
-        job_id
+        share_key: parseQuery.share_key || null
       });
-      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/display-data/' + job_id + '/directories', {});
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + '/display-data/directories?' + query, {});
       return resData.data;
     } catch (ex) {
       throw ex;
     }
   },
-  async openFile(job_id: string, path: string) {
+  async openFile(share_key: string, path: string) {
     try {
+      let parseQuery = GetQueryUrl();
       let query = SmartUrlSearchParams({
-        path
+        share_key: parseQuery.share_key || null
       });
-      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + "/display-data/" + job_id + '/file?' + query, {});
+      let resData = await axios.get(BaseService.QUEUE_RECORD_DETAIL + "/display-data/file?" + query, {});
       return resData.data;
     } catch (ex) {
       throw ex;

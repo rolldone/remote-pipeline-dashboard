@@ -5,6 +5,7 @@ import Notify from "simple-notify";
 import DeleteInfoModal, { DeleteInfoModalInterface } from "./delete_info_modal/DeleteInfoModal";
 import OverrideQueueModal, { OverrideQueueModalInterface } from "./override_queue_modal/OverrideQueueModal";
 import template from './QueueRecordsView.html';
+import ShareModal, { ShareModalInterface } from "./share_modal/ShareModal";
 
 export interface QueueRecordsInterface extends BaseRactiveInterface {
   getQueueRecords?: { (): Promise<any> }
@@ -25,7 +26,8 @@ export default BaseRactive.extend<QueueRecordsInterface>({
   template,
   components: {
     "delete-info-modal": DeleteInfoModal,
-    "override-queue-modal": OverrideQueueModal
+    "override-queue-modal": OverrideQueueModal,
+    "share-modal": ShareModal
   },
   data() {
     return {
@@ -37,6 +39,10 @@ export default BaseRactive.extend<QueueRecordsInterface>({
     let _super = this._super.bind(this);
     return new Promise((resolve: Function) => {
       this.newOn = {
+        onShareModalListener: async (c, action, text, e) => {
+          let _share_queue_modal: ShareModalInterface = this.findComponent("share-modal");
+          _share_queue_modal.hide();
+        },
         onDeleteModalInfoListener: async (c, action, text, e) => {
           switch (action) {
             case 'DELETED':
@@ -72,6 +78,12 @@ export default BaseRactive.extend<QueueRecordsInterface>({
     let queue_record_datas = this.get("queue_record_datas");
     let queue_record_data = null;
     switch (action) {
+      case 'SHARE':
+        e.preventDefault();
+        queue_record_data = queue_record_datas[props.index];
+        let _share_queue_modal: ShareModalInterface = this.findComponent("share-modal");
+        _share_queue_modal.show(queue_record_data);
+        break;
       case 'COPY_LINK':
         e.preventDefault();
         let _urlQueueKey = window.location.origin + "/xhr/outside/queue/" + queue_record_datas[props.index].queue_key;

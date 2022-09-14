@@ -69,14 +69,19 @@ export default BaseRactive.extend<LoginInterface>({
   },
   async submit() {
     try {
+      let query = new URLSearchParams(window.location.search);
+      const url = new URL(query.get("redirect"));
+      let redirectVal = new URLSearchParams(url.search);
+
       let form_data = this.get("form_data");
       let formData = new FormData();
       for (var key in form_data) {
         formData.append(key, form_data[key]);
       }
+      
       let resData = await AuthService.loginService(formData);
       if (this.req.query.redirect != null) {
-        return window.location.href = this.req.query.redirect;
+        return window.location.href = url.toString();
       }
       window.location.href = "/dashboard";
     } catch (ex) {

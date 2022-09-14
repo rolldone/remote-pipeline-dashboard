@@ -192,6 +192,13 @@ export default function (props?: IndexInterface) {
                 req: req
               })
             })
+            .get("/login-page-publisher", async (req, context) => {
+              let Auth = (await import("./auth/LoginPagePublisher")).default;
+              new Auth({
+                target: "#app",
+                req: req
+              })
+            })
             .get("/logout", async (req, context) => {
               let Auth = (await import("./auth/Logout")).default;
               new Auth({

@@ -100,5 +100,42 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async requestPin(share_key: string, email: string) {
+    try {
+      let formData = new FormData();
+      formData.append("share_key", share_key);
+      formData.append("email", email);
+      let resData = await axios({
+        method: "post",
+        url: BaseService.AUTH + '/request-pin',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
+  },
+  async loginPagePublisher(props) {
+    try {
+      let formData = new FormData();
+      formData.append("email", props.email);
+      formData.append("share_key", props.share_key);
+      formData.append("pin_code", props.pin_code);
+      let resData = await axios({
+        method: "post",
+        url: BaseService.AUTH + '/login-page-publisher',
+        data: props,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

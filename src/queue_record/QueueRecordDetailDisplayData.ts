@@ -47,7 +47,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
   },
   async getDirectories() {
     try {
-      let resData = await QueueRecordDetailService.getDirectories(this.req.params.job_id);
+      let resData = await QueueRecordDetailService.getDirectories(this.req.query.share_key);
       return resData;
     } catch (ex) {
       console.error("getDirectories - ex :: ", ex);
@@ -76,7 +76,7 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
       case 'file':
         return Ractive.parse(/* html */`
         <li class="nav-item">
-          <a class="nav-link" on-click="@this.handleClick('OPEN_FILE',{ url : '/xhr/queue-record-detail/display-data/${this.req.params.job_id}/file?path=${props.path}' },@event)">
+          <a class="nav-link" on-click="@this.handleClick('OPEN_FILE',{ url : '/xhr/queue-record-detail/display-data/file?path=${props.path}&share_key=${this.req.query.share_key}' },@event)">
             <span class="nav-link-icon d-md-none d-lg-inline-block">
               <!-- Download SVG icon from http://tabler-icons.io/i/home -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-code-2" width="24"

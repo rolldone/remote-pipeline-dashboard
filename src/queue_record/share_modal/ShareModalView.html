@@ -1,0 +1,103 @@
+<div class="modal modal-blur fade show" id="{{id_element}}" tabindex="-1" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Share {{queue_data.queue_key}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Select Share Mode</label>
+          <div class="btn-group w-100">
+            <button type="button" on-click="@this.handleClick('SELECT_SHARE_MODE','private',@event)"
+              class="btn {{form_data.share_mode=='private'?'btn-primary':''}}">Private</button>
+            <button type="button" on-click="@this.handleClick('SELECT_SHARE_MODE','public',@event)"
+              class="btn {{form_data.share_mode=='public'?'btn-primary':''}}">Public</button>
+            <button type="button" on-click="@this.handleClick('SELECT_SHARE_MODE','specific',@event)"
+              class="btn {{form_data.share_mode=='specific'?'btn-primary':''}}">Specific Users</button>
+          </div>
+        </div>
+        {{#if form_data.share_mode == "specific"}}
+        <div class="mb-3">
+          <label class="form-label">Search User</label>
+          <div class="input-icon mb-3">
+            <input type="email" value="{{form_data.email}}" class="form-control" placeholder="Enter a email address">
+            <span class="input-icon-addon">
+              {{#if form_data.status == "loading"}}
+              <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+              {{/if}}
+            </span>
+          </div>
+          <div class="mb-3">
+            <a href="#" class="btn btn-bitbucket w-100 btn-icon btn-add" aria-label="Plus"
+              on-click="@this.handleClick('ADD_USER',{},@event)">
+              <!-- Download SVG icon from http://tabler-icons.io/i/brand-bitbucket -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="mb-3">
+          {{#if (form_data.users || []).length > 0}}
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Users Added</h3>
+            </div>
+            {{#each (form_data.users||[]):i}}
+            <div class="list-group list-group-flush list-group-hoverable">
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="badge bg-red"></span></div>
+                  <div class="col-auto">
+                    <a href="#">
+                      <span class="avatar" style="background-image: url(./static/avatars/000m.jpg)"></span>
+                    </a>
+                  </div>
+                  <div class="col text-truncate">
+                    <a href="#" class="text-reset d-block">{{form_data.users[i]}}</a>
+                    <!-- <div class="d-block text-muted text-truncate mt-n1">donny.rolanda@gmail.com</div> -->
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" class="list-group-item-actions"
+                      on-click="@this.handleClick('DELETE_USER',{ index : i }, @event)">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+          {{/if}}
+        </div>
+        {{/if}}
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+          Cancel
+        </a>
+        <a href="#" class="btn btn-primary ms-auto" on-click="@this.handleClick('SUBMIT',{},@event)">
+          <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Submit
+        </a>
+      </div>
+    </div>
+  </div>

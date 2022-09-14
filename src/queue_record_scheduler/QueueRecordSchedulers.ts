@@ -1,5 +1,6 @@
 import { DeleteInfoModalInterface } from "queue_record/delete_info_modal/DeleteInfoModal";
 import QueueRecords, { QueueRecordsInterface } from "queue_record/QueueRecords";
+import ShareModal, { ShareModalInterface } from "queue_record/share_modal/ShareModal";
 import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface, QueueRecordStatus } from "services/QueueRecordService";
 import QueueScheduleService, { QueueScheduleInterface } from "services/QueueScheduleService";
@@ -21,7 +22,8 @@ export interface QueueRecordSchedulerInterface extends Omit<QueueRecordsInterfac
 export default QueueRecords.extend<QueueRecordSchedulerInterface>({
   template,
   components: {
-    "scheduler-modal": QueueScheduleModal
+    "scheduler-modal": QueueScheduleModal,
+    "share-modal": ShareModal
   },
   onconstruct() {
     this.newOn = {
@@ -57,7 +59,11 @@ export default QueueRecords.extend<QueueRecordSchedulerInterface>({
           case 'DISPOSE':
             break;
         }
-      }
+      },
+      onShareModalListener: async (c, action, text, e) => {
+        let _share_queue_modal: ShareModalInterface = this.findComponent("share-modal");
+        _share_queue_modal.hide();
+      },
     }
     this.reInitializeObserve();
   },

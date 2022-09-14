@@ -1,4 +1,4 @@
-export default function (props) {
+const SmartUrlSearchParams = function (props) {
   for (let key in props) {
     if (props[key] == null) {
       delete props[key];
@@ -7,3 +7,5 @@ export default function (props) {
   let query = new URLSearchParams(props as any);
   return query;
 }
+
+export default SmartUrlSearchParams;

@@ -24,7 +24,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
           req: req
         })
       })
-      .get("/job/:job_id", async (req, context) => {
+      .get("/job", async (req, context) => {
         // Handle the route here...
         let app = (await import("./QueueRecordDetailDisplayData")).default;
         new app({

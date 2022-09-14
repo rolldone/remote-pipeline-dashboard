@@ -151,6 +151,10 @@
                             on-click="@this.handleClick('STOP_QUEUE_WORKER',{ id : id, index : i },@event)">
                             Stop Queue & Worker
                           </a>
+                          <a class="dropdown-item" href="#"
+                            on-click="@this.handleClick('SHARE',{ id : id, index : i },@event)">
+                            Share
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -205,3 +209,4 @@
 </footer>
 <scheduler-modal on-listener="onSchedulerModalListener"></scheduler-modal>
 <delete-info-modal on-listener="onDeleteModalInfoListener"></delete-info-modal>
+<share-modal on-listener="onShareModalListener"></share-modal>

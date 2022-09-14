@@ -48,5 +48,7 @@ export default {
   OAUTH_USER: ENDPOINT + '/oauth-user',
   CREDENTIAL: ENDPOINT + '/credential',
   CONFIGURATION: ENDPOINT + "/configuration",
-  VARIABLE_ITEM: ENDPOINT + "/variable-item"
+  VARIABLE_ITEM: ENDPOINT + "/variable-item",
+  PAGE_PUBLISHER: ENDPOINT + "/page-publisher",
+  PAGE_PUBLISHER_USER: ENDPOINT + "/page-publisher-user"
 }
