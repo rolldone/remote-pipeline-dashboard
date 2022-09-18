@@ -1,0 +1,144 @@
+<div class="mb-3">
+  <label class="form-label">Server Name</label>
+  <input type="text" class="form-control" name="host_name" value="{{form_data.host_name}}"
+    placeholder="xxx.xxx.xxx.xxx">
+</div>
+<div class="mb-3">
+  <label class="form-label">Host Address</label>
+  <input type="text" class="form-control" name="host" value="{{form_data.host}}" placeholder="Your report name">
+</div>
+<div class="mb-3">
+  <label class="form-label">Port</label>
+  <input type="number" class="form-control" name="port" value="{{form_data.port}}" placeholder="Your report name">
+</div>
+<div class="mb-3">
+  <label class="form-label">Location</label>
+  <input type="text" class="form-control" name="from_provider" value="{{form_data.from_provider}}"
+    placeholder="Your report name">
+</div>
+<div class="form-selectgroup-boxes row mb-3">
+  <div class="col-lg-12">
+    <div class="mb-3">
+      <label class="form-selectgroup-item">
+        <input type="radio" name="{{form_data.auth_type}}" value="parent" class="form-selectgroup-input">
+        <span class="form-selectgroup-label d-flex align-items-center p-3">
+          <span class="me-3">
+            <span class="form-selectgroup-check"></span>
+          </span>
+          <span class="form-selectgroup-label-content">
+            <span class="form-selectgroup-title strong mb-1">Parent</span>
+            <span class="d-block text-muted">Using parent group authentication</span>
+          </span>
+        </span>
+      </label>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="mb-3">
+      <label class="form-selectgroup-item">
+        <input type="radio" name="{{form_data.auth_type}}" value="basic_auth" class="form-selectgroup-input">
+        <span class="form-selectgroup-label d-flex align-items-center p-3">
+          <span class="me-3">
+            <span class="form-selectgroup-check"></span>
+          </span>
+          <span class="form-selectgroup-label-content">
+            <span class="form-selectgroup-title strong mb-1">Basic Authentication</span>
+            <span class="d-block text-muted">Using Password for login server</span>
+          </span>
+        </span>
+      </label>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="mb-3">
+      <label class="form-selectgroup-item">
+        <input type="radio" name="{{form_data.auth_type}}" value="private_key" class="form-selectgroup-input">
+        <span class="form-selectgroup-label d-flex align-items-center p-3">
+          <span class="me-3">
+            <span class="form-selectgroup-check"></span>
+          </span>
+          <span class="form-selectgroup-label-content">
+            <span class="form-selectgroup-title strong mb-1">SSH Key Authentication</span>
+            <span class="d-block text-muted">Using Private key for Authentication</span>
+          </span>
+        </span>
+      </label>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="mb-3">
+      <label class="form-selectgroup-item">
+        <input type="radio" name="{{form_data.auth_type}}" value="credential" class="form-selectgroup-input">
+        <span class="form-selectgroup-label d-flex align-items-center p-3">
+          <span class="me-3">
+            <span class="form-selectgroup-check"></span>
+          </span>
+          <span class="form-selectgroup-label-content">
+            <span class="form-selectgroup-title strong mb-1">Credential Collections</span>
+            <span class="d-block text-muted">Using from credential collections</span>
+          </span>
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+{{#if form_data.auth_type == "basic_auth"}}
+<div class="mb-3">
+  <label class="form-label">Username</label>
+  <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username" name="username"
+    value="{{set_auth_value.username}}">
+  <small class="form-hint">Set the username.</small>
+</div>
+<div class="mb-3">
+  <label class="form-label">Password</label>
+  <input type="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password" name="password"
+    value="{{set_auth_value.password}}">
+  <small class="form-hint">Set the password.</small>
+</div>
+{{elseif form_data.auth_type == "private_key"}}
+<div class="mb-3">
+  <label class="form-label">Username</label>
+  <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username" name="username"
+    value="{{set_auth_value.username}}">
+  <small class="form-hint">Set the username.</small>
+</div>
+<div class="mb-3">
+  <label class="form-label">Private key <span class="form-label-description"></span></label>
+  <textarea class="form-control" name="private_key" rows="6"
+    placeholder="Content..">{{set_auth_value.private_key}}</textarea>
+</div>
+<div class="mb-3">
+  <label class="form-label">Passphrase <span class="form-label-description"></span></label>
+  <textarea class="form-control" name="passphrase" rows="6"
+    placeholder="Content..">{{set_auth_value.passphrase}}</textarea>
+</div>
+{{elseif form_data.auth_type == "credential"}}
+<div class="mb-3">
+  <label class="form-label">Username</label>
+  <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Username" name="password"
+    value="{{set_auth_value.username}}">
+  <small class="form-hint">Set the username.</small>
+</div>
+<div class="mb-3">
+  <label class="form-label">Select Credentials</label>
+  <select class="form-select" value="{{set_auth_value.credential_id}}">
+    {{#credential_datas:i}}
+    <option value="{{id}}" selected="">{{name}}</option>
+    {{/credential_datas}}
+  </select>
+</div>
+{{/if}}
+<div class="row" style="margin-top: 44px;">
+  <div class="col-6"></div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-6">
+        <button class="btn btn-outline-primary full-width"
+          on-click="@this.handleClick('CANCEL',{},@event)">Cancel</button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-primary full-width" on-click="@this.handleClick('SAVE',{},@event)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,43 +1,26 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import Ractive, { ParsedTemplate } from "ractive";
 import CredentialService from "services/CredentialService";
-import template from './EditHostCollectionView.html';
-import ListManageProxy from "./ListManageProxy";
+import template from './FormManageProxyView.html'
 
-declare let window: Window
+export interface FormManageProxyInterface extends BaseRactiveInterface {
 
-export interface EditHostCollectionInterface extends BaseRactiveInterface {
-  show: { (): void }
-  hide: { (): void }
   getCredentials?: { (): void }
   setCredentials?: { (props: any): void }
-
 }
 
-export default BaseRactive.extend<EditHostCollectionInterface>({
+const FormManageProxy = BaseRactive.extend<FormManageProxyInterface>({
   template,
-  components: {
-    "list-manage-proxy": ListManageProxy
-  },
-  partials: {
-    "manage_form_proxy_partials": []
-  },
-  css: /* css */`
-    .full-width{
-      width: 100%;
-    }
-  `,
   data() {
     return {
-      id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
-      form_data: {
-        auth_type: "parent",
-        proxy_datas: []
-      },
+      form_select_index: null,
+      form_data_origin: {},
+      form_data: {},
       set_auth_value: {},
-      index: null,
-      credential_datas: [],
     }
+  },
+  onconfig() {
+    this._super();
+    this.set("form_data", Object.assign({}, this.get("form_data_origin")));
   },
   oncomplete() {
     this.observe("form_data.auth_type", async (val: string, val2: string) => {
@@ -87,56 +70,23 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
         })
       }
     }, {
-      // Dont let start on first load
-      init: false
+      init: true
     })
   },
-  async show() {
-    let _id_element = this.get("id_element");
-    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
-      keyboard: false
-    });
-    // myModal.addEventListener('shown.bs.modal', function () {
-    //   // myInput.focus()
-    // });
-    myModal.show();
-  },
-  hide() {
-    let _id_element = this.get("id_element");
-    var myModal = new window.bootstrap.Modal(document.getElementById(_id_element), {
-      keyboard: false
-    });
-    // myModal.addEventListener('shown.bs.modal', function () {
-    //   // myInput.focus()
-    // });
-    myModal.hide();
-  },
   handleClick(action, props, e) {
-    let _form_data = this.get("form_data");
-    let _proxy_datas = _form_data.proxy_datas || [];
     switch (action) {
-      case 'ADD_PROXY':
-        e.preventDefault();
-        _proxy_datas.push({
-          host_name: "Host Name " + (Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)),
-          host: "",
-          port: "",
-          from_provider: "",
-          auth_type: ""
-        });
-        this.set("form_data.proxy_datas", _proxy_datas);
-        break;
-      case 'SUBMIT':
+      case 'SAVE':
         this.set("form_data", {
           ...this.get("form_data"),
           // Override the value on top
           ...this.get("set_auth_value")
         })
-        let index = this.get("index");
-        this.fire("listener", action, {
-          index: index,
-          form_data: this.get("form_data")
-        }, e);
+        this.set("form_data_origin", this.get("form_data"));
+        this.fire("listener", "SAVE", props, e);
+        break;
+      case 'CANCEL':
+        this.set("form_data", {});
+        this.fire("listener", "CANCEL", props, e);
         break;
     }
   },
@@ -153,5 +103,7 @@ export default BaseRactive.extend<EditHostCollectionInterface>({
   setCredentials(props: any) {
     if (props == null) return;
     this.set("credential_datas", props.return);
-  }
+  },
 });
+
+export default FormManageProxy;

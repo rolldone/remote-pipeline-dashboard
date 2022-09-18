@@ -137,6 +137,15 @@
         </div>
         {{/if}}
       </div>
+      {{#if form_data.proxy_datas.length > 0}}
+      <div class="modal-body">
+        <list-manage-proxy form_datas="{{form_data.proxy_datas}}"></list-manage-proxy>
+      </div>
+      {{/if}}
+      <div class="modal-body">
+        <button class="btn btn-outline-primary full-width" on-click="@this.handleClick('ADD_PROXY',{},@event)">Add Proxy
+          if your connection is have depedency network</button>
+      </div>
       <div class="modal-footer">
         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
           Cancel
