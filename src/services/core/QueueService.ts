@@ -9,7 +9,7 @@ export interface OutSideQueueInterface {
   delay: number
 }
 
-export default {
+const QueueService = {
   deleteItem: async (props: FormData): Promise<any> => {
     try {
       let resData = await axios({
@@ -159,3 +159,4 @@ export default {
     }
   }
 }
+export default QueueService;

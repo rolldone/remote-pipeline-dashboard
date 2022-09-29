@@ -19,6 +19,27 @@ const MasterData = {
   pending: {},
   vars: {},
   listeners: {},
+  setOnMultiSameListener: function () {
+    let listenerName = arguments[0];
+    let callback = arguments[1];
+    let arg2: string | Boolean | null | undefined = arguments[2];
+    arg2 = arg2 == null ? "" : arg2;
+    let arg3: null | false = arguments[3] || null;
+    // let key = Object.prototype.toString.call(arg2)=='[object Boolean]'?'':arg2;
+    // let callOnInit = Object.prototype.toString.call(arg2)=='[object String]'?arg3==null?false:arg3:arg2;
+    let key = typeof arg2 == "boolean" ? '' : arg2;
+    let callOnInit = typeof arg2 == "string" ? arg3 == null ? false : arg3 : arg2;
+    var newKey = listenerName; // + key;
+    var newListenerKey = listenerName + callback.toString();
+    // this.listeners[newListenerKey] = callback;
+    global.pubsub.on(newKey, callback /* this.listeners[newListenerKey] */);
+    if (callOnInit == true) {
+      global.pubsub.emit(newKey, this.vars[newKey]);
+    }
+    // if (this.vars[newKey] != null) {
+    //   return this.vars[newKey];
+    // }
+  },
   // listenerName, callback,key="",callOnInit=false
   setOnListener: function () {
     // if (this.resetListener() == false) return;
@@ -104,9 +125,12 @@ const MasterData = {
   },
   getData: function (key: string, exceptionProps: any) {
     let data = this.vars[key];
-    data = {
+    /* data = {
       ...exceptionProps,
       ...this.vars[key]
+    } */
+    if (data == null) {
+      data = exceptionProps;
     }
     this.vars[key] = data;
     return this.vars[key];

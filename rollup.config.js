@@ -1,26 +1,15 @@
-// import multiEntry from "rollup-plugin-multi-entry";
 import notify from 'rollup-plugin-notify';
 import multiInput from 'rollup-plugin-multi-input';
-import babel from 'rollup-plugin-babel';
 import html from "rollup-plugin-html";
-import scss from 'rollup-plugin-scss';
 import css from "rollup-plugin-import-css";
-import copy from 'rollup-plugin-copy'
 import inject from '@rollup/plugin-inject';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { rollupImportMapPlugin } from "rollup-plugin-import-map";
 import urlResolve from 'rollup-plugin-url-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import path from 'path';
-import { baseUrl } from 'rollup-plugin-base-url';
-import typescriptPlugin from 'rollup-plugin-typescript2';
-import typescript from 'typescript';
 import svg from 'rollup-plugin-svg-import';
 import json from "@rollup/plugin-json";
 
-let baseOut = 'dist';
 export default {
-  input: "src/app.ts",
   plugins: [
     svg({
       // process SVG to DOM Node or String. Default: false
@@ -29,21 +18,10 @@ export default {
     notify(),
     inject({
       // '$': 'jQuery',
-      exclude: ['**/*.html', "**/*.ts", "**/*.scss", "**/*.css","**/*.json"],
+      exclude: ['**/*.html', "**/*.ts", "**/*.scss", "**/*.css", "**/*.json"],
     }),
     html(),
     multiInput(),
-    typescriptPlugin({
-      clean: false,
-      typescript,
-    }),
-    scss({
-      // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
-      output: path.join(baseOut, "/css/style.css"),
-      failOnError: false,
-      // Import library as global use all scss
-      // prefix: `@import "src/base/flexbox.scss";`
-    }),
     css(),
     json(),
     nodeResolve({
@@ -90,12 +68,5 @@ export default {
     //   url: '/public/dashboard', // the base URL prefix; optional, defaults to /
     //   staticImports: true, // also rebases static `import _ from "…"`; optional, defaults to false
     // }),
-  ],
-  output: {
-    dir: path.join(baseOut),
-    format: 'esm',
-    entryFileNames: "[name].js",
-    chunkFileNames: "[name].js",
-    sourcemap: true,
-  }
+  ]
 }

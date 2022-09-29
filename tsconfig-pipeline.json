@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+      "src/PipelineApp.ts",
+      "src/PipelineAppRouter.ts",
+      "src/global.d.ts"
+  ]
+}

@@ -1,7 +1,5 @@
-import { BaseRactiveInterface } from "base/BaseRactive";
-
 var dashboard = async () => {
-  var index = (await import("./index")).default;
+  var index = (await import("./AppRouter")).default;
   let theApp = index({
     css: /* css */``
   })
@@ -16,7 +14,7 @@ var dashboard = async () => {
 }
 
 dashboard().then((result) => {
-  console.log(result.html);
-  console.log(result.css);
+  // console.log(result.html);
+  // console.log(result.css);
 });
 

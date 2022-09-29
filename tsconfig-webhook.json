@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+      "src/WebhookApp.ts",
+      "src/WebhookAppRouter.ts",
+      "src/global.d.ts"
+  ]
+}

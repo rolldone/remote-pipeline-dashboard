@@ -43,7 +43,7 @@ export default BaseRactive.extend<PipelinesInterface>({
   },
   handleClick(action, props, e) {
     let _pipeline_datas = this.get("pipeline_datas");
-    let _pipeline_data: PipelineServiceInterface = null;
+    let _pipeline_data : PipelineServiceInterface = null;
     switch (action) {
       case 'DOWNLOAD_PIPELINE_TASK':
         e.preventDefault();

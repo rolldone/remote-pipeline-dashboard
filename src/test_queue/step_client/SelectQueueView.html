@@ -1,0 +1,107 @@
+<div class="card card-md">
+  <div class="card-body text-center py-4 p-sm-5">
+    <h1 class="mt-1">Testing queue Execution!</h1>
+    <p class="text-muted">You must select queue collections</p>
+  </div>
+  <div class="hr-text hr-text-center hr-text-spaceless">Step 1</div>
+  <div class="card-body">
+    <div class="row">
+      <label class="form-label">Paste queue key</label>
+      <div class="col">
+        <div class="mb-3">
+          <input type="text" class="form-control" name="queue_ley" value="{{form_data.queue_key}}"
+            placeholder="Input queue key">
+        </div>
+      </div>
+      <div class="col-auto">
+        <a class="btn btn-blue w-100" on-click="@this.handleClick('SUBMIT_QUEUE',{},@event)">
+          Submit
+        </a>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="mb-3">
+      <label class="form-label">Execution Name</label>
+      <input class="form-control" type="text" placeholder="Your report name" readonly="" value="{{form_data.exe_name}}"
+        name="exe_name">
+    </div>
+    <label class="form-label">Process Mode</label>
+    <div class="form-selectgroup-boxes row mb-3">
+      <div class="col-lg-6">
+        <label class="form-selectgroup-item">
+          <input class="form-selectgroup-input" type="radio" value="sequential"
+            name="{{form_data.process_mode}}">
+          <span class="form-selectgroup-label d-flex align-items-center p-3">
+            <span class="me-3">
+              <span class="form-selectgroup-check"></span>
+            </span>
+            <span class="form-selectgroup-label-content">
+              <span class="form-selectgroup-title strong mb-1">Sequential Process</span>
+              <span class="d-block text-muted">Provide only basic data needed for the report</span>
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="col-lg-6">
+        <label class="form-selectgroup-item">
+          <input class="form-selectgroup-input" type="radio" value="parallel"
+            name="{{form_data.process_mode}}">
+          <span class="form-selectgroup-label d-flex align-items-center p-3">
+            <span class="me-3">
+              <span class="form-selectgroup-check"></span>
+            </span>
+            <span class="form-selectgroup-label-content">
+              <span class="form-selectgroup-title strong mb-1">Prallel Process</span>
+              <span class="d-block text-muted">Insert charts and additional advanced analyses to be inserted in the
+                report</span>
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Delay to start</label>
+      <div>
+        <input class="form-control" type="number" aria-describedby="emailHelp" placeholder="Enter number of limit"
+          value="{{form_data.delay}}" name="delay">
+        <small class="form-hint">You can set how much delay to start the queue default from system is 2000 ms</small>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <!-- Variable -->
+    {{> variable_form_partial}}
+  </div>
+</div>
+<div class="row align-items-center mt-3">
+  <div class="col-4">
+    <div class="progress">
+      <div style="width: 25%;" class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+        aria-valuemax="100" aria-label="25% Complete"><span class="visually-hidden">25% Complete</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="btn-list justify-content-end">
+      <a class="btn btn-primary" on-click="@this.handleClick('NEXT',{},@event)">Continue</a>
+    </div>
+  </div>
+</div>
+<div class="modal modal-blur fade show" tabindex="-1" role="dialog" aria-modal="true" id="cuwmy">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Manage Execution Wizard</h5> <button class="btn-close" type="button"
+          data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"></div>
+      <div style="display: none;" class="modal-footer"><a class="btn btn-link link-secondary" href="#"
+          data-bs-dismiss="modal">Cancel</a> <a class="btn btn-primary ms-auto" href="#" data-bs-dismiss="modal">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <desc>Download more icon variants from https://tabler-icons.io/i/plus</desc>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg> Create new report</a></div>
+    </div>
+  </div>
+</div>

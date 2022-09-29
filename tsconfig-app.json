@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+      "src/App.ts",
+      "src/AppRouter.ts",
+      "src/global.d.ts"
+  ]
+}

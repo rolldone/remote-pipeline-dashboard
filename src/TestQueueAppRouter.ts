@@ -1,32 +1,22 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import './Style.scss';
 declare let window: Window;
 
 export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/queue-record"
+      basePath: "/dashboard/test-queue"
     })
       .get("/", async (req, context) => {
-        let app = (await import("./QueueRecords")).default;
+        let app = (await import("./test_queue/TestClient")).default;
         new app({
           target: "#index-body",
           req: req
         })
       })
-      .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let app = (await import("./QueueRecordDetail")).default;
-        new app({
-          target: "#index-body",
-          req: req
-        })
-      })
-      .get("/job", async (req, context) => {
-        // Handle the route here...
-        let app = (await import("./QueueRecordDetailDisplayData")).default;
+      .get("/guest-side", async (req, context) => {
+        let app = (await import("./test_queue/TestGuest")).default;
         new app({
           target: "#index-body",
           req: req
@@ -34,6 +24,6 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       })
       .run();
 
-    window.queueRecordRouter = this.router;
+    window.testClientRouter = this.router;
   }
 });

@@ -58,7 +58,11 @@ const InputValue = BaseRactive.extend<InputValueInterface>({
   displayPartial() {
     let _input_partial = [];
     let _schema_data = this.get("schema_data");
-    this.resetPartial("input_partials",/* html */`<${_schema_data.type} readonly={{true}} schema_data={{schema_data}} form_data={{schema_data}} variable_id={{variable_id}}></${_schema_data.type}>`)
+    this.resetPartial("input_partials",/* html */`
+      <fieldset class="form-fieldset">
+        <${_schema_data.type} readonly={{true}} schema_data={{schema_data}} form_data={{schema_data}} variable_id={{variable_id}}></${_schema_data.type}>
+      </fieldset>
+    `)
   }
 });
 

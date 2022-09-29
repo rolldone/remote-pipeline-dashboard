@@ -1,5 +1,4 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
-import QueueService from "services/core/QueueService";
 import QueueRecordService, { QueueRecordInterface } from "services/QueueRecordService";
 import VariableItemService from "services/VariableItemService";
 import VariableService from "services/VariableService";

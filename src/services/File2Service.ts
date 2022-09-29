@@ -102,7 +102,7 @@ export default {
       throw ex;
     }
   },
-  async getFileById(id:number) {
+  async getFileById(id: number) {
     try {
       let query = SmartUrlSearchParams({});
       let resData = await axios.get(BaseService.FILE2 + '/' + id + '/view?' + query, {});

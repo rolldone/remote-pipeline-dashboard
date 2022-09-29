@@ -1,0 +1,96 @@
+<div class="card card-md">
+  <div class="card-body text-center py-4 p-sm-5">
+    <h1 class="mt-1">Testing queue Execution!</h1>
+    <p class="text-muted">You can upload files first and set where the path destination. Skip it if not need it
+    </p>
+  </div>
+  <div class="hr-text hr-text-center hr-text-spaceless">Step 1</div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label">Define path location</label>
+      <input type="text" class="form-control" name="path" value="{{form_data.path}}" placeholder="Input placeholder">
+    </div>
+    <div class="mb-3">
+      <label for="">Select Files</label>
+    </div>
+    <!-- This is partials -->
+    {{#each form_data.files:i}}
+    <div class="row">
+      <div class="col">
+        <div class="form-group mb-3 ">
+          <div>
+            <input type="file" class="form-control" name="files_{{i}}" value="{{form_data.files[i]}}"
+              aria-describedby="emailHelp" placeholder="Select file">
+          </div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="form-group mb-3 ">
+          <a href="#" class="btn btn-youtube w-100 btn-icon"
+            on-click="@this.handleClick('DELETE_SELECT_FILE',{ index : i },@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-youtube -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+    <div class="row">
+      <div class="col-2">
+        <div class="mb-3">
+          <a href="#" class="btn btn-tabler w-30" on-click="@this.handleClick('ADD_MORE',{},@event)">
+            <!-- Download SVG icon from http://tabler-icons.io/i/brand-tabler -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row align-items-center mt-3">
+  <div class="col-4">
+    <div class="progress">
+      <div style="width: 25%;" class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+        aria-valuemax="100" aria-label="25% Complete"><span class="visually-hidden">25% Complete</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="btn-list justify-content-end">
+      <a class="btn btn-link link-secondary" on-click="@this.handleClick('IGNORE',{},@event)">Ignore</a>
+      <a class="btn btn-primary" on-click="@this.handleClick('NEXT',{},@event)">Continue</a>
+    </div>
+  </div>
+</div>
+<div class="modal modal-blur fade show" tabindex="-1" role="dialog" aria-modal="true" id="cuwmy">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Manage Execution Wizard</h5> <button class="btn-close" type="button"
+          data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"></div>
+      <div style="display: none;" class="modal-footer"><a class="btn btn-link link-secondary" href="#"
+          data-bs-dismiss="modal">Cancel</a> <a class="btn btn-primary ms-auto" href="#" data-bs-dismiss="modal">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <desc>Download more icon variants from https://tabler-icons.io/i/plus</desc>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg> Create new report</a></div>
+    </div>
+  </div>
+</div>

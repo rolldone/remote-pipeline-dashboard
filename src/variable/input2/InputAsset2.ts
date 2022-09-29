@@ -18,17 +18,18 @@ const InputAsset2 = InputText.extend<InputAssetInterface>({
   },
   template: /* html */`
     <div class="col text-truncate">
-      <input type="text" class="form-control" name="name" value="{{schema_data.name}}" placeholder="Input var name">
+      <label class="form-label">Variable Asset</label>
+      <input type="text" class="form-control" name="name" value="{{schema_data.name}}" placeholder="Input var name" readonly={{readonly}}>
       <br/>
       {{#schema_data.attachment_datas:i}}
       <div class="mb-3">
         <div class="row">
           <div class="col">
-            <input type="text" class="form-control" value="{{schema_data.attachment_datas[i].name}}" on-click="@this.handleClick('CHOOSE_FILE',{ name : 'attatchment-'+i, index : i },@event)" placeholder="Choose a file" readonly="readyonly">
+            <input type="text" class="form-control" value="{{schema_data.attachment_datas[i].name}}" on-click="@this.handleClick('CHOOSE_FILE',{ name : 'attatchment-'+i, index : i },@event)" placeholder="Choose a file" readonly="readonly">
           </div>
           <div class="col-auto">
             {{#if (schema_data.attachment_datas.length - 1) == i}}
-            <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('MOREE_UPLOAD',{},@event)">
+            <a class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('MOREE_UPLOAD',{},@event)">
               <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -37,7 +38,7 @@ const InputAsset2 = InputText.extend<InputAssetInterface>({
               </svg>
             </a>
             {{else}}
-            <a href="#" class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('DELETE_FILE',{ index : i },@event)">
+            <a class="btn btn-facebook w-100 btn-icon" aria-label="Facebook" on-click="@this.handleClick('DELETE_FILE',{ index : i },@event)">
               <!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

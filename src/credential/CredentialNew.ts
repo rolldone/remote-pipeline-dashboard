@@ -46,6 +46,7 @@ const CredentialNew = BaseRactive.extend<CredentialNewInterface>({
           break;
         case 'password':
           _form_data.data = {
+            username: _form_data_data.username,
             password: _form_data_data.password
           }
           break;

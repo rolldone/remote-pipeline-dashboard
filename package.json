@@ -6,6 +6,15 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
+    "watch_app": "rollup -c rollup.config.app.js -w",
+    "watch_test_queue": "rollup -c rollup.config.test_queue.js -w",
+    "watch_project": "rollup -c rollup.config.project.js -w",
+    "watch_pipeline": "rollup -c rollup.config.pipeline.js -w",
+    "watch_file": "rollup -c rollup.config.file.js -w",
+    "watch_execution": "rollup -c rollup.config.execution.js -w",
+    "watch_host": "rollup -c rollup.config.host.js -w",
+    "watch_queue_record": "rollup -c rollup.config.queue_record.js -w",
+    "watch_webhook": "rollup -c rollup.config.webhook.js -w",
     "build-test": "rollup -c && rollup -c"
   },
   "author": "",
@@ -50,6 +59,7 @@
     "rollup-plugin-import-map": "^2.2.2",
     "rollup-plugin-multi-input": "^1.1.1",
     "rollup-plugin-scss": "^2.6.1",
+    "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-svg-import": "^1.6.0",
     "rollup-plugin-typescript2": "^0.31.2",
     "rollup-plugin-url-resolve": "^0.2.0",

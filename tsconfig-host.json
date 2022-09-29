@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+      "src/HostApp.ts",
+      "src/HostAppRouter.ts",
+      "src/global.d.ts"
+  ]
+}

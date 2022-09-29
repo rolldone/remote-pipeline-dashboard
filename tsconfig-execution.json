@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+      "src/ExecutionApp.ts",
+      "src/ExecutionAppRouter.ts",
+      "src/global.d.ts"
+  ]
+}
