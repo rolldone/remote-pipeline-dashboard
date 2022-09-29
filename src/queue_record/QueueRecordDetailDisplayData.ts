@@ -19,6 +19,51 @@ const QueueRecordDetailDisplayData = BaseRactive.extend<QueueRecordDetailDisplay
   partials: {
     directory_partials: []
   },
+  css:/* css */`
+    #peok-23 .navbar.navbar-dark-custom {
+      background: #333;
+      color: #818181;
+    }
+      #peok-23 .navbar.navbar-dark-custom .navbar-nav .nav-link {
+        color: #b0b0af;
+    }
+      #peok-23 .navbar.navbar-dark-custom .navbar-nav .nav-link:hover, #peok-23 .navbar.navbar-dark-custom .navbar-nav .nav-link:focus {
+        background: #2d2d2d;
+        color: #b0b0af;
+    }
+      #peok-23 .navbar.navbar-dark-custom .navbar-nav .nav-link.show {
+        color: #fff;
+    }
+      #peok-23 .navbar.navbar-dark-custom .navbar-nav .active > .nav-link {
+        color: #fff;
+    }
+      #peok-23 .navbar-vertical.navbar-expand-lg {
+        position: absolute !important;
+    }
+      #peok-23 ul.current-opened-file {
+        display: flex;
+        align-items: center;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+      #peok-23 ul.current-opened-file li {
+        padding: 10px 20px;
+        background: #1f1f1f;
+        color: #b0b0af;
+        border-right: 1px solid #2d2d2d;
+        cursor: pointer;
+    }
+      #peok-23 ul.current-opened-file li.active {
+        background: #282828;
+        color: #fff;
+    }
+      #peok-23 ul.current-opened-file img {
+        width: 23px;
+        margin-right: 10px;
+    }
+      
+  `,
   data() {
     return {
       directories: [],
