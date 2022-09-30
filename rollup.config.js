@@ -22,7 +22,6 @@ export default {
     }),
     html(),
     multiInput(),
-    css(),
     json(),
     nodeResolve({
       browser: true

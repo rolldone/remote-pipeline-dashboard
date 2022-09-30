@@ -3,8 +3,7 @@ import path from 'path';
 import typescriptPlugin from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 import rollup from './rollup.config';
-import scss from 'rollup-plugin-scss';
-
+import css from 'rollup-plugin-import-css';
 let baseOut = 'dist/test_queue';
 
 rollup.input = "src/TestQueueApp.ts";
@@ -19,6 +18,7 @@ rollup.output = {
 
 rollup.plugins = [
   ...rollup.plugins,
+  css(),
   typescriptPlugin({
     tsconfig: 'tsconfig-test_queue.json',
     clean: false,

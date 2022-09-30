@@ -1,8 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-      "src/TestQueue.ts",
-      "src/TestQueueAppRouter.ts",
+      "src/TestQueueApp.ts",
       "src/global.d.ts"
   ]
 }

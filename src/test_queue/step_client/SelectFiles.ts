@@ -16,6 +16,11 @@ const SelectFiles = BaseRactive.extend<SelectFilesInterface>({
       }
     }
   },
+  onconfig() {
+    this._super();
+    // Make sure this object have default data
+    this.set("form_data.files", []);
+  },
   async handleClick(action, props, e) {
     let _form_data = this.get("form_data");
     let _files = _form_data.files || [];
@@ -34,8 +39,7 @@ const SelectFiles = BaseRactive.extend<SelectFilesInterface>({
         break;
       case 'IGNORE':
         e.preventDefault();
-
-      this.fire("listener", 'NEXT', 2, null)
+        this.fire("listener", 'NEXT', 2, null)
         break;
       case 'NEXT':
         e.preventDefault();
@@ -47,6 +51,10 @@ const SelectFiles = BaseRactive.extend<SelectFilesInterface>({
     try {
       let _form_data = this.get("form_data");
       let _files: Array<any> = _form_data.files;
+      if (_files.length == 0) {
+        alert("You need add file first. Or you need ignore, Click button ignore :)");
+        return;
+      }
       for (let a = 0; a < _files.length; a++) {
         let resData = await File2Service.add({
           path: _form_data.path,
