@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -40,7 +40,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       basePath: "/dashboard/queue-record-scheduler"
     })
       .get("/", async (req, context) => {
-        let Excecution = (await import("./queue_record_scheduler/QueueRecordSchedulers")).default;
+        let Excecution = (await import("./QueueRecordSchedulers")).default;
         new Excecution({
           target: "#index-body",
           req: req
@@ -48,7 +48,7 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Excecution = (await import("./queue_record_scheduler/QueueRecordScheluderDetail")).default;
+        let Excecution = (await import("./QueueRecordScheluderDetail")).default;
         new Excecution({
           target: "#index-body",
           req: req

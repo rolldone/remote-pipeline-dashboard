@@ -1,5 +1,5 @@
 var app = async () => {
-  var index = (await import("./queue_record_scheduler/QueueRecordSchedulerAppRouter")).default;
+  var index = (await import("./test_queue/DemoClientAppRouter")).default;
   let theApp = new index({
     css: /* css */``,
   })

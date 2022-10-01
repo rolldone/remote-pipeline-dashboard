@@ -1,10 +1,10 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
 
-declare let window : Window;
+declare let window: Window;
 
 declare global {
   interface Window {
@@ -37,33 +37,38 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/queue-record"
+      basePath: "/dashboard/webhook"
+    }).get('/', async (req, context) => {
+      let webhooks = (await import("./Webhooks")).default;
+      new webhooks({
+        target: "#index-body",
+      })
     })
-      .get("/", async (req, context) => {
-        let app = (await import("./queue_record/QueueRecords")).default;
-        new app({
+      // Define the route matching a path with a callback
+      .get('/new', async (req, context) => {
+        // Handle the route here...
+        let webhook = (await import("./WebhookNew")).default;
+        new webhook({
           target: "#index-body",
-          req: req
         })
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let app = (await import("./queue_record/QueueRecordDetail")).default;
-        new app({
+        let webhook = (await import("./WebhookUpdate")).default;
+        new webhook({
           target: "#index-body",
           req: req
         })
       })
-      .get("/job", async (req, context) => {
+      .get("/:id/histories", async (req, context) => {
         // Handle the route here...
-        let app = (await import("./queue_record/QueueRecordDetailDisplayData")).default;
-        new app({
+        let webhook = (await import("./WebhookHistories")).default;
+        new webhook({
           target: "#index-body",
           req: req
         })
       })
       .run();
-
-    window.queueRecordRouter = this.router;
+    window.webhookRouter = this.router
   }
 });

@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "include": [
       "src/TestQueueApp.ts",
+      "src/DemoClientApp.ts",
       "src/global.d.ts"
   ]
 }

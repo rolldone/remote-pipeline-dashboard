@@ -1,0 +1,35 @@
+<div class="modal modal-blur fade" id="{{id_element}}" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Generate Url</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Url</label>
+          <div class="input-group mb-3">
+            <input type="text"
+              value="{{@global.location.origin}}/dashboard/queue-record/job?share_key={{query_record_detail_data.td_token}}"
+              class="form-control" placeholder="" readonly>
+            <button class="btn" type="button" on-click="@this.handleClick('COPY',{},@event)">
+              <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+              <svg xmlns="http://www.w3.org/2000/svg" style="margin:0 !important;"
+                class="icon icon-tabler icon-tabler-copy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+        <a class="btn btn-primary" target="_blank"
+          href="{{@global.location.origin}}/dashboard/queue-record/job?share_key={{query_record_detail_data.td_token}}">Open</a>
+      </div>
+    </div>
+  </div>
+</div>

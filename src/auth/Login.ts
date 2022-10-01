@@ -70,8 +70,12 @@ export default BaseRactive.extend<LoginInterface>({
   async submit() {
     try {
       let query = new URLSearchParams(window.location.search);
-      const url = new URL(query.get("redirect"));
-      let redirectVal = new URLSearchParams(url.search);
+      let url = null;
+      let redirectVal = null;
+      if(query.has("redirect")){
+        url = new URL(query.get("redirect"));
+        redirectVal = new URLSearchParams(url.search);
+      }
 
       let form_data = this.get("form_data");
       let formData = new FormData();

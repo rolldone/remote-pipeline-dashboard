@@ -191,5 +191,22 @@ export default {
     } catch (ex) {
       throw ex;
     }
+  },
+  async generateUrlDisplay(queue_record_detail_id: number) {
+    try {
+      let formData = new FormData();
+      formData.append("queue_record_detail_id", queue_record_detail_id+"");
+      let resData = await axios({
+        method: "post",
+        url: BaseService.QUEUE_RECORD_DETAIL + '/generate-url-display',
+        data: formData,
+        headers: {
+          // 'Content-Type': `multipart/form-data;`,
+        }
+      })
+      return resData.data;
+    } catch (ex) {
+      throw ex;
+    }
   }
 }

@@ -12,7 +12,6 @@ export interface TestClientInterface extends BaseRactiveInterface {
   renderViewComponent?: { (whatComponent: string): ParsedTemplate }
   testApiKey?: { (): void }
 }
-
 declare let window: Window;
 
 const TestClient = BaseRactive.extend<TestClientInterface>({
@@ -101,7 +100,8 @@ const TestClient = BaseRactive.extend<TestClientInterface>({
       let _form_data = this.get("form_data");
       let resData = await TokenService.getTokenByKey(_form_data.api_key);
       resData = resData.return;
-      if(resData == null){
+      console.log("mvadlfkvm :: ", resData);
+      if (resData == null) {
         alert("The api token is not match :(");
         return;
       }
@@ -110,6 +110,7 @@ const TestClient = BaseRactive.extend<TestClientInterface>({
       masterData.saveData("api_key", _form_data.api_key);
       this.displayPartials();
     } catch (ex) {
+      // alert("The api token is not match :(");
       console.error("testApiKey - ex :: ", ex);
     }
   }

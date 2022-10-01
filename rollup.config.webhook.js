@@ -4,6 +4,7 @@ import typescriptPlugin from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 import rollup from './rollup.config';
 import scss from 'rollup-plugin-scss';
+import css from 'rollup-plugin-import-css';
 
 let baseOut = 'dist/webhook';
 
@@ -19,6 +20,7 @@ rollup.output = {
 
 rollup.plugins = [
   ...rollup.plugins,
+  css(),
   typescriptPlugin({
     tsconfig: 'tsconfig-webhook.json',
     clean: false,

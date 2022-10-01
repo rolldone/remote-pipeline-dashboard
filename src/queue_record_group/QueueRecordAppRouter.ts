@@ -1,10 +1,10 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
 
-declare let window: Window;
+declare let window : Window;
 
 declare global {
   interface Window {
@@ -37,38 +37,33 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/webhook"
-    }).get('/', async (req, context) => {
-      let webhooks = (await import("./webhook/Webhooks")).default;
-      new webhooks({
-        target: "#index-body",
-      })
+      basePath: "/dashboard/queue-record"
     })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let webhook = (await import("./webhook/WebhookNew")).default;
-        new webhook({
-          target: "#index-body",
-        })
-      })
-      .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let webhook = (await import("./webhook/WebhookUpdate")).default;
-        new webhook({
+      .get("/", async (req, context) => {
+        let app = (await import("../queue_record/QueueRecords")).default;
+        new app({
           target: "#index-body",
           req: req
         })
       })
-      .get("/:id/histories", async (req, context) => {
+      .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let webhook = (await import("./webhook/WebhookHistories")).default;
-        new webhook({
+        let app = (await import("../queue_record/QueueRecordDetail")).default;
+        new app({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get("/job", async (req, context) => {
+        // Handle the route here...
+        let app = (await import("../queue_record/QueueRecordDetailDisplayData")).default;
+        new app({
           target: "#index-body",
           req: req
         })
       })
       .run();
-    window.webhookRouter = this.router
+
+    window.queueRecordRouter = this.router;
   }
 });
