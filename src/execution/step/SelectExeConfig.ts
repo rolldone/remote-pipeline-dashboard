@@ -1,5 +1,10 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
+import PipelineService from "services/PipelineService";
 
+export interface SelectExeConfigInterface extends BaseRactiveInterface {
+  getPipelines?: { (): Promise<any> }
+  setPipelines?: { (props: any): void }
+}
 /**
  * Execution mode like
  * - duration
@@ -7,7 +12,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
  * - with trigger webhook
  */
 
-const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
+const SelectExeConfig = BaseRactive.extend<SelectExeConfigInterface>({
   template: /* html */`
     <div class="card card-md">
       <div class="card-body text-center py-4 p-sm-5">
@@ -24,6 +29,7 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
             <small class="form-hint">Put the name of this execution process.</small>
           </div>
         </div>
+        {{#if pipeline_data.connection_type == "ssh"}}
         <label class="form-label">Access the host</label>
         <div class="form-selectgroup-boxes row mb-3">
           <div class="col-lg-6">
@@ -56,6 +62,7 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
             </label>
           </div>
         </div>
+        {{/if}}
         <label class="form-label">Process Mode</label>
         <div class="form-selectgroup-boxes row mb-3">
           <div class="col-lg-6">
@@ -74,7 +81,7 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
           </div>
           <div class="col-lg-6">
             <label class="form-selectgroup-item">
-              <input type="radio" name="{{form_data.process_mode}}" value="parallel" class="form-selectgroup-input" on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
+              <input disabled={{(pipeline_data.connection_type == "ssh"?false:true)}} type="radio" name="{{form_data.process_mode}}" value="parallel" class="form-selectgroup-input" on-change="@this.handleChange('SELECT_PROCESS',{},@event)">
               <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                   <span class="form-selectgroup-check"></span>
@@ -132,9 +139,23 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
   `,
   oncomplete() {
     let _super = this._super.bind(this);
-    return new Promise((resolve: Function) => {
+    return new Promise(async (resolve: Function) => {
+      let _form_data = this.get("form_data");
       if (this.get("form_data.delay") == null) {
         this.set("form_data.delay", 2000);
+      }
+      this.setPipelines(await this.getPipelines());
+      // Create skenario
+      if (_form_data.pipeline_id != null) {
+        let _pipeline_datas = this.get("pipeline_datas");
+        let _pipeline_data = this.get("pipeline_data");
+        for (let a = 0; a < _pipeline_datas.length; a++) {
+          if (_pipeline_datas[a].id == _form_data.pipeline_id) {
+            _pipeline_data = _pipeline_datas[a];
+            break;
+          }
+        }
+        this.set("pipeline_data", _pipeline_data)
       }
       _super();
       resolve();
@@ -164,7 +185,22 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
         }, e);
         break;
     }
-  }
+  },
+  async getPipelines() {
+    try {
+      let _form_data = this.get("form_data");
+      let resData = await PipelineService.getPipelines({
+        project_id: _form_data.project_id,
+      });
+      return resData;
+    } catch (ex) {
+      console.error("getProjects - ex :: ", ex);
+    }
+  },
+  setPipelines(props) {
+    if (props == null) return;
+    this.set("pipeline_datas", props.return)
+  },
 })
 
 export default SelectExeConfig;

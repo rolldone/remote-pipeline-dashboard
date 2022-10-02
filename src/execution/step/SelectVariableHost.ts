@@ -1,5 +1,6 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import HostService from "services/HostService";
+import PipelineService from "services/PipelineService";
 import VariableService from "services/VariableService";
 
 export interface SelectVariableHostInterface extends BaseRactiveInterface {
@@ -7,6 +8,8 @@ export interface SelectVariableHostInterface extends BaseRactiveInterface {
   setHOst?: { (props: any): void }
   getVariables?: { (): Promise<any> }
   setVariables?: { (props: any): void }
+  getPipelines?: { (): Promise<any> }
+  setPipelines?: { (props: any): void }
 }
 
 /**
@@ -59,6 +62,7 @@ const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
             </div>
           </div>
         </div>
+        {{#if pipeline_data.connection_type == "ssh"}}
         <div class="mb-3">
           <div class="card">
             <div class="card-header">
@@ -86,6 +90,7 @@ const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
             </div>
           </div>
         </div>
+        {{/if}}
       </div>
     </div>
     <div class="row align-items-center mt-3">
@@ -112,6 +117,7 @@ const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
   data() {
     return {
       form_data: {},
+      pipeline_data: {},
       variable_datas: {},
       select_variable_index: null,
       host_datas: [],
@@ -132,6 +138,21 @@ const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
           target: e
         });
       }
+
+      this.setPipelines(await this.getPipelines());
+      // Create skenario
+      if (_form_data.pipeline_id != null) {
+        let _pipeline_datas = this.get("pipeline_datas");
+        let _pipeline_data = this.get("pipeline_data");
+        for (let a = 0; a < _pipeline_datas.length; a++) {
+          if (_pipeline_datas[a].id == _form_data.pipeline_id) {
+            _pipeline_data = _pipeline_datas[a];
+            break;
+          }
+        }
+        this.set("pipeline_data", _pipeline_data)
+      }
+
       resolve();
     });
   },
@@ -200,6 +221,21 @@ const SelectVariableHost = BaseRactive.extend<SelectVariableHostInterface>({
     if (props == null) return;
     let _datas = props.return;
     this.set("variable_datas", _datas);
+  },
+  async getPipelines() {
+    try {
+      let _form_data = this.get("form_data");
+      let resData = await PipelineService.getPipelines({
+        project_id: _form_data.project_id,
+      });
+      return resData;
+    } catch (ex) {
+      console.error("getProjects - ex :: ", ex);
+    }
+  },
+  setPipelines(props) {
+    if (props == null) return;
+    this.set("pipeline_datas", props.return)
   },
 });
 
