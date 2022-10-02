@@ -2,9 +2,7 @@
   "extends": "./tsconfig.json",
   "include": [
       "src/QueueRecordApp.ts",
-      "src/QueueRecordAppRouter.ts",
       "src/QueueRecordSchedulerApp.ts",
-      "src/QueueRecordSchedulerAppRouter.ts",
       "src/global.d.ts"
   ]
 }

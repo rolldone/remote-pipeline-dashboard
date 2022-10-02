@@ -62,7 +62,7 @@
           {{/if}}
         </div>
       </div>
-      {{#if variable_groups.length > 0}}
+      {{#if active_tab == -1}}
       <div class="card-footer">
         <div class="row align-items-center">
           <div class="col">Learn more about <a href="#">Project ID</a></div>
@@ -73,6 +73,14 @@
           </div>
         </div>
       </div>
+      {{else}}
+      <div class="card-footer">
+        <div class="row align-items-center">
+          <div class="col">Learn more about <a href="#">Project ID</a></div>
+        </div>
+      </div>
+      {{/if}}
+      {{#if variable_groups.length > 0}}
       {{/if}}
     </div>
   </div>

@@ -171,7 +171,7 @@
                             Stop
                           </a>
                           {{/if}}
-                          <a class="dropdown-item" href="/dashboard/queue-record/job?share_key={{share_key}}">
+                          <a class="dropdown-item" on-click="@this.handleClick('DISPLAY_DATA',{ id : id, index : i },@event)">
                             Display Data
                           </a>
                         </div>
@@ -227,3 +227,4 @@
   </div>
 </footer>
 <display-process-modal></display-process-modal>
+<generate-url-display-modal></generate-url-display-modal>

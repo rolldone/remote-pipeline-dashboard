@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -33,41 +33,37 @@ declare global {
   }
 }
 
-interface ProjectInterface extends BaseRactiveInterface {
-}
-
 export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/execution"
+      basePath: "/dashboard/queue-record"
     })
       .get("/", async (req, context) => {
-        let Excecution = (await import("./execution/Executions")).default;
-        new Excecution({
-          target: "#index-body",
-          req: req
-        })
-      })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let Excecution = (await import("./execution/ExecutionNew")).default;
-        new Excecution({
+        let app = (await import("../queue_record/QueueRecords")).default;
+        new app({
           target: "#index-body",
           req: req
         })
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Excecution = (await import("./execution/ExecutionUpdate")).default;
-        new Excecution({
+        let app = (await import("../queue_record/QueueRecordDetail")).default;
+        new app({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get("/job", async (req, context) => {
+        // Handle the route here...
+        let app = (await import("../queue_record/QueueRecordDetailDisplayData")).default;
+        new app({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.executionRouter = this.router;
+    window.queueRecordRouter = this.router;
   }
 });

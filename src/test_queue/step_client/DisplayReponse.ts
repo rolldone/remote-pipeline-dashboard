@@ -36,6 +36,10 @@ const DisplayResponse = BaseRactive.extend<DisplayResponseInterface>({
   },
   handleClick(action, props, e) {
     switch (action) {
+      case 'FINISH':
+        e.preventDefault();
+        this.fire("listener", 'NEXT', 1, null)
+        break;
       case 'SHOW_PROGRESS':
         e.preventDefault();
         if (props.id == this.get("show_process_id")) {

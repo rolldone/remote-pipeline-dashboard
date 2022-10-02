@@ -1,5 +1,5 @@
 var app = async () => {
-  var index = (await import("./HostAppRouter")).default;
+  var index = (await import("./host/HostAppRouter")).default;
   let theApp = new index({
     css: /* css */``,
   })

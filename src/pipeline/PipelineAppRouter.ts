@@ -1,5 +1,5 @@
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -34,36 +34,37 @@ declare global {
 }
 
 export default BaseRactive.extend<BaseRactiveInterface>({
-  onconfig() {
+  onconfig(){
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/queue-record"
+      basePath: "/dashboard/pipeline"
     })
       .get("/", async (req, context) => {
-        let app = (await import("./queue_record/QueueRecords")).default;
-        new app({
+        let Pipeline = (await import("./Pipelines")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
-      .get('/:id/view', async (req, context) => {
+      // Define the route matching a path with a callback
+      .get('/new', async (req, context) => {
         // Handle the route here...
-        let app = (await import("./queue_record/QueueRecordDetail")).default;
-        new app({
+        let Pipeline = (await import("./PipelineNew")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
-      .get("/job", async (req, context) => {
+      .get('/:id/view/(.*)?', async (req, context) => {
         // Handle the route here...
-        let app = (await import("./queue_record/QueueRecordDetailDisplayData")).default;
-        new app({
+        let Pipeline = (await import("./PipelineUpdate")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.queueRecordRouter = this.router;
+    window.pipelineRouter = this.router;
   }
-});
+})

@@ -1,5 +1,5 @@
 var app = async () => {
-  var index = (await import("./WebhookAppRouter")).default;
+  var index = (await import("./webhook/WebhookAppRouter")).default;
   let theApp = new index({
     css: /* css */``,
   })

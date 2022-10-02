@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -46,14 +46,14 @@ const File = BaseRactive.extend<BaseRactiveInterface>({
         // Define the route matching a path with a callback
         .get('/', async (req, context) => {
           // Handle the route here...
-          let Files = (await import("./file/Files")).default;
+          let Files = (await import("./Files")).default;
           new Files({
             target: "#index-body",
             req: req
           })
         })
         .get('/:id/view', async (req, context) => {
-          let FileInfo = (await import("./file/FileInfo")).default;
+          let FileInfo = (await import("./FileInfo")).default;
           new FileInfo({
             target: "#index-body",
             req: req

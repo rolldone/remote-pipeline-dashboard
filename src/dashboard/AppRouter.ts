@@ -1,4 +1,4 @@
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { BrowserHistoryEngine, createRouter, Router } from 'routerjs';
 import '@tabler/core/dist/js/tabler';
 import "@tabler/core/dist/css/tabler.css";
@@ -110,7 +110,7 @@ export default function (props?: IndexInterface) {
             // Define the route matching a path with a callback
             .get('', async (req, context) => {
               // Handle the route here...
-              let Dashboard = (await import("./dashboard/Dashboard")).default;
+              let Dashboard = (await import("./Dashboard")).default;
               new Dashboard({
                 target: "#index-body",
               })
@@ -158,7 +158,7 @@ export default function (props?: IndexInterface) {
               })
             })
             .get("/group/(.*)?", async (req, context) => {
-              let Groups = (await import("./group/Groups")).default;
+              let Groups = (await import("../group/Groups")).default;
               new Groups({
                 target: "#index-body"
               })
@@ -311,13 +311,13 @@ export default function (props?: IndexInterface) {
               })
             })
             .get("/credential/(.*)?", async (req, context) => {
-              let credential = (await import("./credential")).default;
+              let credential = (await import("../credential")).default;
               new credential({
                 target: "#index-body"
               })
             })
             .get("/user/(.*)?", async (req, context) => {
-              let User = (await import("./user/index")).default;
+              let User = (await import("../user/index")).default;
               new User({
                 target: "#index-body"
               })
@@ -345,42 +345,42 @@ export default function (props?: IndexInterface) {
               })
             })
             .get("/login", async (req, context) => {
-              let Auth = (await import("./auth/Login")).default;
+              let Auth = (await import("../auth/Login")).default;
               new Auth({
                 target: "#app",
                 req: req
               })
             })
             .get("/login-page-publisher", async (req, context) => {
-              let Auth = (await import("./auth/LoginPagePublisher")).default;
+              let Auth = (await import("../auth/LoginPagePublisher")).default;
               new Auth({
                 target: "#app",
                 req: req
               })
             })
             .get("/logout", async (req, context) => {
-              let Auth = (await import("./auth/Logout")).default;
+              let Auth = (await import("../auth/Logout")).default;
               new Auth({
                 target: "#app",
                 req: req
               })
             })
             .get("/register", async (req, context) => {
-              let Auth = (await import("./auth/Register")).default;
+              let Auth = (await import("../auth/Register")).default;
               new Auth({
                 target: "#app",
                 req: req
               })
             })
             .get("/profile", async (req, context) => {
-              let Auth = (await import("./auth/Profile")).default;
+              let Auth = (await import("../auth/Profile")).default;
               new Auth({
                 target: "#app",
                 req: req
               })
             })
             .get("/forgot-password", async (req, context) => {
-              let Auth = (await import("./auth/ForgotPassword")).default;
+              let Auth = (await import("../auth/ForgotPassword")).default;
               new Auth({
                 target: "#app",
                 req: req

@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -33,41 +33,29 @@ declare global {
   }
 }
 
-interface ProjectInterface extends BaseRactiveInterface {
-}
-
 export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/variable"
+      basePath: "/dashboard/queue-record-scheduler"
     })
       .get("/", async (req, context) => {
-        let Variable = (await import("./variable/Variables")).default;
-        let gg = new Variable({
-          target: "#index-body",
-          req: req
-        })
-      })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let Variable = (await import("./variable/VariableNew")).default;
-        new Variable({
+        let Excecution = (await import("./QueueRecordSchedulers")).default;
+        new Excecution({
           target: "#index-body",
           req: req
         })
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Variable = (await import("./variable/VariableUpdate")).default;
-        new Variable({
+        let Excecution = (await import("./QueueRecordScheluderDetail")).default;
+        new Excecution({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.variableRouter = this.router;
+    window.queueRecordSchedulerRouter = this.router;
   }
 });

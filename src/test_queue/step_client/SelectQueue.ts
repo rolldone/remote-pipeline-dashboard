@@ -39,7 +39,7 @@ const SelectQueue = BaseRactive.extend<SelectQueueInterface>({
   },
   oncomplete() {
     this._super();
-    this.set("form_data.queue_key", '7S7XLqPnf7s6');
+    this.set("form_data.queue_key", '');
   },
   async handleClick(action, props, e) {
     let _variable_item = this.get("variable_item");

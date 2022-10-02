@@ -185,6 +185,7 @@ const StepChooseType = BaseRactive.extend<StepChooseTypeInterface>({
           // this.setExecutions(await this.getExecutions());
         }
       })
+      this.set("form_data.execution_type", this.get("form_data.execution_type") || "single");
       resolve();
     });
   },

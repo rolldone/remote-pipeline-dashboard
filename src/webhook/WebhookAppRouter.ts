@@ -1,10 +1,10 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
 
-declare let window : Window;
+declare let window: Window;
 
 declare global {
   interface Window {
@@ -33,46 +33,42 @@ declare global {
   }
 }
 
-interface ProjectInterface extends BaseRactiveInterface {
-}
-
-export default BaseRactive.extend<ProjectInterface>({
-  data() {
-    return {
-      project_datas: []
-    }
-  },
-  onconfig(){
+export default BaseRactive.extend<BaseRactiveInterface>({
+  onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/project"
+      basePath: "/dashboard/webhook"
+    }).get('/', async (req, context) => {
+      let webhooks = (await import("./Webhooks")).default;
+      new webhooks({
+        target: "#index-body",
+      })
     })
       // Define the route matching a path with a callback
-      .get('/', async (req, context) => {
-        // Handle the route here...
-        let Projects = (await import("./project/Projects")).default;
-        new Projects({
-          target: "#index-body",
-          req: req
-        })
-      })
       .get('/new', async (req, context) => {
         // Handle the route here...
-        let ProjectNew = (await import("./project/ProjectNew")).default;
-        new ProjectNew({
+        let webhook = (await import("./WebhookNew")).default;
+        new webhook({
           target: "#index-body",
-          req: req
         })
       })
       .get('/:id/view', async (req, context) => {
-        let ProjectNew = (await import("./project/ProjectUpdate")).default;
-        new ProjectNew({
+        // Handle the route here...
+        let webhook = (await import("./WebhookUpdate")).default;
+        new webhook({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get("/:id/histories", async (req, context) => {
+        // Handle the route here...
+        let webhook = (await import("./WebhookHistories")).default;
+        new webhook({
           target: "#index-body",
           req: req
         })
       })
       .run();
-
-    window.projectRouter = this.router;
+    window.webhookRouter = this.router
   }
 });

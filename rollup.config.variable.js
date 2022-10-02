@@ -6,9 +6,9 @@ import rollup from './rollup.config';
 import scss from 'rollup-plugin-scss';
 import css from 'rollup-plugin-import-css';
 
-let baseOut = 'dist/file';
+let baseOut = 'dist/variable';
 
-rollup.input = "src/FileApp.ts";
+rollup.input = "src/VariableApp.ts";
 
 rollup.output = {
   dir: path.join(baseOut),
@@ -22,7 +22,7 @@ rollup.plugins = [
   ...rollup.plugins,
   css(),
   typescriptPlugin({
-    tsconfig: 'tsconfig-file.json',
+    tsconfig: 'tsconfig-variable.json',
     clean: false,
     typescript
   }),

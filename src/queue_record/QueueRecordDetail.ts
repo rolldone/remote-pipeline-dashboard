@@ -2,6 +2,7 @@ import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import QueueRecordDetailService, { QueueRecordDetailInterface } from "services/QueueRecordDetailService";
 import QueueRecordService, { QueueRecordStatus } from "services/QueueRecordService";
 import DisplayProcessModal, { DisplayProcessModalInterface } from "./display_process_modal/DisplayProcessModal";
+import GenerateUrlDisplayModal, { GenerateUrlDisplayModalInterface } from "./generate_url_display_modal/GenerateUrlDisplayModal";
 import template from './QueueRecordDetailView.html';
 
 export interface QueueRecordDetailsInterface extends BaseRactiveInterface {
@@ -9,13 +10,15 @@ export interface QueueRecordDetailsInterface extends BaseRactiveInterface {
   setQueueRecordDetails?: { (props: any): void }
   getQueueIdsStatus?: { (): void }
   setQueueIdsStatus?: { (props: any) }
+  displayDataModal?: { (id: number): void }
 }
 
 declare let window: Window;
 
 export default BaseRactive.extend<QueueRecordDetailsInterface>({
   components: {
-    "display-process-modal": DisplayProcessModal
+    "display-process-modal": DisplayProcessModal,
+    "generate-url-display-modal": GenerateUrlDisplayModal
   },
   template,
   data() {
@@ -94,7 +97,8 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
         this.set("check_ids", {});
         break;
       case 'DISPLAY_DATA':
-
+        e.preventDefault();
+        this.displayDataModal(props.id);
         break;
       case 'RETRY':
         e.preventDefault();
@@ -133,6 +137,14 @@ export default BaseRactive.extend<QueueRecordDetailsInterface>({
         displayProcessModal.show(_queue_record_detail_datas[props.index]);
         break;
 
+    }
+  },
+  displayDataModal(id) {
+    try {
+      let generateUrlDisplayModal: GenerateUrlDisplayModalInterface = this.findComponent("generate-url-display-modal");
+      generateUrlDisplayModal.show(id);
+    } catch (ex) {
+      console.error("displayDataModal :: ", ex);
     }
   },
   async getQueueRecordDetails() {

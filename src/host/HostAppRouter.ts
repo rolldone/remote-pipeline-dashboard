@@ -1,10 +1,10 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
 
-declare let window: Window;
+declare let window : Window;
 
 declare global {
   interface Window {
@@ -33,42 +33,41 @@ declare global {
   }
 }
 
+interface ProjectInterface extends BaseRactiveInterface {
+}
+
 export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/webhook"
-    }).get('/', async (req, context) => {
-      let webhooks = (await import("./webhook/Webhooks")).default;
-      new webhooks({
-        target: "#index-body",
-      })
+      basePath: "/dashboard/host"
     })
-      // Define the route matching a path with a callback
-      .get('/new', async (req, context) => {
-        // Handle the route here...
-        let webhook = (await import("./webhook/WebhookNew")).default;
-        new webhook({
-          target: "#index-body",
-        })
-      })
-      .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let webhook = (await import("./webhook/WebhookUpdate")).default;
-        new webhook({
+      .get("/", async (req, context) => {
+        let Host = (await import("./Hosts")).default;
+        new Host({
           target: "#index-body",
           req: req
         })
       })
-      .get("/:id/histories", async (req, context) => {
+      // Define the route matching a path with a callback
+      .get('/new', async (req, context) => {
         // Handle the route here...
-        let webhook = (await import("./webhook/WebhookHistories")).default;
-        new webhook({
+        let Host = (await import("./HostNew")).default;
+        new Host({
+          target: "#index-body",
+          req: req
+        })
+      })
+      .get('/:id/view', async (req, context) => {
+        // Handle the route here...
+        let Host = (await import("./HostUpdate")).default;
+        new Host({
           target: "#index-body",
           req: req
         })
       })
       .run();
-    window.webhookRouter = this.router
+
+    window.hostRouter = this.router;
   }
 });

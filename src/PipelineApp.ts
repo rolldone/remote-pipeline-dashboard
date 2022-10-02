@@ -1,5 +1,5 @@
 var app = async () => {
-  var index = (await import("./PipelineAppRouter")).default;
+  var index = (await import("./pipeline/PipelineAppRouter")).default;
   let theApp = new index({
     css: /* css */``,
   })

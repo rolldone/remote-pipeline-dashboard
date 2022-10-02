@@ -19,7 +19,7 @@ rollup.output = {
 }
 
 rollup.plugins = [
-  css(),
+  ...rollup.plugins,
   scss({
     // include: ["/**/*.css", "/**/*.scss", "/**/*.sass"],
     output: path.join(baseOut, "/css/style.css"),
@@ -27,7 +27,6 @@ rollup.plugins = [
     // Import library as global use all scss
     // prefix: `@import "src/base/flexbox.scss";`
   }),
-  ...rollup.plugins,
   typescriptPlugin({
     tsconfig: 'tsconfig-app.json',
     clean: false,
