@@ -4,7 +4,7 @@ import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
 
-declare let window : Window;
+declare let window: Window;
 
 declare global {
   interface Window {
@@ -41,13 +41,6 @@ export default BaseRactive.extend<BaseRactiveInterface>({
     })
       .get("/", async (req, context) => {
         let app = (await import("./TestClient")).default;
-        new app({
-          target: "#index-body",
-          req: req
-        })
-      })
-      .get("/guest-side", async (req, context) => {
-        let app = (await import("./TestGuest")).default;
         new app({
           target: "#index-body",
           req: req

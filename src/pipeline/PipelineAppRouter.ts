@@ -1,5 +1,5 @@
+import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -33,46 +33,38 @@ declare global {
   }
 }
 
-interface ProjectInterface extends BaseRactiveInterface {
-}
-
-export default BaseRactive.extend<ProjectInterface>({
-  data() {
-    return {
-      project_datas: []
-    }
-  },
+export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig(){
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/project"
+      basePath: "/dashboard/pipeline"
     })
-      // Define the route matching a path with a callback
-      .get('/', async (req, context) => {
-        // Handle the route here...
-        let Projects = (await import("./project/Projects")).default;
-        new Projects({
+      .get("/", async (req, context) => {
+        let Pipeline = (await import("./Pipelines")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
+      // Define the route matching a path with a callback
       .get('/new', async (req, context) => {
         // Handle the route here...
-        let ProjectNew = (await import("./project/ProjectNew")).default;
-        new ProjectNew({
+        let Pipeline = (await import("./PipelineNew")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
-      .get('/:id/view', async (req, context) => {
-        let ProjectNew = (await import("./project/ProjectUpdate")).default;
-        new ProjectNew({
+      .get('/:id/view/(.*)?', async (req, context) => {
+        // Handle the route here...
+        let Pipeline = (await import("./PipelineUpdate")).default;
+        new Pipeline({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.projectRouter = this.router;
+    window.pipelineRouter = this.router;
   }
-});
+})

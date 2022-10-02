@@ -10,8 +10,8 @@ export default ExecutionNew.extend<ExecutionUpdateInterface>({
   oncomplete() {
     let _super = this._super.bind(this);
     return new Promise(async (resolve: Function) => {
-      await _super();
       this.setExecution(await this.getExecution());
+      await _super();
       resolve();
     })
   },

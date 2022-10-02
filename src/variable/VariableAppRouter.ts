@@ -1,5 +1,5 @@
-import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive";
 import { BrowserHistoryEngine, createRouter } from "routerjs";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -33,15 +33,18 @@ declare global {
   }
 }
 
+interface ProjectInterface extends BaseRactiveInterface {
+}
+
 export default BaseRactive.extend<BaseRactiveInterface>({
-  onconfig(){
+  onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/pipeline"
+      basePath: "/dashboard/variable"
     })
       .get("/", async (req, context) => {
-        let Pipeline = (await import("./pipeline/Pipelines")).default;
-        new Pipeline({
+        let Variable = (await import("./Variables")).default;
+        let gg = new Variable({
           target: "#index-body",
           req: req
         })
@@ -49,22 +52,22 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       // Define the route matching a path with a callback
       .get('/new', async (req, context) => {
         // Handle the route here...
-        let Pipeline = (await import("./pipeline/PipelineNew")).default;
-        new Pipeline({
+        let Variable = (await import("./VariableNew")).default;
+        new Variable({
           target: "#index-body",
           req: req
         })
       })
-      .get('/:id/view/(.*)?', async (req, context) => {
+      .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Pipeline = (await import("./pipeline/PipelineUpdate")).default;
-        new Pipeline({
+        let Variable = (await import("./VariableUpdate")).default;
+        new Variable({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.pipelineRouter = this.router;
+    window.variableRouter = this.router;
   }
-})
+});

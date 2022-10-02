@@ -15,6 +15,7 @@
     "watch_host": "rollup -c rollup.config.host.js -w",
     "watch_queue_record": "rollup -c rollup.config.queue_record.js -w",
     "watch_webhook": "rollup -c rollup.config.webhook.js -w",
+    "watch_variable": "rollup -c rollup.config.variable.js -w",
     "build-test": "rollup -c && rollup -c"
   },
   "author": "",

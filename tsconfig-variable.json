@@ -2,7 +2,6 @@
   "extends": "./tsconfig.json",
   "include": [
       "src/VariableApp.ts",
-      "src/VariableAppRouter.ts",
       "src/global.d.ts"
   ]
 }

@@ -136,6 +136,8 @@ const SelectExeConfig = BaseRactive.extend<BaseRactiveInterface>({
       if (this.get("form_data.delay") == null) {
         this.set("form_data.delay", 2000);
       }
+      // Default value if no exist
+      this.set("form_data.access_host_type", this.get("form_data.access_host_type") || "one_to_many");
       _super();
       resolve();
     })

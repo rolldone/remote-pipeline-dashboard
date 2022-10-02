@@ -110,7 +110,7 @@ const TestClient = BaseRactive.extend<TestClientInterface>({
       masterData.saveData("api_key", _form_data.api_key);
       this.displayPartials();
     } catch (ex) {
-      // alert("The api token is not match :(");
+      alert("The api token is not match :(");
       console.error("testApiKey - ex :: ", ex);
     }
   }

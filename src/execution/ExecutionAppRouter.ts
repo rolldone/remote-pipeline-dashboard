@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -40,11 +40,11 @@ export default BaseRactive.extend<BaseRactiveInterface>({
   onconfig() {
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/variable"
+      basePath: "/dashboard/execution"
     })
       .get("/", async (req, context) => {
-        let Variable = (await import("./variable/Variables")).default;
-        let gg = new Variable({
+        let Excecution = (await import("./Executions")).default;
+        new Excecution({
           target: "#index-body",
           req: req
         })
@@ -52,22 +52,22 @@ export default BaseRactive.extend<BaseRactiveInterface>({
       // Define the route matching a path with a callback
       .get('/new', async (req, context) => {
         // Handle the route here...
-        let Variable = (await import("./variable/VariableNew")).default;
-        new Variable({
+        let Excecution = (await import("./ExecutionNew")).default;
+        new Excecution({
           target: "#index-body",
           req: req
         })
       })
       .get('/:id/view', async (req, context) => {
         // Handle the route here...
-        let Variable = (await import("./variable/VariableUpdate")).default;
-        new Variable({
+        let Excecution = (await import("./ExecutionUpdate")).default;
+        new Excecution({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.variableRouter = this.router;
+    window.executionRouter = this.router;
   }
 });

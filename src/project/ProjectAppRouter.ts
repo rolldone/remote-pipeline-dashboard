@@ -1,5 +1,5 @@
 import { BrowserHistoryEngine, createRouter } from "routerjs";
-import BaseRactive, { BaseRactiveInterface } from "./base/BaseRactive";
+import BaseRactive, { BaseRactiveInterface } from "../base/BaseRactive";
 import { MasterDataInterface } from "base/MasterData";
 import { Router } from "routerjs";
 import $ from 'jquery';
@@ -36,38 +36,43 @@ declare global {
 interface ProjectInterface extends BaseRactiveInterface {
 }
 
-export default BaseRactive.extend<BaseRactiveInterface>({
-  onconfig() {
+export default BaseRactive.extend<ProjectInterface>({
+  data() {
+    return {
+      project_datas: []
+    }
+  },
+  onconfig(){
     this.router = createRouter({
       engine: BrowserHistoryEngine({ bindClick: false }),
-      basePath: "/dashboard/host"
+      basePath: "/dashboard/project"
     })
-      .get("/", async (req, context) => {
-        let Host = (await import("./host/Hosts")).default;
-        new Host({
+      // Define the route matching a path with a callback
+      .get('/', async (req, context) => {
+        // Handle the route here...
+        let Projects = (await import("./Projects")).default;
+        new Projects({
           target: "#index-body",
           req: req
         })
       })
-      // Define the route matching a path with a callback
       .get('/new', async (req, context) => {
         // Handle the route here...
-        let Host = (await import("./host/HostNew")).default;
-        new Host({
+        let ProjectNew = (await import("./ProjectNew")).default;
+        new ProjectNew({
           target: "#index-body",
           req: req
         })
       })
       .get('/:id/view', async (req, context) => {
-        // Handle the route here...
-        let Host = (await import("./host/HostUpdate")).default;
-        new Host({
+        let ProjectNew = (await import("./ProjectUpdate")).default;
+        new ProjectNew({
           target: "#index-body",
           req: req
         })
       })
       .run();
 
-    window.hostRouter = this.router;
+    window.projectRouter = this.router;
   }
 });

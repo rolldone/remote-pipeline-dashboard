@@ -24,6 +24,9 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // Do something with response error
   console.error(error)
+  setTimeout(() => {
+    NProgress.done();
+  }, 5000);
   return Promise.reject(error);
 });
 
