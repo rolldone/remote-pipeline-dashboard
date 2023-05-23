@@ -29,11 +29,14 @@ export default PipelineNew.extend<PipelineNewInterface>({
       console.error("getPipeline - ex :: ", ex);
     }
   },
-  setPipeline(props) {
+  async setPipeline(props) {
     if (props == null) return;
-    this.set("form_data", props.return);
-    if (this.safeJSON(this.get("form_data"), "repo_data.repo_name", null) != null) {
+    await this.set("form_data", props.return);
+    if (this.safeJSON(this.get("form_data"), "repo_data.repo_from", null) != null) {
       this.set("select_pipeline_planning", SELECT_PIPLINE_PLANNING.WITH_REPOSITORY);
+      if (this.safeJSON(this.get("form_data"), "repo_data.repo_name", null) == null) {
+        this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data.repo_data}}></repo-list>`)
+      }
     }
     let parseQuery = this.parseQuery(window.location.search);
     if (parseQuery.oauth_user_id != null) {

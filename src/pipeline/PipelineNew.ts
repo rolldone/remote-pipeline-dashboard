@@ -62,8 +62,8 @@ export default BaseRactive.extend<PipelineNewInterface>({
             let _repository_popup: RepositoryPopupInterface = this.findComponent("repository-popup");
             _repository_popup.hide();
             await this.submit();
-            this.set("select_source_from", text.repo_from);
-            this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data.repo_data}}></repo-list>`)
+            // this.set("select_source_from", text.repo_from);
+            // this.resetPartial("repo_list_partial", /* html */`<repo-list on-listener="onRepoListListener" form_data={{form_data.repo_data}}></repo-list>`)
             // this.set("form_data.oauth_user_id", text.id);
             // this.set("form_data.from_provider", text.repo_from);
             // this.set("select_source_from", text.repo_from);
@@ -116,6 +116,9 @@ export default BaseRactive.extend<PipelineNewInterface>({
       let parseQuery = this.parseQuery(window.location.search);
       this.set("form_data.oauth_user_id", parseQuery.oauth_user_id || null);
       this.set("select_source_from", parseQuery.from_provider);
+      if(parseQuery.from_provider != null){
+        this.set("select_pipeline_planning", SELECT_PIPLINE_PLANNING.WITH_REPOSITORY);
+      }
       let _smartValidation = SmartValidation("pipeline-form");
       _smartValidation.inputTextValidation({
         callback: (props, e) => {
