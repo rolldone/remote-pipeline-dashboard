@@ -12,7 +12,22 @@ export interface RepoSelectedInterface extends BaseRactiveInterface {
 
 const RepoSelected = BaseRactive.extend<RepoSelectedInterface>({
   template: /* html */`
+    {{#if form_data.repo_from != null}}
+    <div class="card mb-3">
+      <div class="card-stamp">
+        <div class="card-stamp-icon bg-yellow">
+          <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path><path d="M9 17v1a3 3 0 0 0 6 0v-1"></path></svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Ensuring Proper Private Key Access for Cloning Repositories with Submodules</h3>
+        <p class="text-muted">When cloning a repository that contains submodules, ensure that your private key allows access to both the main repository and all its submodules. This ensures that the necessary authentication is in place to clone and access all components of the repository.</p>
+      </div>
+    </div>
+    {{/if}}
     <div class="card">
+      
       {{#if form_data.repo_from == "git"}}
       <div class="card-body">
         <dl class="row">
