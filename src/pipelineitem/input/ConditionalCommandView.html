@@ -36,6 +36,7 @@
       {{> parent_conditon_partial}}
     </div>
     {{#if parent_condition_type==@this.getParentConditionType().EQUALS || parent_condition_type==@this.getParentConditionType().INCLUDES}}
+    {{#if pipeline.connection_type != "basic"}}
     <div class="mb-3">
       <label class="form-label">Working Directory</label>
       <input type="text" class="form-control" name="working_dir" value="{{form_data.data.working_dir}}"
@@ -46,6 +47,7 @@
       <input type="text" class="form-control" name="command" value="{{form_data.data.command}}"
         placeholder="Input command">
     </div>
+    {{/if}}
     {{/if}}
     <div class="mb-3">
       <label class="form-label">Description <span class="form-label-description">56/100</span></label>

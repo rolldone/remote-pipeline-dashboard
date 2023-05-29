@@ -39,7 +39,7 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     {{#if command_data.type == "basic-command"}}
     <basic-command index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></basic-command>
     {{elseif command_data.type == "conditional-command"}}
-    <conditional-command index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></conditional-command>
+    <conditional-command pipeline={{pipeline}} index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></conditional-command>
     {{elseif command_data.type == "file-transfer"}}
     <file-transfer index={{index}} on-listener="onCommandListener" form_data={{command_data}} command_datas={{command_datas}}></file-transfer>
     {{elseif command_data.type == "write-transfer"}}

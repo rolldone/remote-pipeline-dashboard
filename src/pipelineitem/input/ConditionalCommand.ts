@@ -9,7 +9,7 @@ export interface ConditionalCommandInterface extends BasicCommandInterface {
   displayPartial: { (action: string, val: any): void }
 }
 
-export default BasicCommand.extend<ConditionalCommandInterface>({
+const ConditionalCommand = BasicCommand.extend<ConditionalCommandInterface>({
   template,
   partials: {
     parent_conditon_partial: [],
@@ -19,6 +19,7 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
   },
   data() {
     return {
+      pipeline: {},
       condition_values: [],
       method_type: null,
       sync_action: null,
@@ -205,3 +206,5 @@ export default BasicCommand.extend<ConditionalCommandInterface>({
     }
   }
 });
+
+export default ConditionalCommand;
