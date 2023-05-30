@@ -8,12 +8,14 @@ export interface RepoTransferCommandInterface extends BasicCommandInterface {
 
 const RepoTransferCommand = BasicCommand.extend<RepoTransferCommandInterface>({
   template,
-  data(){
+  data() {
     return {
-      form_data : {
-        data : {
+      form_data: {
+        data: {
           exclude: "*",
-          include: "*/"
+          include: "*/",
+          method_type: "rsync",
+          transfer_mode: "soft"
         }
       }
     }
@@ -24,6 +26,10 @@ const RepoTransferCommand = BasicCommand.extend<RepoTransferCommandInterface>({
         e.preventDefault();
         this.set("form_data.data.transfer_mode", props.value);
         return;
+      case 'METHOD_TYPE':
+        e.preventDefault();
+        this.set("form_data.data.method_type", props.value);
+        break;
     }
   }
 });

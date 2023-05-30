@@ -23,6 +23,16 @@
       </datalist> -->
     </div>
     <div class="mb-3">
+      <label class="form-label">Method Type</label>
+      <div class="btn-group w-100">
+        <button type="button" class="btn {{form_data.data.method_type=='rsync'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'rsync'},@event)">Rsync</button>
+        <button type="button" class="btn {{form_data.data.method_type=='sftp'?'btn-primary':''}}"
+          on-click="@this.handleClick('METHOD_TYPE',{ value : 'sftp'},@event)">SFTP</button>
+      </div>
+    </div>
+    {{#if form_data.data.method_type == "rsync"}}
+    <div class="mb-3">
       <label class="form-label">Rsync Transfer Mode</label>
       <div class="btn-group w-100">
         <button type="button" class="btn {{form_data.data.transfer_mode=='soft'?'btn-primary':''}}"
@@ -31,6 +41,7 @@
           on-click="@this.handleClick('TRANSFER_MODE',{ value : 'force'},@event)">Force Mode</button>
       </div>
     </div>
+    {{/if}}
     <div class="mb-3">
       <label class="form-label">Target Path</label>
       <input type="text" class="form-control" name="target_path" value="{{form_data.data.target_path}}" placeholder="Target Path">
