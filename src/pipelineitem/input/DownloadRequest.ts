@@ -77,6 +77,11 @@ const DownloadRequest = BasicCommand.extend<DownloadRequestInterface>({
         this.set(`form_data.data.asset_datas[${props.index}].is_folder`, e.target.checked);
         break;
     }
+    /**
+     * Parent :
+     * SELECT_PARENT_ORDER_NUMBER
+     */
+    this._super(action, props, e);
   },
   async handleClick(action, props, e) {
     let _template = null;
