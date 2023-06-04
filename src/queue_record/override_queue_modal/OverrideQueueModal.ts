@@ -14,6 +14,12 @@ export interface OverrideQueueModalInterface extends BaseRactiveInterface {
   submitAddVariableItem?: { (): void }
 }
 
+export type form_datat_type = {
+  process_mode: "sequential" | "parallel"
+  process_limit: number
+  delay: number
+}
+
 let myModal = null;
 const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   template,
@@ -27,7 +33,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
     return {
       id_element: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5),
       queue_data: {},
-      form_data: {},
+      form_data: {} as form_datat_type,
       variable_data: {},
       variable_item: {}
     }
@@ -37,7 +43,7 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
     return new Promise((resolve: Function) => {
       this.newOn = {
         onVariableFormListener: (c, action, text, e) => {
-          debugger;
+          // debugger;
         }
       }
       resolve();
@@ -58,12 +64,18 @@ const OverrideQueueModal = BaseRactive.extend<OverrideQueueModalInterface>({
   handleChange(action, props, e) {
     switch (action) {
       case 'SELECT_PROCESS':
-        debugger;
+        
         break;
     }
   },
   async show(props) {
     this.set("queue_data", props);
+    this.set("form_data",{
+      delay: props.exe_delay,
+      process_mode: props.exe_process_mode,
+      process_limit: props.exe_process_limit
+    } as form_datat_type)
+    
     let myModalEl = document.getElementById(this.get("id_element"));
     myModal = new window.bootstrap.Modal(myModalEl, {
       backdrop: 'static', keyboard: false
