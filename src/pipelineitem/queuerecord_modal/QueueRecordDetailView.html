@@ -67,17 +67,17 @@
                       </button>
                       <div class="dropdown-menu dropdown-menu-end">
                         {{#if ids_status[id] == 0 || ids_status[id] == 5 || ids_status[id] == 3 || ids_status[id] == 6}}
-                        <a class="dropdown-item" href="#"
+                        <!-- <a class="dropdown-item" href="#"
                           on-click="@this.handleClick('RETRY',{ id : id, index : i },@event)">
                           Retry
-                        </a>
+                        </a> -->
                         {{else}}
                         <a class="dropdown-item" href="#"
                           on-click="@this.handleClick('STOP',{ id : id, index : i },@event)">
                           Stop
                         </a>
                         {{/if}}
-                        <a class="dropdown-item" target="_blank" href="/dashboard/queue-record/job/{{job_id}}">
+                        <a class="dropdown-item" target="_blank" href="/dashboard/queue-record/job/{{job_id}}" on-click="@this.handleClick('DISPLAY_DATA',{ id : id, index : i },@event)">
                           Display Data
                         </a>
                       </div>
@@ -94,3 +94,4 @@
   </div>
 </div>
 <display-process-modal></display-process-modal>
+<generate-url-display-modal></generate-url-display-modal>
