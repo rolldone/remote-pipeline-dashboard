@@ -11,6 +11,7 @@ let baseOut = 'dist/project';
 rollup.input = "src/ProjectApp.ts";
 
 rollup.output = {
+  ...rollup.output,
   dir: path.join(baseOut),
   format: 'esm',
   entryFileNames: "[name].js",

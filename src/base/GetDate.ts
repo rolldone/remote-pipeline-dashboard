@@ -1,5 +1,4 @@
 import momentTimezone from 'moment-timezone';
-import { MasterDataInterface } from "./MasterData";
 
 declare let window: Window;
 

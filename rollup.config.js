@@ -10,6 +10,17 @@ import svg from 'rollup-plugin-svg-import';
 import json from "@rollup/plugin-json";
 
 export default {
+  output: {
+    manualChunks: {
+      three: ["ractive"],
+      three2: ['routerjs'],
+      three3: ["loadjs","@tabler/core/dist/js/tabler"],
+      three4: ["axios","lodash"],
+      three5: ["eventemitter2","jquery"],
+      three6: ['moment'],
+      three7: ["moment-timezone"]
+    },
+  },
   plugins: [
     svg({
       // process SVG to DOM Node or String. Default: false
@@ -30,7 +41,7 @@ export default {
     commonjs({
       // non-CommonJS modules will be ignored, but you can also
       // specifically include/exclude files
-      include: [],  // Default: undefined
+      include: /node_modules/,  // Default: undefined
       exclude: [],  // Default: undefined
       // these values can also be regular expressions
       // include: /node_modules/

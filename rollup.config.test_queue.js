@@ -14,6 +14,7 @@ rollup.input = [
 ];
 
 rollup.output = {
+  ...rollup.output,
   dir: path.join(baseOut),
   format: 'esm',
   entryFileNames: "[name].js",

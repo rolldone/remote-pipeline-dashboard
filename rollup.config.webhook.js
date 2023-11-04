@@ -11,6 +11,7 @@ let baseOut = 'dist/webhook';
 rollup.input = "src/WebhookApp.ts";
 
 rollup.output = {
+  ...rollup.output,
   dir: path.join(baseOut),
   format: 'esm',
   entryFileNames: "[name].js",

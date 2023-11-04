@@ -11,6 +11,7 @@ let baseOut = 'dist/pipeline';
 rollup.input = "src/PipelineApp.ts";
 
 rollup.output = {
+  ...rollup.output,
   dir: path.join(baseOut),
   format: 'esm',
   entryFileNames: "[name].js",
