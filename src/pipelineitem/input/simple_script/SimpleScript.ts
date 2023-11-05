@@ -1,4 +1,5 @@
 import BaseRactive, { BaseRactiveInterface } from "base/BaseRactive"
+import makeid from "base/MakeID";
 import loadjs from 'loadjs';
 // Ace editor
 // import * as ace from 'brace';
@@ -7,7 +8,7 @@ import loadjs from 'loadjs';
 
 import { debounce, DebouncedFunc } from "lodash"
 
-var editor = null;
+
 
 export interface SimpleScriptInterface extends BaseRactiveInterface {
   selectLanguage: { (whatLang: string): any }
@@ -53,41 +54,7 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
       _super();
       let _form_data = this.get("form_data");
       this.set("allow_var_environment", _form_data.allow_var_environment == true ? [null] : []);
-      let mySelector = document.getElementById(this.get("id_code_mirror"));
-
-      // editor = ace.edit(this.get("id_code_mirror"));
-      // editor.setTheme('ace/theme/github');
-      // editor.setValue(_form_data.content || "");
-      // editor.setOption("tabSize", 2);
-      // editor.clearSelection();
-
-      // let _pendingSave: DebouncedFunc<any> = null;
-      // editor.on("change", (e) => {
-      //   if (_pendingSave != null) {
-      //     _pendingSave.cancel();
-      //   }
-      //   _pendingSave = debounce(() => {
-      //     let textStr: string = editor.getValue();
-      //     this.set("form_data.content", textStr);
-      //     this.fire("listener", "SAVE", this.get("form_data"), e);
-      //   }, 2000);
-      //   _pendingSave();
-      // })
-
-      // let _pendingCheckTypeFile: DebouncedFunc<any> = null;
-      // this.observe("form_data.file_name", (val: string) => {
-      //   if (_pendingCheckTypeFile != null) {
-      //     _pendingCheckTypeFile.cancel();
-      //   }
-      //   _pendingCheckTypeFile = debounce(async () => {
-      //     let _ext = val.split('.').pop();
-      //     let language = await this.selectLanguage(_ext);
-      //     if (language != null) {
-      //       editor.getSession().setMode(language);
-      //     }
-      //   }, 2000);
-      //   _pendingCheckTypeFile();
-      // });
+      console.log("called");
       this.loadAceEditor();
       resolve();
     })
@@ -95,16 +62,17 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
 
   loadAceEditor() {
     let self = this;
+    // debugger;
     return new Promise((resolve) => {
       let loadAceEditorFunc = () => {
         let _form_data = this.get("form_data");
         let pendingSave: DebouncedFunc<any> = null;
-        editor = window.ace.edit(this.get("id_code_mirror"));
+        let editor = window.ace.edit(this.get("id_code_mirror"));
         editor.setTheme('ace/theme/github');
         editor.setValue(_form_data.content || "");
         editor.setOption("tabSize", 2);
         editor.clearSelection();
-  
+
         let _pendingSave: DebouncedFunc<any> = null;
         editor.on("change", (e) => {
           if (_pendingSave != null) {
@@ -117,7 +85,7 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
           }, 2000);
           _pendingSave();
         })
-  
+
         let _pendingCheckTypeFile: DebouncedFunc<any> = null;
         this.observe("form_data.file_name", (val: string) => {
           if (_pendingCheckTypeFile != null) {
@@ -134,23 +102,28 @@ const SimpleScript = BaseRactive.extend<SimpleScriptInterface>({
         });
         return window.ace;
       }
-      if (window.ace == null) {
+
+
+      try {
+        let randomText = this.get("id_code_mirror");
         loadjs([
           'https://cdnjs.cloudflare.com/ajax/libs/ace/1.6.0/ace.js',
-        ], 'ace_editor', {
+        ], 'ace_editor_' + randomText, {
           before: function (path, scriptEl) { /* execute code before fetch */ },
           async: true,  // load files synchronously or asynchronously (default: true)
           numRetries: 3, // see caveats about using numRetries with async:false (default: 0),
           returnPromise: false  // return Promise object (default: false)
         })
-        loadjs.ready('ace_editor', {
+        loadjs.ready('ace_editor_' + randomText, {
           success: function () {
             resolve(loadAceEditorFunc());
           },
           error: function (err) {
           }
         })
-      } else {
+        // if (window.ace == null) {
+        // }
+      } catch (error) {
         resolve(loadAceEditorFunc());
       }
     })

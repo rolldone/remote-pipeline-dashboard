@@ -59,7 +59,7 @@ const CommandItem = BaseRactive.extend<BaseRactiveInterface>({
     {{else}}
     {{/if}}
   `,
-  onconfig() {
+  oncomplete() {
     let pipeline = this.get("pipeline");
     this.set("command_data", {
       ...this.get("command_data"),

@@ -31,7 +31,7 @@ export interface BasicCommandInterface extends BaseRactiveInterface {
   displayScriptCode?: { (val: boolean): void }
 }
 
-export default BaseRactive.extend<BasicCommandInterface>({
+const BasicCommand = BaseRactive.extend<BasicCommandInterface>({
   components: {
     "simple-script": SimpleScript
   },
@@ -168,3 +168,5 @@ export default BaseRactive.extend<BasicCommandInterface>({
     ])
   }
 });
+
+export default BasicCommand;
